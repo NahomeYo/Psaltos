@@ -1,0 +1,125 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
+:root {
+    overflow-x: hidden;
+    background: linear-gradient(-90deg, rgb(190, 198, 201) 50%, rgb(203, 227, 234) 100%);
+    font-size: 24px;
+    color: #426077;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+p {
+    font-family: "Inter", sans-serif;
+    font-size: 0.6em;
+    white-space: wrap;
+}
+
+@font-face {
+    font-family: Coptic;
+    src: url(Fonts/Coptic\ Eyes\ \(Latin\ Letters\).ttf);
+}
+
+@font-face {
+    font-family: Antonious-Bold;
+    src: url(Fonts/Antonious-Bold.ttf);
+}
+
+@font-face {
+    font-family: Antonious-Normal;
+    src: url(Fonts/Antonious-Normal.ttf);
+}
+
+@font-face {
+    font-family: Antonious-Thin;
+    src: url(Fonts/Antonious-Normal-Thin.ttf);
+}
+
+h1 {
+    font-size: 1.5em;
+    font-family: Coptic;
+}
+
+h2 {
+    font-size: 1.2em;
+    font-family: Antonious-Normal;
+}
+
+.menuLogo {
+    width: 10vw;
+    height: 10vh;
+    opacity: 70%;
+}
+
+nav {
+    margin: 0 5vw 0 5vw;
+}
+
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    justify-content: flex-start;
+    padding: 1vw 0vw;
+    height: 100%;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #426077;
+    margin: 0vw 2vw 0 2vw;
+}
+
+nav ul li {
+    margin: 0vw 2vw 0 2vw;
+}
+
+.Jesus {
+    position: absolute;
+    top: 60%;
+    right: 10%;
+    z-index: -1;
+    scale: 2.5;
+}
+
+.searchContainer {
+    margin: 0 10vw 0 10vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    gap: 2vh;
+}
+
+.searchBar {
+    width: 90%;
+    background-color: white;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1vw 4vw 1vw 4vw;
+    border-radius: 40px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.147);
+}
+
+.searchBar input {
+    background-color: transparent !important;
+    border: 0px solid;
+    outline: none;
+    width: 100%;
+    font-size: 1em;
+}
+
+.searchBar input:focus {
+    outline: none;
+}

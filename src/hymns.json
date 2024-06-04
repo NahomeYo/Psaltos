@@ -1,0 +1,113 @@
+[
+    {
+        "name": "Agios",
+        "artist": "Gad Lewis",
+        "season": "Nativity",
+        "tune": "Joyful",
+        "mp3": "https://media.tasbeha.org/mp3/Hymns/Annual/Congregation_Responses/Cantor_Gad_Lewis/17_The_Trisagion.mp3"
+    },
+    {
+        "name": "The seven tunes",
+        "artist": "Ibrahim Ayad",
+        "season": [
+            "Nativity",
+            "Resurrection"
+        ],
+        "tune": "Joyful",
+        "mp3": "https://media.tasbeha.org/mp3/Hymns/Major_Feasts_of_the_Lord/Nativity/Ibrahim_Ayad/04_The_Seven_Ways-Tunes.1530.mp3"
+    },
+    {
+        "name": "Psalm 150",
+        "artist": "Ibrahim Ayad",
+        "season": "Annual",
+        "tune": "Annual",
+        "mp3": null
+    },
+    {
+        "name": "Psalm 150 for distribution",
+        "artist": "Ibrahim Ayad",
+        "season": "Nativity",
+        "tune": "Kiahk",
+        "mp3": null
+    },
+    {
+        "name": "Verses of Cymbals",
+        "artist": "Ibrahim Ayad",
+        "season": "Annual",
+        "tune": null,
+        "mp3": null
+    },
+    {
+        "name": "TenGosht",
+        "artist": "Ibrahim Ayad",
+        "season": "Annual",
+        "tune": null,
+        "mp3": null
+    },
+    {
+        "name": "Concluding Canon",
+        "artist": "Ibrahim Ayad",
+        "season": "Annual",
+        "tune": null,
+        "mp3": null
+    },
+    {
+        "name": "Tenou Osht",
+        "artist": "Ibrahim Ayad",
+        "season": "Annual",
+        "tune": null,
+        "mp3": null
+    },
+    {
+        "name": "Shere Maria",
+        "artist": "Ibrahim Ayad",
+        "season": "Annual",
+        "tune": null,
+        "mp3": null
+    },
+    {
+        "name": "Pi epnevma",
+        "artist": "Ibrahim Ayad",
+        "season": [
+            "Pentecost",
+            "Marriage"
+        ],
+        "tune": null,
+        "mp3": null
+    },
+    {
+        "name": "Alleluia Fai Pe Pi",
+        "artist": "Gad Lewis",
+        "season": "Annual",
+        "tune": null,
+        "mp3": null
+    },
+    {
+        "name": "Azpazesthe",
+        "artist": "Ibrahim Ayad",
+        "season": "Annual",
+        "tune": null,
+        "mp3": null
+    },
+    {
+        "name": "Xristos Anesti",
+        "artist": "Gad Lewis",
+        "season": "Resurrection",
+        "tune": "Joyful",
+        "mp3": null
+    },
+    {
+        "name": "E Parthenon",
+        "artist": "Ibrahim Ayad",
+        "season": "Nativity",
+        "tune": "Joyful",
+        "mp3": null
+    },
+    {
+        "name": "Oran enshosho",
+        "artist": "Gad Lewis",
+        "season": "Epiphany",
+        "tune": "joyful",
+        "mp3": null
+    }
+]
