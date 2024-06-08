@@ -4,7 +4,12 @@
     overflow-x: hidden;
     background: linear-gradient(-90deg, rgb(190, 198, 201) 50%, rgb(203, 227, 234) 100%);
     font-size: 24px;
-    color: #426077;
+    --bigFont: 1.5em;
+    --medFont: 1.2em;
+    --smallFont: 0.6em;
+    --primaryColor: #426077;
+    --secondaryColor: white;
+    --tertiaryColor: #776742;
 }
 
 * {
@@ -17,12 +22,6 @@ body {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-}
-
-p {
-    font-family: "Inter", sans-serif;
-    font-size: 0.6em;
-    white-space: wrap;
 }
 
 @font-face {
@@ -46,13 +45,22 @@ p {
 }
 
 h1 {
-    font-size: 1.5em;
+    font-size: var(--bigFont);
     font-family: Coptic;
+    color: var(--primaryColor);
 }
 
 h2 {
-    font-size: 1.2em;
+    font-size: var(--medFont);
     font-family: Antonious-Normal;
+    color: var(--primaryColor);
+}
+
+p {
+    font-size: var(--smallFont);
+    --primaryColor: #426077;
+    font-family: "Inter", sans-serif;
+    color: var(--primaryColor);
 }
 
 .menuLogo {
@@ -77,7 +85,7 @@ nav ul {
 
 nav ul li a {
     text-decoration: none;
-    color: #426077;
+    color: var(--primaryColor);
     margin: 0vw 2vw 0 2vw;
 }
 
@@ -104,7 +112,7 @@ nav ul li {
 
 .searchBar {
     width: 90%;
-    background-color: white;
+    background: var(--secondaryColor);
     display: flex;
     justify-content: flex-end;
     padding: 1vw 4vw 1vw 4vw;
@@ -122,4 +130,8 @@ nav ul li {
 
 .searchBar input:focus {
     outline: none;
+}
+
+.dropdown {
+    background: var(--secondaryColor);
 }
