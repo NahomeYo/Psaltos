@@ -4,12 +4,13 @@
     overflow-x: hidden;
     background: linear-gradient(-90deg, rgb(190, 198, 201) 50%, rgb(203, 227, 234) 100%);
     font-size: 24px;
-    --bigFont: 1.5em;
-    --medFont: 1.2em;
-    --smallFont: 0.6em;
+    --bigFont: 2em;
+    --medFont: 1.8em;
+    --smallFont: 1em;
     --primaryColor: #426077;
     --secondaryColor: white;
-    --tertiaryColor: #776742;
+    --tertiaryColor: #8dadc6;
+    --highlightColor: #a2a5a7;
 }
 
 * {
@@ -22,6 +23,11 @@ body {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+}
+
+@font-face {
+    font-family: Gyptienne;
+    src: url(./Fonts/Gyptienne.ttf);
 }
 
 @font-face {
@@ -44,6 +50,26 @@ body {
     src: url(Fonts/Antonious-Normal-Thin.ttf);
 }
 
+@font-face {
+    font-family: Cairo;
+    src: url(Fonts/Cairo.ttf);
+}
+
+@font-face {
+    font-family: Aldery-block;
+    src: url(Fonts/Adlery-Pro-Blockletter-trial.ttf);
+}
+
+@font-face {
+    font-family: Aldery-trial;
+    src: url(Fonts/Adlery-Pro-trial.ttf);
+}
+
+@font-face {
+    font-family: Creshex;
+    src: url(Fonts/Creshex\ Brush.ttf);
+}
+
 h1 {
     font-size: var(--bigFont);
     font-family: Coptic;
@@ -52,8 +78,18 @@ h1 {
 
 h2 {
     font-size: var(--medFont);
-    font-family: Antonious-Normal;
+    font-family: Creshex;
     color: var(--primaryColor);
+    letter-spacing: 3px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+h3 {
+    font-size: var(--smallFont);
+    color: var(--primaryColor);
+    font-family: Aldery-block;
+    letter-spacing: 2.5px;
 }
 
 p {
@@ -95,8 +131,8 @@ nav ul li {
 
 .Jesus {
     position: absolute;
-    top: 60%;
-    right: 10%;
+    top: 0;
+    right: 0;
     z-index: -1;
     scale: 2.5;
 }
@@ -110,18 +146,23 @@ nav ul li {
     gap: 2vh;
 }
 
-.searchBar {
+.searchBarContainer {
     width: 90%;
     background: var(--secondaryColor);
     display: flex;
-    justify-content: flex-end;
-    padding: 1vw 4vw 1vw 4vw;
+    flex-direction: column;
+    padding: 1vw 1vw 1vw 0vw;
     border-radius: 40px;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.147);
 }
 
+.searchBar {
+    display: flex;
+    margin-left: 30px;
+}
+
 .searchBar input {
-    background-color: transparent !important;
+    background-color: transparent;
     border: 0px solid;
     outline: none;
     width: 100%;
@@ -133,5 +174,151 @@ nav ul li {
 }
 
 .dropdown {
-    background: var(--secondaryColor);
+    background: transparent;
+    margin-top: 2vw;
+    display: flex;
+    flex-direction: column;
+    padding-right: 2vw;
+    margin-bottom: 1vw;
+}
+
+.dropdown>div {
+    display: flex;
+    justify-content: end;
+    position: relative;
+    align-items: center;
+    width: 100%;
+    border-radius: 0px 80px 80px 0px;
+    margin-bottom: 1vw;
+}
+
+.dropdown>div li {
+    list-style: none;
+}
+
+.dropdown>div li ul {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    text-align: start;
+    width: 10vw;
+}
+
+.dropdown>div li ul svg {
+    fill: var(--tertiaryColor);
+    width: 40px;
+}
+
+.dropdown>div li:nth-of-type(1) {
+    position: absolute;
+    left: 30px;
+}
+
+.dropdown>div li:nth-of-type(2) {
+    display: flex;
+    flex-direction: row;
+}
+
+.dropdown>div li:nth-of-type(2) img {
+    border-radius: 50px;
+    margin-right: 1vw;
+    width: 65px;
+    height: 65px;
+    border: 5px solid var(--tertiaryColor);
+}
+
+.hover {
+    transition: 0.5s;
+    color: var(--secondaryColor);
+}
+
+.dropdownHover {
+    background: var(--highlightColor);
+    transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    border-left: var(--primaryColor) 0.3em solid;
+}
+
+.selectionBoxes {
+    margin: 0vw 10vw 0vw 10vw;
+}
+
+.selectionBoxes ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.selectionBoxes ul li {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    margin: 1vw 0;
+}
+
+.selectionBoxes ul li img {
+    object-fit: cover;
+    width: 200px;
+    height: 150px;
+    border-radius: 30px;
+    border: 3px solid var(--secondaryColor);
+    margin-bottom: 1vw;
+}
+
+.selectionBoxes ul li .overlay {
+    font-size: var(--smallFont);
+    font-family: Aldery-block;
+    color: var(--primaryColor);
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-align: center;
+    line-height: normal;
+}
+
+.seasonTitle svg {
+    width: 20px;
+    margin: 0vw 1vw;
+    fill: var(--primaryColor);
+}
+
+.seasonTitle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.selectionBoxesArtist {
+    margin: 0vw 10vw 0vw 10vw;
+}
+
+.selectionBoxesArtist ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.selectionBoxesArtist ul li {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    font-size: var(--smallFont);
+    font-family: Aldery-block;
+    color: var(--primaryColor);
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-align: center;
+    align-items: center;
+}
+
+.selectionBoxesArtist ul li img {
+    object-fit: cover;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid var(--secondaryColor);
+    padding: 0;
+    margin-bottom: 1vw;
 }
