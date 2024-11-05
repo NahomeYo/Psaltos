@@ -6,7 +6,6 @@ import search from './img/search.svg';
 import jesus from './img/jesus.svg';
 import Navbar from "./Navbar.js";
 import Cross from "./img/icons/cross.js";
-import mikhailGirgis from "./img/profiles/MikhailGirgis.jpeg";
 import Church from "./img/church.svg";
 import Deaf from "./img/cymbals.svg";
 import CrossIcon from "./img/icons/crossButton.js";
@@ -20,37 +19,27 @@ import SundayTesbaha from "./img/tasbeha.jpg";
 import Weekday from "./img/weekdayTasbeha.jpg";
 import SundayVespers from "./img/vespers.jpg"
 import ArtistIcon from "./img/icons/artistIcon.js";
+import HymnsData from "./output.json";
+import ArtistData from "./artists.json";
 import { useEffect, useState } from "react";
 
 function App() {
   const [hymnData, setHymnData] = useState([]);
   const [hymn, setHymn] = useState("");
-  const [artists, setArtists] = useState([]);
+  const [artistData, setArtistData] = useState([]);
   const [filteredHymns, setFilteredHymns] = useState([]);
   const [typing, setTyping] = useState(false);
-  const [seasons, setSeasons] = useState([]);
-  const [tabStage, setTabStage] = useState(0);
   const [selectedHymn, setSelectedHymn] = useState([]);
-  const [filteredHymnsByArtist, setFilteredHymnsByArtist] = useState([]);
-  const [render, setRender] = useState(false);
+  const [selectedSeason, setSelectedSeason] = useState();
+  const [selectedArtist, setSelectedArtist] = useState();
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/output.json");
-        const jsonData = await response.json();
-        const hymns = jsonData.map((hymn) => ({
-          name: hymn.name,
-          artist: hymn.artist,
-          season: hymn.season,
-          tune: hymn.tune,
-          audio: hymn.mp3,
-        }));
-        setHymnData(hymns);
-        setFilteredHymns(hymns);
+        setHymnData(HymnsData);
+        setFilteredHymns(HymnsData);
 
-        setSeasons([...new Set(hymns.map((hymn) => hymn.season))]);
-        setArtists([...new Set(hymns.map((hymn) => hymn.artist))]);
+        setArtistData(ArtistData)
       } catch (error) {
         console.error(error);
       }
@@ -72,13 +61,13 @@ function App() {
     setFilteredHymns(searchMatch);
   };
 
-  const artistEdit = (hymn) => hymn?.artist?.substring(7) || hymn?.artist || "";
+  // const artistEdit = (hymn) => hymn?.artist?.substring(7) || hymn?.artist || "";
 
-  const TabList = () => {
+  const ArtistList = () => {
     const [click, setClick] = useState(0);
 
     const nextFour = () => {
-      setClick(prevClick => Math.min(prevClick + 4, artists.length - 4));
+      setClick(prevClick => Math.min(prevClick + 4, artistData.length - 4));
     }
 
     const prevFour = () => {
@@ -96,49 +85,28 @@ function App() {
             <path d="M1.05873 17.5848C0.0187157 16.7842 0.0187151 15.2158 1.05873 14.4152L18.28 1.15824C19.5951 0.145845 21.5 1.08337 21.5 2.74305V29.2569C21.5 30.9166 19.5951 31.8542 18.28 30.8418L1.05873 17.5848Z" />
           </svg>
           <div className="list">
-            {artists.slice(click, click + 4).map((artist, index) => (
-              <div key={index} onClick={() => {
-                setSelectedHymn(artist);
-                setTabStage((prevStage) => (prevStage + 1) % 4);
-
-                const artistHymns = hymnData.filter(hymn => hymn.artist === artist);
-                setFilteredHymnsByArtist(artistHymns);
-              }}>
-                {renderTab(artist)}
+            {artistData.slice(click, click + 4).map((artist, index) => (
+              <div key={index}>
+                {renderArtist(artist)}
               </div>
             ))}
           </div>
           <svg className="rightArrow" onClick={nextFour} width="22" height="32" viewBox="0 0 22 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1.05873 17.5848C0.0187157 16.7842 0.0187151 15.2158 1.05873 14.4152L18.28 1.15824C19.5951 0.145845 21.5 1.08337 21.5 2.74305V29.2569C21.5 30.9166 19.5951 31.8542 18.28 30.8418L1.05873 17.5848Z" />
           </svg>
-          {render && renderHymnsBySeason()}
         </span>
       </div>
     );
   }
 
-  const renderTab = (artist) => {
-    switch (tabStage) {
-      case 0:
-        return cantorTab001(artist);
-      case 1:
-        return cantorTab002();
-      case 2:
-        return cantorTab003();
-      case 3:
-        return cantorTab004();
-      default:
-        return cantorTab001(artist);
-    }
-  }
-
-  const renderHymnsBySeason = () => {
-    const seasons = [...new Set(filteredHymnsByArtist.map(hymn => hymn.season))];
+  const renderSeasons = () => {
+    // we have selected an artist so display all the seasons for that artist
+    const seasons = [...new Set(hymnData.filter(hymn => hymn.artist === selectedArtist.artistName).map(hymn => hymn.season))];
 
     return (
       <div className="seasonContainer">
         {seasons.map((season, index) => (
-          <div key={index} className="seasonItem">
+          <div key={index} className="seasonItem" onClick={() => setSelectedSeason(season)}>
             {seasonRender(season)}
             <HeaderComponent placeHolder={season} />
           </div>
@@ -146,6 +114,25 @@ function App() {
       </div>
     );
   };
+  const renderHymns = () => {
+    // we have selected an artist and season so display all the hymns for that season from the selected artist
+    const hymns = [...new Set(hymnData.filter(hymn => hymn.artist === selectedArtist.artistName && hymn.season === selectedSeason))];
+
+    return (
+      <div >
+        {hymns.map((hymn, index) => (
+          <div key={index} style={{width: 1000}}>
+            <HeaderComponent placeHolder={hymn.name} />
+            <Audio/>
+            <br/>
+            <br/>
+
+          </div>
+        ))}
+      </div>
+    );
+  };
+
 
   const HeaderComponent = ({ placeHolder }) => (
     <div className="headerContainer">
@@ -155,75 +142,23 @@ function App() {
     </div>
   );
 
-  const cantorTab001 = (artist) => (
-    <div className="cantorTab001" onClick={() => setTabStage(1)}>
+  const renderArtist = (artist) => (
+    <div className="cantorTab001" onClick={() => {
+      setSelectedArtist(artist);
+    }}>
       <div className="cantorContainer">
-        <div className="topRow">{profilePic()}</div>
+        <div className="topRow">
+          <img src={artist.img} alt={artist.artistName} />
+        </div>
         <div className="artist">
           <span>
             <ArtistIcon />
             <p>CANTOR</p>
           </span>
-          <b>{artist}</b>
+          <b>{artist.artistName}</b>
         </div>
       </div>
       <Robe />
-    </div>
-  );
-
-  const cantorTab002 = () => (
-    <div className="cantorTab002" onClick={() => {
-      setTabStage(2);
-      setRender(true);
-    }}
-    >
-      <div className="cantorContainer">
-        <div className="topRow">{profilePic()}</div>
-        <div className="artist">
-          <span>
-            <ArtistIcon />
-            <p>CANTOR</p>
-          </span>
-          <b>{artistEdit(selectedHymn)}</b>
-        </div>
-      </div>
-      <Robe />
-    </div>
-  );
-
-  const cantorTab003 = () => (
-    <div className="cantorTab003" onClick={() => setTabStage(3)}>
-      <div className="cantorContainer">
-        <div className="topRow">
-          <HeaderComponent placeHolder={selectedHymn.name} />
-        </div>
-        <div className="artist">
-          <span>
-            <ArtistIcon />
-            <p>CANTOR</p>
-          </span>
-          <b>{artistEdit(selectedHymn)}</b>
-        </div>
-      </div>
-    </div>
-  );
-
-  const cantorTab004 = () => (
-    <div className="cantorTab004">
-      <div className="cantorContainer">
-        <div className="topRow">
-          {profilePic()}
-          <HeaderComponent placeHolder={selectedHymn.name} />
-        </div>
-        <div className="artist">
-          <span>
-            <ArtistIcon />
-            <p>CANTOR</p>
-          </span>
-          <b>{artistEdit(selectedHymn)}</b>
-        </div>
-        <Audio />
-      </div>
     </div>
   );
 
@@ -260,23 +195,12 @@ function App() {
               <ArtistIcon />
               <p>CANTOR</p>
             </span>
-            <b>{artistEdit(hymn)}</b>
+            <b>{hymn.artist}</b>
           </div>
         </div>
       </div>
     ))
   );
-
-  const profilePic = () => {
-    switch (selectedHymn) {
-      case "Cantor Mikhail Girgis Elbatanony":
-        return <img src={mikhailGirgis} alt="Cantor Mikhail" />;
-      case "Cantor Ibrahim Ayad":
-        return <img src={Nativity} alt="Cantor Ibrahim" />;
-      default:
-        return <img src={mikhailGirgis} alt="Cantor Default" />;
-    }
-  };
 
   return (
     <div className="mainContainer">
@@ -301,8 +225,9 @@ function App() {
         </div>
         <p>The ultimate search engine to house all the hymns in the Coptic church</p>
         <img className="deaf" src={Deaf} alt="deaf" />
-        {TabList()}
-        {filteredHymnsByArtist.length > 0 && renderHymnsBySeason()}
+        {ArtistList()}
+        {selectedArtist && !selectedSeason && renderSeasons()}
+        {selectedSeason && renderHymns()}
         <div className="footer">
           <nav>
             <li><img src={logo} alt="logo" /></li>

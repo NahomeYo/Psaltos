@@ -19,7 +19,7 @@ function Audio() {
         <>
             <WavesurferPlayer
                 height={100}
-                waveColor="blue"
+                waveColor="#2C475C"
                 url={testAudio}
                 onReady={onReady}
                 onPlay={() => setIsPlaying(true)}
