@@ -1,0 +1,244 @@
+.artist {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: flex-start;
+}
+
+.artist span {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 5px;
+}
+
+.artist span p {
+    color: var(--fourthy-color);
+}
+
+.artist svg {
+    width: 25px;
+    height: 25px;
+}
+
+.cantorTab001 {
+    overflow: visible;
+    position: relative;
+}
+
+.cantorTab001 .cantorContainer {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0px 30px 30px 0px;
+    background: var(--primary-color);
+    border-radius: 30px;
+    margin-bottom: 3vw;
+}
+
+.cantorTab001 .artist {
+    padding-left: 10px;
+    width: min-content;
+}
+
+.cantorTab001 .artist span .artistIcon,
+.cantorTab001 .artist span p {
+    fill: var(--fifthly-color);
+    color: var(--fifthly-color);
+}
+
+.cantorTab001 .artist span .artistIcon {
+    width: 30px;
+    height: 30px;
+}
+
+.cantorTab001 .cantorContainer .topRow {
+    background: #678399;
+    border-radius: 0px 0px 80px 0px;
+    padding-bottom: 10px;
+}
+
+.cantorTab001 .cantorContainer .topRow img {
+    border-radius: 0px 0px 80px 0px;
+    border: solid var(--fifthly-color);
+    border-right: solid var(--fifthly-color) 20px;
+    border-bottom: solid var(--fifthly-color) 5px;
+    border-left: solid var(--fifthly-color) 0px;
+    border-top: solid var(--fifthly-color) 0px;
+    width: 100px;
+    height: 120px;
+}
+
+.cantorTab001 b {
+    white-space: wrap;
+    text-align: left;
+    color: var(--fourthy-color);
+}
+
+.cantorTab002 {
+    position: relative;
+    width: 100%;
+}
+
+.cantorTab002 .cantorContainer {
+    background: var(--primary-color);
+    border-radius: 60px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+}
+
+.cantorTab001 .robe,
+.cantorTab002 .robe {
+    position: absolute;
+    right: 0;
+    top: -1px;
+}
+
+.cantorTab003 .cantorContainer {
+    background: radial-gradient(circle, rgba(103, 131, 153, 1) 0%, rgba(44, 71, 92, 1) 100%);
+    border-radius: 60px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 1vw;
+}
+
+.cantorTab003 .topRow {
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0 20px 0px 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    background: none;
+    border-radius: 0 0 30px 0px;
+    width: max-content;
+    overflow: visible;
+}
+
+.cantorTab004 .cantorContainer {
+    background: var(--primary-color);
+    border-radius: 30px 0px 0px 30px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 0px 10px 10px 0px;
+    width: min-content;
+}
+
+.headerContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+    gap: 10px;
+}
+
+.headerContainer h1 {
+    text-align: start;
+}
+
+.headerContainer .cross {
+    fill: var(--primary-color);
+}
+
+.artistIcon {
+    fill: var(--fourthy-color);
+}
+
+.searchItem .artistIcon {
+    fill: var(--primary-color);
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10vw;
+}
+
+.searchBar {
+    font-size: var(--medium);
+}
+
+.searchItem {
+    padding: 1vw 2vw;
+}
+
+.searchItem .cantorContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.searchItem .cantorContainer .topRow {
+    background: none;
+}
+
+.searchItem .cantorContainer h1,
+.searchItem .cantorContainer h2,
+.searchItem .cantorContainer b,
+.searchItem .cantorContainer p,
+.searchItem .cantorContainer .artistIcon .searchItem .cantorContainer .cross {
+    color: var(--primary-color);
+    fill: var(--primary-color);
+}
+
+.searchItem .cantorContainer .artist {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 5px;
+    white-space: wrap;
+}
+
+.searchItem:hover {
+    background: var(--fourthy-color);
+}
+
+.secondRow {
+    margin: 0px 30px;
+}
+
+.topRow {
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0 20px 0px 0px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    background: var(--primary-color);
+    border-radius: 0 0 30px 0px;
+    width: max-content;
+    overflow: visible;
+}
+
+.topRow .title {
+    display: flex;
+    flex-direction: column;
+}
+
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: top;
+    justify-content: space-between;
+    overflow-x: visible;
+}

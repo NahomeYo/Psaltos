@@ -1,0 +1,88 @@
+@font-face {
+    font-family: 'Aladin';
+    src: url(./Fonts/Aladin/Aladin-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'Intel-light';
+    src: url(./Fonts/Inter/Inter_18pt-Medium.ttf);
+}
+
+@font-face {
+    font-family: 'RumRaisin';
+    src: url(./Fonts/Rum_Raisin/RumRaisin-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'Akshar';
+    src: url(./Fonts/Akshar/Akshar-VariableFont_wght.ttf);
+}
+
+:root {
+    --max: 60px;
+    --big: 30px;
+    --medium: 25px;
+    --small: 18px;
+    --mini: 12px;
+    --primary-color: #2C475C;
+    --secondary-color: #426077;
+    --fourthy-color: #B5CBD5;
+    --fifthly-color: #eff9ff;
+}
+
+.rum-raisin-regular {
+    font-family: "Rum Raisin", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+t {
+    font-size: var(--max);
+    color: var(--secondary-color);
+    font-family: 'Aladin';
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    font-size: var(--big);
+    font-family: 'RumRaisin';
+    text-transform: uppercase;
+    color: var(--fifthly-color);
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+}
+
+h2 {
+    font-size: var(--medium);
+    color: var(--fifthly-color);
+    font-family: 'Aladin';
+    padding: 0;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+b {
+    font-size: var(--small);
+    color: var(--fifthly-color);
+    font-family: 'Aladin';
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+}
+
+p {
+    font-size: var(--mini);
+    font-family: 'Intel-light';
+    text-transform: none;
+    color: var(--secondary-color);
+    padding: 0;
+    margin: 0;
+}
+
+.tabList p {
+    color: var(--fifthly-color);
+}

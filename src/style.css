@@ -1,164 +1,114 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 
-:root {
-    overflow-x: hidden;
-    background: linear-gradient(-90deg, rgb(190, 198, 201) 50%, rgb(203, 227, 234) 100%);
-    font-size: 24px;
-    --bigFont: 2em;
-    --medFont: 1.8em;
-    --smallFont: 1em;
-    --primaryColor: #426077;
-    --secondaryColor: white;
-    --tertiaryColor: #8dadc6;
-    --highlightColor: #a2a5a7;
-}
-
-* {
+body {
+    background: linear-gradient(180deg, var(--fifthly-color) 0%, var(--fourthy-color) 100%);
     margin: 0;
     padding: 0;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: visible;
 }
 
-body {
-    position: relative;
-    box-sizing: border-box;
+body::before {
+    background-image:
+        url('./img/backgroundPattern.png');
+    background-repeat: repeat;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -4;
+    content: "";
+}
+
+.mainLogo {
+    width: 180px;
+    height: 180px;
+}
+
+.titleContainer {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    align-items: center;
 }
 
-@font-face {
-    font-family: Gyptienne;
-    src: url(./Fonts/Gyptienne.ttf);
+.churchImg {
+    position: absolute;
+    mix-blend-mode: luminosity;
+    z-index: -2;
+    left: 0px;
+    bottom: 0px;
+    width: 60vw;
+    opacity: 60%;
 }
 
-@font-face {
-    font-family: Coptic;
-    src: url(Fonts/Coptic\ Eyes\ \(Latin\ Letters\).ttf);
+.contents {
+    margin: 0px 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    justify-content: flex-start;
+    align-items: center;
 }
 
-@font-face {
-    font-family: Antonious-Bold;
-    src: url(Fonts/Antonious-Bold.ttf);
-}
-
-@font-face {
-    font-family: Antonious-Normal;
-    src: url(Fonts/Antonious-Normal.ttf);
-}
-
-@font-face {
-    font-family: Antonious-Thin;
-    src: url(Fonts/Antonious-Normal-Thin.ttf);
-}
-
-@font-face {
-    font-family: Cairo;
-    src: url(Fonts/Cairo.ttf);
-}
-
-@font-face {
-    font-family: Aldery-block;
-    src: url(Fonts/Adlery-Pro-Blockletter-trial.ttf);
-}
-
-@font-face {
-    font-family: Aldery-trial;
-    src: url(Fonts/Adlery-Pro-trial.ttf);
-}
-
-@font-face {
-    font-family: Creshex;
-    src: url(Fonts/Creshex\ Brush.ttf);
-}
-
-h1 {
-    font-size: var(--bigFont);
-    font-family: Coptic;
-    color: var(--primaryColor);
-}
-
-h2 {
-    font-size: var(--medFont);
-    font-family: Creshex;
-    color: var(--primaryColor);
-    letter-spacing: 3px;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-h3 {
-    font-size: var(--smallFont);
-    color: var(--primaryColor);
-    font-family: Aldery-block;
-    letter-spacing: 2.5px;
-}
-
-p {
-    font-size: var(--smallFont);
-    --primaryColor: #426077;
-    font-family: "Inter", sans-serif;
-    color: var(--primaryColor);
-}
-
-.menuLogo {
-    width: 10vw;
-    height: 10vh;
-    opacity: 70%;
+.mainContainer {
+    position: relative;
 }
 
 nav {
-    margin: 0 5vw 0 5vw;
-}
-
-nav ul {
+    width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
     list-style: none;
     justify-content: flex-start;
-    padding: 1vw 0vw;
-    height: 100%;
+    align-items: center;
+    gap: 60px;
+    padding: 30px 0px;
 }
 
-nav ul li a {
+nav li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+nav li:nth-of-type(1) img {
+    height: 80px;
+}
+
+nav li a {
     text-decoration: none;
-    color: var(--primaryColor);
-    margin: 0vw 2vw 0 2vw;
 }
 
-nav ul li {
-    margin: 0vw 2vw 0 2vw;
+nav li a h2 {
+    color: var(--primary-color);
 }
 
 .Jesus {
     position: absolute;
-    top: 0;
-    right: 0;
-    z-index: -1;
-    scale: 2.5;
-}
-
-.searchContainer {
-    margin: 0 10vw 0 10vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-    gap: 2vh;
+    top: -100px;
+    right: -100px;
+    z-index: -3;
+    mix-blend-mode: multiply;
+    opacity: 80%;
 }
 
 .searchBarContainer {
-    width: 90%;
+    width: 100%;
     background: var(--secondaryColor);
     display: flex;
     flex-direction: column;
-    padding: 1vw 1vw 1vw 0vw;
+    gap: 2vh;
     border-radius: 40px;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.147);
+    background: var(--fifthly-color);
 }
 
 .searchBar {
     display: flex;
-    margin-left: 30px;
+    padding: 1vw 2vw;
 }
 
 .searchBar input {
@@ -173,152 +123,286 @@ nav ul li {
     outline: none;
 }
 
-.dropdown {
-    background: transparent;
-    margin-top: 2vw;
+.loadingContainer {
     display: flex;
-    flex-direction: column;
-    padding-right: 2vw;
-    margin-bottom: 1vw;
-}
-
-.dropdown>div {
-    display: flex;
-    justify-content: end;
-    position: relative;
-    align-items: center;
-    width: 100%;
-    border-radius: 0px 80px 80px 0px;
-    margin-bottom: 1vw;
-}
-
-.dropdown>div li {
-    list-style: none;
-}
-
-.dropdown>div li ul {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    text-align: start;
-    width: 10vw;
-}
-
-.dropdown>div li ul svg {
-    fill: var(--tertiaryColor);
-    width: 40px;
-}
-
-.dropdown>div li:nth-of-type(1) {
-    position: absolute;
-    left: 30px;
-}
-
-.dropdown>div li:nth-of-type(2) {
-    display: flex;
-    flex-direction: row;
-}
-
-.dropdown>div li:nth-of-type(2) img {
-    border-radius: 50px;
-    margin-right: 1vw;
-    width: 65px;
-    height: 65px;
-    border: 5px solid var(--tertiaryColor);
-}
-
-.hover {
-    transition: 0.5s;
-    color: var(--secondaryColor);
-}
-
-.dropdownHover {
-    background: var(--highlightColor);
-    transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-    border-left: var(--primaryColor) 0.3em solid;
-}
-
-.selectionBoxes {
-    margin: 0vw 10vw 0vw 10vw;
-}
-
-.selectionBoxes ul {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-}
-
-.selectionBoxes ul li {
-    display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 350px;
-    margin: 1vw 0;
+    z-index: 999;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(180deg, rgba(237, 242, 245, 1) 0%, rgba(154, 187, 202, 1) 100%);
 }
 
-.selectionBoxes ul li img {
-    object-fit: cover;
-    width: 200px;
-    height: 150px;
-    border-radius: 30px;
-    border: 3px solid var(--secondaryColor);
-    margin-bottom: 1vw;
+.loadingContainer .leftCymbal {
+    animation: clashRight 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
-.selectionBoxes ul li .overlay {
-    font-size: var(--smallFont);
-    font-family: Aldery-block;
-    color: var(--primaryColor);
-    letter-spacing: 2px;
-    font-weight: 600;
-    text-align: center;
-    line-height: normal;
+.loadingContainer .rightCymbal {
+    animation: clashLeftTap 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
-.seasonTitle svg {
-    width: 20px;
-    margin: 0vw 1vw;
-    fill: var(--primaryColor);
+.clash path:nth-of-type(1) {
+    animation: fade 0.5s linear forwards infinite;
+    animation-delay: 0s;
 }
 
-.seasonTitle {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.clash path:nth-of-type(2) {
+    animation: fade 0.5s linear forwards infinite;
+    animation-delay: 0.05s;
 }
 
-.selectionBoxesArtist {
-    margin: 0vw 10vw 0vw 10vw;
+.clash path:nth-of-type(3) {
+    animation: fade 0.5s linear forwards infinite;
+    animation-delay: 0.10s;
 }
 
-.selectionBoxesArtist ul {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+.clash path:nth-of-type(4) {
+    animation: fade 0.5s linear forwards infinite;
+    animation-delay: 0.15s;
 }
 
-.selectionBoxesArtist ul li {
+.clash {
+    overflow: visible;
+    position: absolute;
+    top: 25vh;
+    left: 49vw;
+    animation: clashTime 1s linear infinite;
+    animation-delay: 1s;
+    opacity: 1;
+}
+
+@keyframes clashTime {
+    0% {
+        opacity: 100%;
+    }
+
+    25% {
+        opacity: 0%;
+    }
+
+    100% {
+        opacity: 0%;
+    }
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+        transform: translateY(0px);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-50px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+}
+
+@keyframes clashRight {
+    0% {
+        transform: translateX(0px) rotate(0deg);
+    }
+
+    25% {
+        transform: translateX(40px) rotate(15deg);
+    }
+
+    50% {
+        transform: translateX(30px) rotate(10deg);
+    }
+
+    75% {
+        transform: translateX(30px) rotate(10deg);
+    }
+
+    100% {
+        transform: translateX(0px) rotate(0deg);
+    }
+}
+
+@keyframes clashLeftTap {
+    0% {
+        transform: translateX(0px) rotate(0deg);
+    }
+
+    25% {
+        transform: translateX(-50px) rotate(-10deg);
+    }
+
+    50% {
+        transform: translateX(-25px) rotate(0deg);
+    }
+
+    62.5% {
+        transform: translateX(-25px) rotate(-20deg);
+    }
+
+    75% {
+        transform: translateX(-25px) rotate(2deg);
+    }
+
+    87.5% {
+        transform: translateX(-75px) rotate(-20deg);
+    }
+
+    100% {
+        transform: translateX(0px) rotate(0deg);
+    }
+}
+
+.TabList {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    width: 350px;
-    font-size: var(--smallFont);
-    font-family: Aldery-block;
-    color: var(--primaryColor);
-    letter-spacing: 2px;
-    font-weight: 600;
-    text-align: center;
     align-items: center;
+    background: linear-gradient(0deg, rgba(185, 204, 217, 1) 0%, rgba(136, 158, 174, 1) 100%);
+    position: relative;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 0px 50px 0px 50px;
+    border-radius: 200px 0px 100px 0px;
+    border-bottom: solid var(--fifthly-color) 20px;
 }
 
-.selectionBoxesArtist ul li img {
+.TabList>span:first-child {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.TabList>span:nth-child(2) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 5vw;
+}
+
+.TabList .cross,
+.TabList .leftArrow,
+.TabList .rightArrow {
+    fill: var(--fifthly-color);
+}
+
+.TabList .rightArrow {
+    transform: scaleX(-1);
+}
+
+.TabList+p {
+    color: var(--primary-color);
+}
+
+.TabList>span:nth-of-type(2) .TabListArrow:nth-of-type(1) {
+    transform: scaleX(1);
+}
+
+.TabList>span:nth-of-type(2) .TabListArrow:nth-of-type(2) {
+    transform: scaleX(-1);
+}
+
+.arrowContainer {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+nav ul li h2 {
+    color: var(--primary-color);
+}
+
+.deaf {
+    width: 40px;
+    height: 50px;
+    margin: 50px 0px;
+}
+
+.footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 40px 0px;
+}
+
+.footer nav {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.footer nav .cross {
+    width: 30px;
+    height: 30px;
+    fill: var(--primary-color);
+}
+
+fade {
+    position: absolute;
+    z-index: -1;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    background: linear-gradient(0deg, rgba(154, 187, 202, 1) 50%, rgba(154, 187, 202, 0) 100%);
+}
+
+.seasonContainer {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 50px 0px;
+    gap: 40px;
+}
+
+.seasonItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+}
+
+.seasonItem:hover::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    border-radius: 30px;
+    pointer-events: none;
+}
+
+.seasonItem img {
+    width: 100%;
+    height: 160px;
     object-fit: cover;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    border: 4px solid var(--secondaryColor);
-    padding: 0;
-    margin-bottom: 1vw;
+    object-position: 0% 25%;
+    border-radius: 30px;
+    border: var(--primary-color) solid 4px;
+    transition: filter 0.3s ease;
+}
+
+.seasonItem:hover img {
+    filter: brightness(0.8);
+}
+
+.seasonItem .cross,
+.seasonItem h1 {
+    color: var(--primary-color);
+    fill: var(--primary-color);
+    text-align: center;
 }

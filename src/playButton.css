@@ -1,0 +1,30 @@
+.previousSong path,
+.audioDownload path,
+.nextSong path,
+.pauseButton path,
+.playButton path,
+.fifteenRewind path,
+.fifteenForward path,
+.speaker path {
+    fill: var(--fourthy-color);
+}
+
+.audioContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0px 30px;
+}
+
+.playOption {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+}
+
+.audioControl {
+    overflow: hidden;
+    background: none;
+    border: none;
+}
