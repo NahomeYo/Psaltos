@@ -167,7 +167,10 @@ function App() {
   );
 
   const renderSingleArtist = () => (
-    <div className="cantorTab003" onClick={() => setSelectedArtist()}>
+    <div className="cantorTab003" onClick={() => {
+      setSelectedArtist(); 
+      setSelectedSeason();
+    }}>
        <div className="cantorContainer">
          <div className="topRow">
            <HeaderComponent placeHolder={selectedArtist.artistName} />
