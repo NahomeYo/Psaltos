@@ -85,12 +85,17 @@ function App() {
             <path d="M1.05873 17.5848C0.0187157 16.7842 0.0187151 15.2158 1.05873 14.4152L18.28 1.15824C19.5951 0.145845 21.5 1.08337 21.5 2.74305V29.2569C21.5 30.9166 19.5951 31.8542 18.28 30.8418L1.05873 17.5848Z" />
           </svg>
           <div className="list">
-            {artistData.slice(click, click + 4).map((artist, index) => (
+            {!selectedArtist ? 
+            artistData.slice(click, click + 4).map((artist, index) => (
               <div key={index}>
                 {renderArtist(artist)}
               </div>
-            ))}
+            )) 
+            : 
+            <div>{renderSingleArtist()}</div>}
+
           </div>
+
           <svg className="rightArrow" onClick={nextFour} width="22" height="32" viewBox="0 0 22 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1.05873 17.5848C0.0187157 16.7842 0.0187151 15.2158 1.05873 14.4152L18.28 1.15824C19.5951 0.145845 21.5 1.08337 21.5 2.74305V29.2569C21.5 30.9166 19.5951 31.8542 18.28 30.8418L1.05873 17.5848Z" />
           </svg>
@@ -162,6 +167,23 @@ function App() {
     </div>
   );
 
+  const renderSingleArtist = () => (
+    <div className="cantorTab003" onClick={() => setSelectedArtist()}>
+       <div className="cantorContainer">
+         <div className="topRow">
+           <HeaderComponent placeHolder={selectedArtist.artistName} />
+         </div>
+         <div className="artist">
+           <span>
+             <ArtistIcon />
+             <p>CANTOR</p>
+           </span>
+           <b>{selectedArtist.artistName}</b>
+         </div>
+       </div>
+     </div>
+   );
+
   const seasonRender = (season) => {
     switch (season) {
       case 'Nativity':
@@ -226,7 +248,7 @@ function App() {
         <p>The ultimate search engine to house all the hymns in the Coptic church</p>
         <img className="deaf" src={Deaf} alt="deaf" />
         {ArtistList()}
-        {selectedArtist && !selectedSeason && renderSeasons()}
+        {selectedArtist && renderSeasons()}
         {selectedSeason && renderHymns()}
         <div className="footer">
           <nav>
