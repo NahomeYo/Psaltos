@@ -17,7 +17,7 @@ import Theophany from "./img/tasbeha.jpg";
 import Apostles from "./img/apostles.jpg";
 import SundayTesbaha from "./img/tasbeha.jpg";
 import Weekday from "./img/weekdayTasbeha.jpg";
-import SundayVespers from "./img/vespers.jpg"
+import SundayVespers from "./img/vespers.jpg";
 import ArtistIcon from "./img/icons/artistIcon.js";
 import HymnsData from "./output.json";
 import ArtistData from "./artists.json";
@@ -29,7 +29,6 @@ function App() {
   const [artistData, setArtistData] = useState([]);
   const [filteredHymns, setFilteredHymns] = useState([]);
   const [typing, setTyping] = useState(false);
-  const [selectedHymn, setSelectedHymn] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState();
   const [selectedArtist, setSelectedArtist] = useState();
 
@@ -38,7 +37,6 @@ function App() {
       try {
         setHymnData(HymnsData);
         setFilteredHymns(HymnsData);
-
         setArtistData(ArtistData)
       } catch (error) {
         console.error(error);
@@ -61,99 +59,141 @@ function App() {
     setFilteredHymns(searchMatch);
   };
 
-  // const artistEdit = (hymn) => hymn?.artist?.substring(7) || hymn?.artist || "";
-
   const ArtistList = () => {
     const [click, setClick] = useState(0);
+    const [cantorContainerStyle, setCantorContainerStyle] = useState({});
+    const [tabIndex, setTabIndex] = useState(0);
+    const [selectedArtist, setSelectedArtist] = useState(null);
+
+    const handleArtistClick = (artist) => {
+      setSelectedArtist(artist);
+      setTabIndex((prevTab) => {
+        return prevTab < 4 ? prevTab + 1 : 1;
+      });
+    };
+
+    useEffect(() => {
+      if (selectedArtist) {
+        let newStyle = {
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          padding: '0px 30px 30px 0px',
+          background: 'var(--primary-color)',
+          borderRadius: '30px',
+          marginBottom: '3vw',
+        };
+
+        switch (tabIndex) {
+          case 1:
+            newStyle = {
+              background: 'var(--primary-color)',
+              width: '100%',
+              borderRadius: '60px',
+              overflow: 'hidden',
+              position: 'relative',
+              display: 'flex',
+              gap: '20px',
+              justifyContent: 'flex-start',
+              flexDirection: 'row',
+              alignItems: 'center',
+            };
+            break;
+          case 2:
+            newStyle = {
+              background: 'var(--primary-color)',
+              borderRadius: '60px',
+              overflow: 'hidden',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '20px',
+              marginBottom: '1vw',
+            };
+            break;
+          case 3:
+            newStyle = {
+              background: 'var(--primary-color)',
+              borderRadius: '30px 0px 0px 30px',
+              overflow: 'hidden',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '30px',
+              padding: '0px 10px 10px 0px',
+              width: 'min-content',
+            };
+            break;
+          default:
+            break;
+        }
+        setCantorContainerStyle(newStyle);
+      }
+    }, [tabIndex, selectedArtist]);
 
     const nextFour = () => {
-      setClick(prevClick => Math.min(prevClick + 4, artistData.length - 4));
-    }
+      setClick((prevClick) => Math.min(prevClick + 4, artistData.length - 4));
+    };
 
     const prevFour = () => {
-      setClick(prevClick => Math.max(prevClick - 4, 0));
-    }
+      setClick((prevClick) => Math.max(prevClick - 4, 0));
+    };
 
     return (
       <div className="TabList">
         <span>
           <HeaderComponent placeHolder="cantors" />
-          <p>Choose a Coptic deacon to enrich your spiritual journey with traditional hymns</p>
+          <p>
+            Choose a Coptic deacon to enrich your spiritual journey with traditional hymns
+          </p>
         </span>
         <span>
-          <svg className="leftArrow" onClick={prevFour} width="22" height="32" viewBox="0 0 22 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            className="leftArrow"
+            onClick={prevFour}
+            width="22"
+            height="32"
+            viewBox="0 0 22 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path d="M1.05873 17.5848C0.0187157 16.7842 0.0187151 15.2158 1.05873 14.4152L18.28 1.15824C19.5951 0.145845 21.5 1.08337 21.5 2.74305V29.2569C21.5 30.9166 19.5951 31.8542 18.28 30.8418L1.05873 17.5848Z" />
           </svg>
-          <div className="list">
-            {!selectedArtist ? 
-            artistData.slice(click, click + 4).map((artist, index) => (
-              <div key={index}>
-                {renderArtist(artist)}
-              </div>
-            )) 
-            : 
-            <div>{renderSingleArtist()}</div>}
 
+          <div className="list">
+            {!selectedArtist
+              ? artistData.slice(click, click + 4).map((artist, index) => (
+                <div key={index}>
+                  {renderArtist(artist, cantorContainerStyle, handleArtistClick)}
+                </div>
+              ))
+              : renderArtist(selectedArtist, cantorContainerStyle, handleArtistClick)}
           </div>
 
-          <svg className="rightArrow" onClick={nextFour} width="22" height="32" viewBox="0 0 22 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            className="rightArrow"
+            onClick={nextFour}
+            width="22"
+            height="32"
+            viewBox="0 0 22 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path d="M1.05873 17.5848C0.0187157 16.7842 0.0187151 15.2158 1.05873 14.4152L18.28 1.15824C19.5951 0.145845 21.5 1.08337 21.5 2.74305V29.2569C21.5 30.9166 19.5951 31.8542 18.28 30.8418L1.05873 17.5848Z" />
           </svg>
         </span>
       </div>
     );
-  }
-
-  const renderSeasons = () => {
-    // we have selected an artist so display all the seasons for that artist
-    const seasons = [...new Set(hymnData.filter(hymn => hymn.artist === selectedArtist.artistName).map(hymn => hymn.season))];
-
-    return (
-      <div className="seasonContainer">
-        {seasons.map((season, index) => (
-          <div key={index} className="seasonItem" onClick={() => setSelectedSeason(season)}>
-            {seasonRender(season)}
-            <HeaderComponent placeHolder={season} />
-          </div>
-        ))}
-      </div>
-    );
-  };
-  const renderHymns = () => {
-    // we have selected an artist and season so display all the hymns for that season from the selected artist
-    const hymns = [...new Set(hymnData.filter(hymn => hymn.artist === selectedArtist.artistName && hymn.season === selectedSeason))];
-
-    return (
-      <div >
-        {hymns.map((hymn, index) => (
-          <div key={index} style={{width: 1000}}>
-            <HeaderComponent placeHolder={hymn.name} />
-            <Audio/>
-            <br/>
-            <br/>
-
-          </div>
-        ))}
-      </div>
-    );
   };
 
-
-  const HeaderComponent = ({ placeHolder }) => (
-    <div className="headerContainer">
-      <Cross />
-      <h1>{placeHolder}</h1>
-      <Cross />
-    </div>
-  );
-
-  const renderArtist = (artist) => (
-    <div className="cantorTab001" onClick={() => {
-      setSelectedArtist(artist);
-    }}>
-      <div className="cantorContainer">
-        <div className="topRow">
-          <img src={artist.img} alt={artist.artistName} />
+  const renderArtist = (artist, cantorContainerStyle, handleArtistClick) => (
+    <div className="cantorTab001">
+      <div className="cantorContainer" onClick={() => { handleArtistClick(artist) }} style={cantorContainerStyle}>
+        <div className="topRow" >
+          <img src={artist.img} alt={`Artist ${artist.artistName}`} />
         </div>
         <div className="artist">
           <span>
@@ -167,22 +207,49 @@ function App() {
     </div>
   );
 
-  const renderSingleArtist = () => (
-    <div className="cantorTab003" onClick={() => setSelectedArtist()}>
-       <div className="cantorContainer">
-         <div className="topRow">
-           <HeaderComponent placeHolder={selectedArtist.artistName} />
-         </div>
-         <div className="artist">
-           <span>
-             <ArtistIcon />
-             <p>CANTOR</p>
-           </span>
-           <b>{selectedArtist.artistName}</b>
-         </div>
-       </div>
-     </div>
-   );
+  const renderSeasons = () => {
+    if (!selectedArtist) return null;
+
+    const seasons = [...new Set(hymnData.filter(hymn => hymn.artist === selectedArtist.artistName).map(hymn => hymn.season))];
+
+    return (
+      <div className="seasonContainer">
+        {seasons.map((season, index) => (
+          <div key={index} className="seasonItem" onClick={() => setSelectedSeason(season)}>
+            {seasonRender(season)}
+            <HeaderComponent placeHolder={season} />
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderHymns = () => {
+    if (!selectedSeason) return null;
+
+    const hymns = [...new Set(hymnData.filter(hymn => hymn.artist === selectedArtist.artistName && hymn.season === selectedSeason))];
+
+    return (
+      <div >
+        {hymns.map((hymn, index) => (
+          <div key={index} style={{ width: 1000 }}>
+            <HeaderComponent placeHolder={hymn.name} />
+            <Audio />
+            <br />
+            <br />
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const HeaderComponent = ({ placeHolder }) => (
+    <div className="headerContainer">
+      <Cross />
+      <h1>{placeHolder}</h1>
+      <Cross />
+    </div>
+  );
 
   const seasonRender = (season) => {
     switch (season) {
@@ -197,9 +264,9 @@ function App() {
       case 'Sunday Tasbeha (Midnight Praises)':
         return <img src={SundayTesbaha} alt="Sunday Tasbeha" />;
       case 'Weekday Tasbeha (Midnight Praises)':
-        return <img src={Weekday} alt="Sunday Tasbeha" />;
+        return <img src={Weekday} alt="Weekday Tasbeha" />;
       case 'Sunday Vespers Praise':
-        return <img src={SundayVespers} alt="Sunday Tasbeha" />;
+        return <img src={SundayVespers} alt="Sunday Vespers" />;
       default:
         return null;
     }
@@ -247,7 +314,7 @@ function App() {
         </div>
         <p>The ultimate search engine to house all the hymns in the Coptic church</p>
         <img className="deaf" src={Deaf} alt="deaf" />
-        {ArtistList()}
+        <ArtistList />
         {selectedArtist && renderSeasons()}
         {selectedSeason && renderHymns()}
         <div className="footer">

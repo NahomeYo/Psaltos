@@ -56,7 +56,7 @@
 .cantorTab001 .cantorContainer .topRow {
     background: #678399;
     border-radius: 0px 0px 80px 0px;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
 }
 
 .cantorTab001 .cantorContainer .topRow img {
@@ -68,6 +68,8 @@
     border-top: solid var(--fifthly-color) 0px;
     width: 100px;
     height: 120px;
+    object-fit: cover;   
+    object-position: 50% 100%;
 }
 
 .cantorTab001 b {
@@ -81,36 +83,11 @@
     width: 100%;
 }
 
-.cantorTab002 .cantorContainer {
-    background: var(--primary-color);
-    border-radius: 60px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    gap: 20px;
-    justify-content: flex-start;
-    flex-direction: row;
-    align-items: center;
-}
-
 .cantorTab001 .robe,
 .cantorTab002 .robe {
     position: absolute;
     right: 0;
     top: -1px;
-}
-
-.cantorTab003 .cantorContainer {
-    background: radial-gradient(circle, rgba(103, 131, 153, 1) 0%, rgba(44, 71, 92, 1) 100%);
-    border-radius: 60px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    margin-bottom: 1vw;
 }
 
 .cantorTab003 .topRow {
@@ -124,18 +101,6 @@
     border-radius: 0 0 30px 0px;
     width: max-content;
     overflow: visible;
-}
-
-.cantorTab004 .cantorContainer {
-    background: var(--primary-color);
-    border-radius: 30px 0px 0px 30px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    padding: 0px 10px 10px 0px;
-    width: min-content;
 }
 
 .headerContainer {
