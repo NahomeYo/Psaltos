@@ -31,13 +31,18 @@ function App() {
   const [typing, setTyping] = useState(false);
   const [selectedSeason, setSelectedSeason] = useState();
   const [selectedArtist, setSelectedArtist] = useState();
+  const [click, setClick] = useState(0);
+  const [cantorContainerStyle, setCantorContainerStyle] = useState({});
+  const [imgStyle, setImgStyle] = useState({});
+  const [textStyle, setTextStyle] = useState({});
+  const [tabIndex, setTabIndex] = useState(0);
 
   useEffect(() => {
     const getData = async () => {
       try {
         setHymnData(HymnsData);
         setFilteredHymns(HymnsData);
-        setArtistData(ArtistData)
+        setArtistData(ArtistData);
       } catch (error) {
         console.error(error);
       }
@@ -59,181 +64,185 @@ function App() {
     setFilteredHymns(searchMatch);
   };
 
-  const ArtistList = () => {
-    const [click, setClick] = useState(0);
-    const [cantorContainerStyle, setCantorContainerStyle] = useState({});
-    const [tabIndex, setTabIndex] = useState(0);
-    const [selectedArtist, setSelectedArtist] = useState(null);
+  const seasons = selectedArtist
+    ? [
+      ...new Set(
+        hymnData
+          .filter(hymn => hymn.artist === selectedArtist?.artistName)
+          .map(hymn => hymn.season)
+      )
+    ]
+    : [];
 
-    const handleArtistClick = (artist) => {
-      setSelectedArtist(artist);
-      setTabIndex((prevTab) => {
-        return prevTab < 4 ? prevTab + 1 : 1;
-      });
-    };
+  const hymns = selectedArtist && selectedSeason
+    ? hymnData.filter(hymn => hymn.artist === selectedArtist?.artistName && hymn.season === selectedSeason)
+    : [];
 
-    useEffect(() => {
-      if (selectedArtist) {
-        let newStyle = {
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-          padding: '0px 30px 30px 0px',
-          background: 'var(--primary-color)',
-          borderRadius: '30px',
-          marginBottom: '3vw',
-        };
-
-        switch (tabIndex) {
-          case 1:
-            newStyle = {
-              background: 'var(--primary-color)',
-              width: '100%',
-              borderRadius: '60px',
-              overflow: 'hidden',
-              position: 'relative',
-              display: 'flex',
-              gap: '20px',
-              justifyContent: 'flex-start',
-              flexDirection: 'row',
-              alignItems: 'center',
-            };
-            break;
-          case 2:
-            newStyle = {
-              background: 'var(--primary-color)',
-              borderRadius: '60px',
-              overflow: 'hidden',
-              position: 'relative',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '20px',
-              marginBottom: '1vw',
-            };
-            break;
-          case 3:
-            newStyle = {
-              background: 'var(--primary-color)',
-              borderRadius: '30px 0px 0px 30px',
-              overflow: 'hidden',
-              position: 'relative',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '30px',
-              padding: '0px 10px 10px 0px',
-              width: 'min-content',
-            };
-            break;
-          default:
-            break;
-        }
-        setCantorContainerStyle(newStyle);
-      }
-    }, [tabIndex, selectedArtist]);
-
-    const nextFour = () => {
-      setClick((prevClick) => Math.min(prevClick + 4, artistData.length - 4));
-    };
-
-    const prevFour = () => {
-      setClick((prevClick) => Math.max(prevClick - 4, 0));
-    };
-
-    return (
-      <div className="TabList">
-        <span>
-          <HeaderComponent placeHolder="cantors" />
-          <p>
-            Choose a Coptic deacon to enrich your spiritual journey with traditional hymns
-          </p>
-        </span>
-        <span>
-          <svg
-            className="leftArrow"
-            onClick={prevFour}
-            width="22"
-            height="32"
-            viewBox="0 0 22 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M1.05873 17.5848C0.0187157 16.7842 0.0187151 15.2158 1.05873 14.4152L18.28 1.15824C19.5951 0.145845 21.5 1.08337 21.5 2.74305V29.2569C21.5 30.9166 19.5951 31.8542 18.28 30.8418L1.05873 17.5848Z" />
-          </svg>
-
-          <div className="list">
-            {!selectedArtist
-              ? artistData.slice(click, click + 4).map((artist, index) => (
-                <div key={index}>
-                  {renderArtist(artist, cantorContainerStyle, handleArtistClick)}
-                </div>
-              ))
-              : renderArtist(selectedArtist, cantorContainerStyle, handleArtistClick)}
-          </div>
-
-          <svg
-            className="rightArrow"
-            onClick={nextFour}
-            width="22"
-            height="32"
-            viewBox="0 0 22 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M1.05873 17.5848C0.0187157 16.7842 0.0187151 15.2158 1.05873 14.4152L18.28 1.15824C19.5951 0.145845 21.5 1.08337 21.5 2.74305V29.2569C21.5 30.9166 19.5951 31.8542 18.28 30.8418L1.05873 17.5848Z" />
-          </svg>
-        </span>
-      </div>
-    );
-  };
-
-  const renderArtist = (artist, cantorContainerStyle, handleArtistClick) => (
-    <div className="cantorTab001">
-      <div className="cantorContainer" onClick={() => { handleArtistClick(artist) }} style={cantorContainerStyle}>
-        <div className="topRow" >
-          <img src={artist.img} alt={`Artist ${artist.artistName}`} />
-        </div>
-        <div className="artist">
-          <span>
-            <ArtistIcon />
-            <p>CANTOR</p>
-          </span>
-          <b>{artist.artistName}</b>
-        </div>
-      </div>
-      <Robe />
-    </div>
-  );
-
-  const renderSeasons = () => {
-    if (!selectedArtist) return null;
-
-    const seasons = [...new Set(hymnData.filter(hymn => hymn.artist === selectedArtist.artistName).map(hymn => hymn.season))];
-
+  const renderSeasons = (seasons) => {
     return (
       <div className="seasonContainer">
         {seasons.map((season, index) => (
           <div key={index} className="seasonItem" onClick={() => setSelectedSeason(season)}>
             {seasonRender(season)}
-            <HeaderComponent placeHolder={season} />
+            <HeaderComponent placeholder={season} />
           </div>
         ))}
       </div>
     );
   };
 
-  const renderHymns = () => {
-    if (!selectedSeason) return null;
+  const handleArtistClick = (artist) => {
+    setSelectedArtist(artist);
+    setTabIndex((prevTab) => {
+      return prevTab < 4 ? prevTab + 1 : 1;
+    });
+  };
 
-    const hymns = [...new Set(hymnData.filter(hymn => hymn.artist === selectedArtist.artistName && hymn.season === selectedSeason))];
+  useEffect(() => {
+    if (selectedArtist) {
+      let newStyle = {
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+        padding: '0px 30px 30px 0px',
+        background: 'var(--primary-color)',
+        borderRadius: '30px',
+        marginBottom: '3vw',
+      };
 
+      let imgStyle = {};
+
+      let textStyle = {};
+
+      switch (tabIndex) {
+        case 1:
+          newStyle = {
+            background: 'var(--primary-color)',
+            borderRadius: '60px',
+            overflow: 'hidden',
+            position: 'relative',
+            display: 'flex',
+            gap: '20px',
+            justifyContent: 'flex-start',
+            flexDirection: 'row',
+            alignItems: 'center',
+            whiteSpace: 'nowrap',
+            padding: '0',
+            margin: '0',
+          };
+
+          imgStyle = {
+            width: '80px',
+            height: '100px',
+          };
+
+          textStyle = {
+            whiteSpace: 'nowrap',
+          };
+
+          break;
+        case 2:
+          newStyle = {
+            background: 'var(--primary-color)',
+            borderRadius: '60px',
+            overflow: 'hidden',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '20px',
+            marginBottom: '1vw',
+          };
+          break;
+        case 3:
+          newStyle = {
+            background: 'var(--primary-color)',
+            borderRadius: '30px 0px 0px 30px',
+            overflow: 'hidden',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '30px',
+            padding: '0px 10px 10px 0px',
+            width: 'min-content',
+          };
+          break;
+        default:
+          break;
+      }
+      setCantorContainerStyle(newStyle);
+      setImgStyle(imgStyle);
+      setTextStyle(textStyle);
+    }
+  }, [tabIndex, selectedArtist]);
+
+  const nextFour = () => {
+    setClick((prevClick) => Math.min(prevClick + 4, artistData.length - 4));
+  };
+
+  const prevFour = () => {
+    setClick((prevClick) => Math.max(prevClick - 4, 0));
+  };
+
+  const rightArrow = () => {
     return (
-      <div >
+      <svg
+        className="rightArrow"
+        onClick={nextFour}
+        width="22"
+        height="32"
+        viewBox="0 0 22 32"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M1.05873 17.5848C0.0187157 16.7842 0.0187151 15.2158 1.05873 14.4152L18.28 1.15824C19.5951 0.145845 21.5 1.08337 21.5 2.74305V29.2569C21.5 30.9166 19.5951 31.8542 18.28 30.8418L1.05873 17.5848Z" />
+      </svg>
+    );
+  };
+
+  const leftArrow = () => {
+    return (
+      <svg
+        className="leftArrow"
+        onClick={prevFour}
+        width="22"
+        height="32"
+        viewBox="0 0 22 32"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M1.05873 17.5848C0.0187157 16.7842 0.0187151 15.2158 1.05873 14.4152L18.28 1.15824C19.5951 0.145845 21.5 1.08337 21.5 2.74305V29.2569C21.5 30.9166 19.5951 31.8542 18.28 30.8418L1.05873 17.5848Z" />
+      </svg>
+    );
+  };
+
+  const renderArtist = (artist, cantorContainerStyle, handleArtistClick, imgStyle, textStyle, tabIndex) => (
+    <div className="cantorTab001">
+      <div className="cantorContainer" onClick={() => { handleArtistClick(artist) }} style={cantorContainerStyle}>
+        <div className="topRow">
+          {tabIndex === 2 && <HeaderComponent placeholder={hymn.name} />}
+          {tabIndex !== 2 && <img style={imgStyle} src={artist.img} alt={`Artist ${artist.artistName}`} />}
+        </div>
+        <div className="artist">
+          <span>
+            <ArtistIcon />
+            <p>CANTOR</p>
+          </span>
+          <b style={textStyle}>{artist.artistName}</b>
+        </div>
+      </div>
+      <Robe />
+    </div>
+  );
+
+  const renderHymns = (hymns) => {
+    return (
+      <div>
         {hymns.map((hymn, index) => (
           <div key={index} style={{ width: 1000 }}>
-            <HeaderComponent placeHolder={hymn.name} />
+            <HeaderComponent placeholder={hymn.name} />
             <Audio />
             <br />
             <br />
@@ -243,10 +252,10 @@ function App() {
     );
   };
 
-  const HeaderComponent = ({ placeHolder }) => (
+  const HeaderComponent = ({ placeholder }) => (
     <div className="headerContainer">
       <Cross />
-      <h1>{placeHolder}</h1>
+      <h1>{placeholder}</h1>
       <Cross />
     </div>
   );
@@ -277,7 +286,7 @@ function App() {
       <div key={index} className="searchItem" onClick={() => { }}>
         <div className="cantorContainer">
           <div className="topRow">
-            <HeaderComponent placeHolder={hymn.name} />
+            <HeaderComponent placeholder={hymn.name} />
           </div>
           <div className="artist">
             <span>
@@ -311,12 +320,39 @@ function App() {
             <img src={search} alt="search" />
           </div>
           {typing && searchItem()}
+
+          <span>
+            <p>The ultimate search engine to house all the hymns in the Coptic church</p>
+            <img className="deaf" src={Deaf} alt="deaf" />
+          </span>
         </div>
-        <p>The ultimate search engine to house all the hymns in the Coptic church</p>
-        <img className="deaf" src={Deaf} alt="deaf" />
-        <ArtistList />
-        {selectedArtist && renderSeasons()}
-        {selectedSeason && renderHymns()}
+        <div className="TabList">
+          <span>
+            <HeaderComponent placeholder="cantors" />
+          </span>
+          <span>
+
+            <div className="list">
+              {!selectedArtist && leftArrow()}
+
+              {!selectedArtist
+                ? artistData.slice(click, click + 4).map((artist, index) => (
+                  <div key={index}>
+                    {renderArtist(artist, cantorContainerStyle, handleArtistClick)}
+                  </div>
+                ))
+                : renderArtist(selectedArtist, cantorContainerStyle, handleArtistClick, imgStyle, textStyle, tabIndex)}
+
+              {!selectedArtist && rightArrow()}
+            </div>
+
+            {selectedArtist && renderSeasons(seasons)}
+          </span>
+        </div>
+
+        {selectedSeason && renderHymns(hymns)}
+
+        {renderSeasons(seasons)}
         <div className="footer">
           <nav>
             <li><img src={logo} alt="logo" /></li>

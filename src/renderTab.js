@@ -21,6 +21,7 @@ const HeaderComponent = ({ placeHolder }) => (
 
 export const CantorTab = ({ artists }) => {
     const [click, setClick] = useState(0);
+    const [tab, setTab] = useState(0);
 
     const nextFour = () => {
         setClick((prevClick) => Math.min(prevClick + 4, artists.length - 4));
@@ -29,6 +30,10 @@ export const CantorTab = ({ artists }) => {
     const prevFour = () => {
         setClick((prevClick) => Math.max(prevClick - 4, 0));
     };
+
+    while (tab < 4) {
+        preTab => preTab + 1
+    }
 
     return (
         <div className="TabList">
@@ -98,7 +103,7 @@ export const profilePic = (artist) => {
 export const RenderTab = ({ filteredHymns }) => {
     const renderHymns = () => {
         return filteredHymns.map((selectedHymn, index) => (
-            <div key={index} className="cantorTab002" onClick={() => console.log(`Selected Hymn: ${selectedHymn.name}`)}>
+            <div key={index} className="cantorTab002">
                 <div className="cantorContainer">
                     <div className="topRow">{profilePic(selectedHymn.artist)}</div>
                     <div className="artist">
