@@ -328,7 +328,7 @@ function App() {
         </div>
         <div className="TabList">
           <span>
-            <HeaderComponent placeholder="cantors" />
+            {!selectedArtist && <HeaderComponent placeholder="cantors" />}
           </span>
           <span>
 
@@ -348,11 +348,11 @@ function App() {
 
             {selectedArtist && renderSeasons(seasons)}
           </span>
+          <Cross/>
         </div>
 
         {selectedSeason && renderHymns(hymns)}
 
-        {renderSeasons(seasons)}
         <div className="footer">
           <nav>
             <li><img src={logo} alt="logo" /></li>

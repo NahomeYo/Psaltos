@@ -294,6 +294,7 @@ nav li a h2 {
     align-items: center;
     width: 100%;
     gap: 5vw;
+    flex-direction: column;
 }
 
 .TabList .cross,
@@ -316,6 +317,15 @@ nav li a h2 {
 
 .TabList>span:nth-of-type(2) .TabListArrow:nth-of-type(2) {
     transform: scaleX(-1);
+}
+
+.TabList .list {
+    display: flex;
+    flex-direction: row;
+}
+
+.TabList  > .headerContainer .cross {
+    fill: var(--fifthly-color);
 }
 
 .arrowContainer {
