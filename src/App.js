@@ -31,13 +31,12 @@ function App() {
   const [typing, setTyping] = useState(false);
   const [selectedSeason, setSelectedSeason] = useState();
   const [selectedArtist, setSelectedArtist] = useState();
-  const [selectedHymn, setSelectedHymn] = useState();
   const [click, setClick] = useState(0);
   const [cantorContainerStyle, setCantorContainerStyle] = useState({});
   const [imgStyle, setImgStyle] = useState({});
   const [textStyle, setTextStyle] = useState({});
   const [tabIndex, setTabIndex] = useState(0);
-  const [expandedHymns, setExpandedHymns] = useState(0);
+  const [expandedHymns, setExpandedHymns] = useState(-1);
 
 
   useEffect(() => {
@@ -77,7 +76,7 @@ function App() {
     ]
     : [];
 
-  const hymns = selectedArtist && selectedSeason && selectedHymn
+  const hymns = selectedArtist && selectedSeason
     ? hymnData.filter(hymn => hymn.artist === selectedArtist?.artistName && hymn.season === selectedSeason)
     : [];
 
@@ -203,7 +202,7 @@ function App() {
   const renderHymn = (hymns, artist) => {
     return (
       <div className="hymnContainer">
-        {expandedHymns === 0 && !selectedHymn && (
+        {(
           <div className="header">
             <HeaderComponent placeholder={selectedSeason} />
           </div>
@@ -214,11 +213,10 @@ function App() {
             className="cantorTab001"
             key={index}
             onClick={() => {
-              setSelectedHymn(hymn); 
-              if (expandedHymns === 0 || selectedHymn !== hymn) {
-                setExpandedHymns(1); 
+              if (expandedHymns === index) {
+                setExpandedHymns(-1);
               } else {
-                setExpandedHymns(0); 
+                setExpandedHymns(index);
               }
             }}
             style={cantorContainerStyle}
@@ -226,19 +224,21 @@ function App() {
             <div className="cantorContainer">
               <div className="topRow">
                 <HeaderComponent placeholder={hymn.name} />
-                {expandedHymns === 1 && selectedHymn === hymn && (
+                {expandedHymns === index && (
                   <img style={imgStyle} src={artist.img} alt={`Artist ${artist.artistName}`} />
                 )}
               </div>
-              <div className="artist">
+
+              {expandedHymns === index && <div className="artist">
                 <span>
                   <ArtistIcon />
                   <p>CANTOR</p>
                 </span>
                 <b style={textStyle}>{selectedArtist?.artistName}</b>
-                {expandedHymns === 1 && selectedHymn === hymn && <Audio />}
-              </div>
-              {expandedHymns === 1 && selectedHymn === hymn && <Robe />}
+              </div>}
+
+              {expandedHymns === index && <Audio />}
+              {expandedHymns === index && <Robe />}
             </div>
           </div>
         ))}
@@ -341,7 +341,7 @@ function App() {
 
           <span>
             <div className="list">
-              {!selectedArtist && !selectedSeason && <button>{leftArrow()}</button>}
+              {!selectedArtist && !selectedSeason && <button className="leftBtn">{leftArrow()}</button>}
 
               {!selectedArtist && !selectedSeason
                 ? artistData.slice(click, click + 4).map((artist, index) => (
@@ -353,7 +353,7 @@ function App() {
 
               {selectedArtist && !selectedSeason && renderArtist(selectedArtist, cantorContainerStyle, handleArtistClick, imgStyle, textStyle, tabIndex, hymns)}
 
-              {!selectedArtist && !selectedSeason && <button>{rightArrow()}</button>}
+              {!selectedArtist && !selectedSeason && <button className="rightBtn">{rightArrow()}</button>}
             </div>
 
             {selectedSeason

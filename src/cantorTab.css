@@ -193,3 +193,13 @@
     justify-content: space-between;
     overflow-x: visible;
 }
+
+.leftBtn {
+    background: none;
+    border: none;
+}
+
+.rightBtn {
+    background: none;
+    border: none;
+}
