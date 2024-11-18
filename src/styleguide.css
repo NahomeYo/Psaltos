@@ -18,14 +18,25 @@
     src: url(./Fonts/Akshar/Akshar-VariableFont_wght.ttf);
 }
 
+@font-face {
+    font-family: 'Handwritten';
+    src: url(./Fonts/handwritten/Hey\ October.otf);
+}
+
+@font-face {
+    font-family: 'cursive';
+    src: url(./Fonts/handwritten/Lemon\ Tuesday.otf);
+}
+
 :root {
     --max: 60px;
     --big: 30px;
     --medium: 25px;
-    --small: 18px;
+    --small: 22px;
     --mini: 12px;
     --primary-color: #2C475C;
     --secondary-color: #426077;
+    --thirdly-color: #678399;
     --fourthy-color: #B5CBD5;
     --fifthly-color: #eff9ff;
 }
@@ -78,6 +89,14 @@ p {
     font-size: var(--mini);
     font-family: 'Intel-light';
     text-transform: none;
+    color: var(--secondary-color);
+    padding: 0;
+    margin: 0;
+}
+
+h {
+    font-size: var(--small);
+    font-family: 'Handwritten';
     color: var(--secondary-color);
     padding: 0;
     margin: 0;

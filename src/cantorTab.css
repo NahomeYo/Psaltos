@@ -24,6 +24,9 @@
 .cantorTab001 {
     overflow: visible;
     position: relative;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: row;
     width: 100%;
 }
 
@@ -31,15 +34,14 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 0px 30px 30px 0px;
     background: var(--primary-color);
-    border-radius: 30px;
+    border-radius: 30px 0px 0px 30px;
 }
 
 .cantorTab001 .artist {
-    padding-left: 10px;
+    padding: 10px 0px 0px 15px;
     width: min-content;
+    margin: 0;
 }
 
 .cantorTab001 .artist span .artistIcon,
@@ -66,8 +68,8 @@
     border-bottom: solid var(--fifthly-color) 5px;
     border-left: solid var(--fifthly-color) 0px;
     border-top: solid var(--fifthly-color) 0px;
-    width: 100px;
-    height: 120px;
+    min-width: none;
+    max-height: 100px;
     object-fit: cover;
     object-position: 50% 100%;
 }
@@ -83,12 +85,6 @@
     width: 100%;
 }
 
-.cantorTab001 .robe {
-    position: absolute;
-    right: 0;
-    top: -1px;
-}
-
 .headerContainer {
     display: flex;
     flex-direction: row;
@@ -99,12 +95,8 @@
     gap: 10px;
 }
 
-.headerContainer h1 {
-    text-align: start;
-}
-
 .headerContainer .cross {
-    fill: var(--primary-color);
+    fill: var(--thirdly-color);
 }
 
 .artistIcon {
@@ -127,40 +119,51 @@
 }
 
 .searchItem {
-    padding: 1vw 2vw;
-}
-
-.searchItem .cantorContainer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-
+    width: 95%;
+    padding-right: 2vw;
+    border-radius: 0px 60px 60px 0px;
+    margin-bottom: 0.5vw;
 }
 
-.searchItem .cantorContainer .topRow {
-    background: none;
-}
-
-.searchItem .cantorContainer h1,
-.searchItem .cantorContainer h2,
-.searchItem .cantorContainer b,
-.searchItem .cantorContainer p,
-.searchItem .cantorContainer .artistIcon .searchItem .cantorContainer .cross {
+.searchItem h1,
+.searchItem h2,
+.searchItem b,
+.searchItem .artistIcon .searchItem .cross,
+.searchItem .artist span p {
     color: var(--primary-color);
     fill: var(--primary-color);
 }
 
-.searchItem .cantorContainer .artist {
+.searchItem:hover {
+    background: var(--fourthy-color);
+}
+
+.searchItem:hover h1,
+.searchItem:hover h2,
+.searchItem:hover b,
+.searchItem:hover .artistIcon,
+.searchItem:hover .cross,
+.searchItem:hover .artist span p {
+    color: var(--fifthly-color);
+    fill: var(--fifthly-color);
+}
+
+.searchItem .topRow {
+    background: none;
+    padding-left: 1.5vw
+}
+
+.searchItem .artist {
     display: flex;
     flex-direction: column;
     align-items: end;
+    justify-content: end;
     gap: 5px;
-    white-space: wrap;
-}
-
-.searchItem:hover {
-    background: var(--fourthy-color);
+    white-space: nowrap;
 }
 
 .secondRow {
@@ -185,21 +188,6 @@
     flex-direction: column;
 }
 
-.list {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    align-items: top;
-    justify-content: space-between;
-    overflow-x: visible;
-}
-
-.leftBtn {
-    background: none;
-    border: none;
-}
-
-.rightBtn {
-    background: none;
-    border: none;
+.artistItem {
+    width: min-content;
 }

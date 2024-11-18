@@ -32,6 +32,7 @@ body::before {
     flex-direction: column;
     width: 100%;
     align-items: center;
+    height: min-content;
 }
 
 .churchImg {
@@ -45,12 +46,9 @@ body::before {
 }
 
 .contents {
-    margin: 0px 140px;
     display: flex;
     flex-direction: column;
-    gap: 50px;
-    justify-content: flex-start;
-    align-items: center;
+    margin: 0px 139px;
 }
 
 .mainContainer {
@@ -64,7 +62,7 @@ nav {
     justify-content: flex-start;
     align-items: center;
     gap: 60px;
-    padding: 30px 0px;
+    padding-top: 20px;
 }
 
 nav li {
@@ -95,30 +93,41 @@ nav li a h2 {
     opacity: 80%;
 }
 
-.searchBarContainer {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-}
-
-.searchBarContainer>span {
+.caption {
     margin-top: 1vw;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+.caption img {
+    height: 100px;
+    margin: 0;
+    opacity: 50%;
+}
+
+.searchBarContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.searchBarContainer .background {
+    background: var(--fifthly-color);
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.29);
+    border-radius: 40px;
+    padding-top: 0.5vw;
+    max-width: 90%;
+    min-width: 80%;
+    width: 100%;
+    overflow: hidden;
+}
+
+
 .searchBar {
-    padding: 1vw 2vw;
     width: 100%;
     display: flex;
     flex-direction: row;
-    gap: 2vh;
-    border-radius: 40px;
-    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.147);
-    background: var(--fifthly-color);
 }
 
 .searchBar input {
@@ -127,10 +136,16 @@ nav li a h2 {
     outline: none;
     width: 100%;
     font-size: 1em;
+    margin-left: 2vw;
+    margin-bottom: 1vw;
 }
 
 .searchBar input:focus {
     outline: none;
+}
+
+.searchBar img {
+    margin-right: 5vw;
 }
 
 .loadingContainer {
@@ -267,42 +282,128 @@ nav li a h2 {
     }
 }
 
-.TabList span:nth-of-type(3) {
-    margin-bottom: 10px;
+.progressContainer {
+    display: flex;
+    align-items: center;
+}
+
+.progress {
+    width: 20px;
+    height: 20px;
+    background: var(--fifthly-color);
+    border-radius: 80px;
+}
+
+.flowSection row {
+    display: flex;
+    align-items: start;
+    position: relative;
+    overflow: hidden;
+}
+
+.flowSection>row>span:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    border-radius: 3rem 5rem 0 0;
+    overflow: hidden;
+    background: var(--thirdly-color);
+    flex: 0 1 auto;
+    z-index: 3;
+}
+
+.flowSection>row>span:nth-child(2) {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    border-radius: 3rem 5rem 0 0;
+    overflow: hidden;
+    background: var(--secondary-color);
+    flex: 0 1 auto;
+    z-index: 2;
+}
+
+.flowSection>row>span:nth-child(3) {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    border-radius: 3rem 5rem 0 0;
+    overflow: hidden;
+    background: var(--thirdly-color);
+    flex: 0 1 auto;
+    z-index: 1;
+}
+
+.flowSection row>span:nth-of-type(1) img {
+    width: 80px;
+}
+
+.instructions h {
+    text-transform: uppercase;
+    font-size: 100px;
+    background: -webkit-linear-gradient(90deg, rgba(66, 96, 119, 0) 25%, rgb(178, 203, 221) 100%);
+    -webkit-background-clip: text;
+    width: 100%;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+.instructions p {
+    color: var(--fifthly-color);
+    font-size: 30px;
+    font-family: 'cursive';
+    z-index: 1;
+    margin: 10px 0px 0px 30px;
+}
+
+.instructions .headerContainer {
+    margin: -30px 0px -50px 0px;
+    width: 100%;
+}
+
+.leftBtn {
+    background: none;
+    border: none;
+    width: 2.5vw;
+    display: flex;
+    justify-content: start;
+}
+
+.rightBtn {
+    background: none;
+    border: none;
+    width: 2.5vw;
+    display: flex;
+    justify-content: end;
 }
 
 .TabList {
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(0deg, rgba(185, 204, 217, 1) 0%, rgba(136, 158, 174, 1) 100%);
-    position: relative;
+    background: var(--thirdly-color);
     justify-content: center;
-    gap: 20px;
-    padding: 0px 50px 0px 50px;
-    border-radius: 150px 0px 100px 0px;
+    gap: 2vw;
+    list-style: none;
+    position: relative;
+    border-radius: 0px 20px 20px 20px;
     border-bottom: solid var(--fifthly-color) 20px;
-    margin: 0;
 }
 
-.TabList>span:first-child {
-    margin-top: 20px;
-    padding: 20px;
-}
-
-.TabList span:first-child .headerContainer .cross {
-    fill: var(--fifthly-color);
-}
-
-.TabList>span:nth-child(2) {
-    display: block;
-    align-items: center;
+.TabList span:nth-child(2) li:nth-child(2) {
     width: 100%;
-    gap: 5vw;
-    height: min-content;
-    flex-direction: column;
-    height: auto;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.TabList span:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
 }
 
 .TabList .cross,
@@ -317,12 +418,6 @@ nav li a h2 {
 
 .TabList+p {
     color: var(--primary-color);
-}
-
-.TabList .list {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
 }
 
 nav ul li h2 {
@@ -369,12 +464,10 @@ fade {
 
 .seasonContainer {
     display: flex;
-    position: relative;
-    align-items: center;
-    justify-content: center;
     flex-wrap: wrap;
-    padding: 50px 0px;
-    gap: 40px;
+    gap: 2vw;
+    justify-content: flex-start;
+    width: 100%;
 }
 
 .seasonItem {
@@ -382,39 +475,29 @@ fade {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 300px;
-}
-
-.seasonItem:hover::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.3;
     border-radius: 30px;
-    pointer-events: none;
+    flex: 1 0 30%;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.29);
+
 }
 
 .seasonItem img {
     width: 100%;
     height: 160px;
     object-fit: cover;
-    object-position: 0% 25%;
+    object-position: 0% 20%;
     border-radius: 30px;
-    border: var(--primary-color) solid 4px;
     transition: filter 0.3s ease;
 }
 
-.seasonItem:hover img {
-    filter: brightness(0.8);
+.seasonItem img:hover {
+    filter: grayscale(20)
 }
 
-.seasonItem .cross,
-.seasonItem h1 {
-    color: var(--primary-color);
-    fill: var(--primary-color);
+.seasonItem .headerContainer .cross,
+.seasonItem .headerContainer h1 {
+    color: var(--fifthly-color);
+    fill: var(--fifthly-color);
     text-align: center;
 }
 
@@ -422,7 +505,9 @@ fade {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
 }
 
 .hymnContainer .header {
@@ -443,15 +528,31 @@ fade {
     fill: var(--fifthly-color);
 }
 
+.audioContainer {
+    display: grid;
+}
 
-.hymnContainer .tab {
-    background: green;
-    border-radius: 60px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 20px;
+.audioContainer ul {
+    display: inline-flex;
+    list-style: none;
+    justify-content: space-evenly;
     width: 100%;
+    align-items: center;
+}
+
+.playOption button {
+    background: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.playOption button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.playOption {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
