@@ -310,6 +310,7 @@ nav li a h2 {
     background: var(--thirdly-color);
     flex: 0 1 auto;
     z-index: 3;
+    order: 2;
 }
 
 .flowSection>row>span:nth-child(2) {
@@ -321,6 +322,8 @@ nav li a h2 {
     background: var(--secondary-color);
     flex: 0 1 auto;
     z-index: 2;
+    order: 1;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.29);
 }
 
 .flowSection>row>span:nth-child(3) {
@@ -390,10 +393,19 @@ nav li a h2 {
     border-bottom: solid var(--fifthly-color) 20px;
 }
 
+.TabList span:first-child {
+    width: 100%;
+}
+
+.robe {
+    height: 100%;
+}
+
 .TabList span:nth-child(2) li:nth-child(2) {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -474,10 +486,8 @@ fade {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    border-radius: 30px;
+    border-radius: 20px;
     flex: 1 0 30%;
-    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.29);
 
 }
 
@@ -485,9 +495,13 @@ fade {
     width: 100%;
     height: 160px;
     object-fit: cover;
-    object-position: 0% 20%;
-    border-radius: 30px;
+    object-position: 0% 10%;
+    border-radius: 20px;
     transition: filter 0.3s ease;
+}
+
+.seasonItem:nth-child(2) img {
+    object-position: 0% 50%;
 }
 
 .seasonItem img:hover {

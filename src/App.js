@@ -23,7 +23,6 @@ import HymnsData from "./output.json";
 import ArtistData from "./artists.json";
 import { useEffect, useState } from "react";
 import crossIcon from "./img/icons/crossButton.svg"
-import crossDome from "./img/crossDome.svg";
 
 function App() {
   const [hymnData, setHymnData] = useState([]);
@@ -110,14 +109,6 @@ function App() {
   useEffect(() => {
     if (selectedArtist) {
       let cantorTabNewStyle = {
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        background: 'var(--primary-color)',
-        borderRadius: '30px',
-        height: '250px',
-        width: '12vw',
-        minWidth: '200px'
       };
 
       let imgStyle = {};
@@ -128,7 +119,6 @@ function App() {
         case 1:
           cantorTabNewStyle = {
             background: 'var(--primary-color)',
-            borderRadius: '0px',
             overflow: 'hidden',
             flexDirection: 'row',
             alignItems: 'start',
@@ -136,6 +126,9 @@ function App() {
             whiteSpace: 'nowrap',
             margin: '0',
             height: 'min-content',
+            width: '100%',
+            borderRadius: '60px 0px 0px 60px',
+            paddingBottom: '0px',
           };
 
           imgStyle = {
@@ -277,11 +270,10 @@ function App() {
               key={index}
               className="seasonItem"
               style={{
-                background: isActive ? 'var(--primary-color)' : 'none',
-                padding: isActive ? '0.2vw 0.2vw 0.5vw 0.2vw' : '0vw',
-                flex: isActive ? '1 0 100%' : '1 0 30%',
-                borderBottom: isActive ? '10px solid var(--primary-color)' : 'none',
-                transition: 'background 0.3s, padding 0.3s, borderBottom 0.3s, flex-basis 0.5s ease',
+                background: isActive ? 'none' : 'none',
+                padding: isActive ? '0vw' : '0vw',
+                borderBottom: isActive ? 'none' : 'none',
+                transition: 'background 0.3s, padding 0.3s, borderBottom 0.3s',
               }}
               onMouseEnter={() => setSelectedIndex(index)}
               onMouseLeave={() => setSelectedIndex(-1)}
@@ -439,7 +431,7 @@ function App() {
                 <>
                   {click === true
                     ? artistData.slice(4).map((artist, index) => (
-                      <div key={index} className="artistItem">
+                      <div key={index}>
                         {renderArtist(
                           artist,
                           cantorContainerStyle,
@@ -451,7 +443,7 @@ function App() {
                       </div>
                     ))
                     : artistData.slice(0, 4).map((artist, index) => (
-                      <div key={index} className="artistItem">
+                      <div key={index}>
                         {renderArtist(
                           artist,
                           cantorContainerStyle,
@@ -471,9 +463,9 @@ function App() {
             </li>
           </span>
 
-          {selectedSeason && !selectedArtist
-            ? renderHymn(hymns, artistData)
-            : renderSeasons(seasons)}
+          {selectedArtist && !selectedSeason && renderSeasons(seasons)}
+
+          {selectedSeason && renderHymn(hymns, artistData)}
 
           {!selectedArtist && <div className="progressContainer">
             <ProgressBar artistData={artistData} />
