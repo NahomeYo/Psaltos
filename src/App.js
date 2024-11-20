@@ -198,7 +198,7 @@ function App() {
     );
   };
 
-  const renderArtist = (artist, cantorContainerStyle, handleArtistClick, imgStyle, textStyle, tabIndex) => (
+  const renderArtist = (artist, tabIndex) => (
     <div className="cantorTab001">
       <div
         className="cantorContainer"
@@ -233,12 +233,10 @@ function App() {
         {hymns.map((hymn, index) => (
           <div
             className="cantorTab001"
-            style={textStyle}
+            style={{paddingRight: "0"}}
             key={index}
             onClick={() => {
-              if (expandedHymns === index) {
-                setExpandedHymns(-1);
-              } else {
+              if (expandedHymns !== index) {
                 setExpandedHymns(index);
               }
             }}
@@ -283,8 +281,7 @@ function App() {
                 borderBottom: isActive ? '10px solid var(--primary-color)' : 'none',
                 transition: 'background 0.3s, padding 0.3s, borderBottom 0.3s, flex-basis 0.5s ease',
               }}
-              onMouseEnter={() => setSelectedIndex(index)}
-              onMouseLeave={() => setSelectedIndex(-1)}
+
               onClick={() => setSelectedSeason(season)}
             >
               {seasonRender(season)}
@@ -388,19 +385,15 @@ function App() {
 
         <div className="flowSection">
           <row>
-            <span>
-              <div className="instructions">
-                <p>Select a
-                </p>
-                <span>
-                  {!selectedArtist ? <HeaderComponent placeholder="cantor" /> : <HeaderComponent placeholder="season" />}
-                </span>
-              </div>
-            </span>
-
-            <span>
+          <span>
               {selectedArtist && (
-                <div className="instructions">
+                <div className="instructions" onClick={() => {
+                  setSelectedArtist();
+                  setSelectedSeason();
+                  setTabIndex(0)
+                  setCantorContainerStyle({})
+                  setTextStyle({})
+                }}>
                   <p>return ←
                   </p>
                   <span>
@@ -409,10 +402,22 @@ function App() {
                 </div>
               )}
             </span>
+            {/* {selectedArtist && !selectedSeason &&<span>
+              <div className="instructions">
+                <p>Select a
+                </p>
+                <span>
+                  {!selectedArtist ? <HeaderComponent placeholder="cantor" /> : <HeaderComponent placeholder="season" />}
+                </span>
+              </div>
+            </span>} */}
 
             <span>
               {selectedSeason && (
-                <div className="instructions">
+                <div className="instructions" onClick={() => {
+                  setSelectedSeason();
+                  setTabIndex(1)
+                  }}>
                   <p>return ←
                   </p>
                   <span>
@@ -426,7 +431,7 @@ function App() {
 
         <div className="TabList">
           <span>
-            {selectedArtist && !selectedSeason && renderArtist(selectedArtist, cantorContainerStyle, handleArtistClick, imgStyle, textStyle, tabIndex, hymns)}
+            {selectedArtist && !selectedSeason && renderArtist(selectedArtist, tabIndex, hymns)}
           </span>
 
           <span>
@@ -442,10 +447,6 @@ function App() {
                       <div key={index} className="artistItem">
                         {renderArtist(
                           artist,
-                          cantorContainerStyle,
-                          handleArtistClick,
-                          imgStyle,
-                          textStyle,
                           tabIndex
                         )}
                       </div>
@@ -454,10 +455,6 @@ function App() {
                       <div key={index} className="artistItem">
                         {renderArtist(
                           artist,
-                          cantorContainerStyle,
-                          handleArtistClick,
-                          imgStyle,
-                          textStyle,
                           tabIndex
                         )}
                       </div>
@@ -471,8 +468,8 @@ function App() {
             </li>
           </span>
 
-          {selectedSeason && !selectedArtist
-            ? renderHymn(hymns, artistData)
+          {selectedSeason
+            ? renderHymn(hymns, selectedArtist)
             : renderSeasons(seasons)}
 
           {!selectedArtist && <div className="progressContainer">

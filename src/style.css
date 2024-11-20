@@ -529,7 +529,8 @@ fade {
 }
 
 .audioContainer {
-    display: grid;
+    display: flex;
+    flex-direction: column;
 }
 
 .audioContainer ul {
