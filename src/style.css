@@ -73,7 +73,7 @@ nav li {
 }
 
 nav li:nth-of-type(1) img {
-    height: 80px;
+    height: var(--icon);
 }
 
 nav li a {
@@ -135,7 +135,7 @@ nav li a h2 {
     border: 0px solid;
     outline: none;
     width: 100%;
-    font-size: 1em;
+    font-size: var(--medium);
     margin-left: 2vw;
     margin-bottom: 1vw;
 }
@@ -343,7 +343,7 @@ nav li a h2 {
 
 .instructions h {
     text-transform: uppercase;
-    font-size: 100px;
+    font-size: var(--max);
     background: -webkit-linear-gradient(90deg, rgba(66, 96, 119, 0) 25%, rgb(178, 203, 221) 100%);
     -webkit-background-clip: text;
     width: 100%;
@@ -474,34 +474,66 @@ fade {
     background: linear-gradient(0deg, rgba(154, 187, 202, 1) 50%, rgba(154, 187, 202, 0) 100%);
 }
 
-.seasonContainer {
+.psalmodyContainer {
     display: flex;
     flex-wrap: wrap;
     gap: 2vw;
-    justify-content: flex-start;
+    justify-content: center;
     width: 100%;
+    border-radius: 30px;
 }
 
-.seasonItem {
+.feastContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2vw;
+    justify-content: center;
+    width: 100%;
+    border-radius: 30px;
+}
+
+.feastContainer .seasonItem {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    border-radius: 20px;
-    flex: 1 0 30%;
-
+    align-items: start;
+    flex: 0 0 20%;
 }
 
-.seasonItem img {
-    width: 100%;
-    height: 160px;
+.feastContainer .seasonItem img {
+    width: var(--imageTab);
     object-fit: cover;
     object-position: 0% 10%;
     border-radius: 20px;
     transition: filter 0.3s ease;
+    height: 50%;
+}
+
+.seasonItem:nth-child(1) img {
+    object-position: 0% 25%;
 }
 
 .seasonItem:nth-child(2) img {
     object-position: 0% 50%;
+}
+
+.seasonItem:nth-child(3) img {
+    object-position: 0% 30%;
+}
+
+.seasonItem:nth-child(4) img {
+    object-position: 0% 70%;
+}
+
+.seasonItem:nth-child(5) img {
+    object-position: 0% 10%;
+}
+
+.seasonItem:nth-child(6) img {
+    object-position: 0% 0%;
+}
+
+.seasonItem:nth-child(7) img {
+    object-position: 0% 20%;
 }
 
 .seasonItem img:hover {
@@ -536,6 +568,10 @@ fade {
 
 .hymnContainer .header .headerContainer .cross {
     fill: var(--primary-color);
+}
+
+.seasonItem .headerContainer .cross {
+    width: 1rem;
 }
 
 .hymnContainer .headerContainer .cross {

@@ -10,14 +10,14 @@ import Church from "./img/church.svg";
 import Deaf from "./img/cymbals.svg";
 import CrossIcon from "./img/icons/crossButton.js";
 import Robe from "./img/icons/robe.js";
-import Nativity from "./img/Nativity.jpg";
 import Audio from "./Audio.js";
-import Resurrection from "./img/resurrection.jpg";
-import Theophany from "./img/tasbeha.jpg";
-import Apostles from "./img/apostles.jpg";
-import SundayTesbaha from "./img/tasbeha.jpg";
-import Weekday from "./img/weekdayTasbeha.jpg";
-import SundayVespers from "./img/vespers.jpg";
+import Nativity from "./img/copticIcons/Nativity.jpg";
+import Resurrection from "./img/copticIcons/Ressurection.jpeg"
+import Theophany from "./img/copticIcons/Theophany.jpg";
+import Apostles from "./img/copticIcons/Apostles.jpg";
+import SundayTesbaha from "./img/copticIcons/SundayTesbaha.jpg";
+import Weekday from "./img/copticIcons/WeekdayTesbaha.jpg";
+import SundayVespers from "./img/copticIcons/SundayVespers.jpg";
 import ArtistIcon from "./img/icons/artistIcon.js";
 import HymnsData from "./output.json";
 import ArtistData from "./artists.json";
@@ -39,7 +39,6 @@ function App() {
   const [tabIndex, setTabIndex] = useState(0);
   const [expandedHymns, setExpandedHymns] = useState(-1);
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [sectionTabWidth, setSectionTabWidth] = useState(0);
 
   useEffect(() => {
     const getData = async () => {
@@ -79,6 +78,22 @@ function App() {
       )
     ]
     : [];
+
+  const feasts = (seasons) => {
+    return seasons.filter((season) =>
+      ["Nativity", "Resurrection", "Theophany", "Apostles Fast"].includes(season)
+    );
+  };
+
+  const psalmody = (seasons) => {
+    return seasons.filter(
+      (season) =>
+        ["Sunday Vespers Praise", "Sunday Tasbeha (Midnight Praises)", "Weekday Tasbeha (Midnight Praises)"].includes(season)
+    );
+  };
+
+  const feastSeasons = feasts(seasons);
+  const psalmodySeasons = psalmody(seasons);
 
   const hymns = selectedArtist && selectedSeason
     ? hymnData.filter(hymn => hymn.artist === selectedArtist?.artistName && hymn.season === selectedSeason)
@@ -150,15 +165,6 @@ function App() {
       setCantorContainerStyle(cantorTabNewStyle);
     }
   }, [tabIndex, selectedArtist, selectedSeason]);
-
-  useEffect(() => {
-    const sectionTab = document.querySelector('.flowSection span > span');
-    if (sectionTab) {
-      const sectionTabStyle = getComputedStyle(sectionTab);
-      const width = sectionTabStyle.getPropertyValue('width');
-      setSectionTabWidth(width);
-    }
-  }, [selectedArtist, selectedSeason, tabIndex])
 
   const rightArrow = () => {
     return (
@@ -260,31 +266,57 @@ function App() {
     );
   };
 
-  const renderSeasons = (seasons) => {
+  const renderSeasons = (feastSeasons, psalmodySeasons) => {
     return (
-      <div className="seasonContainer">
-        {seasons.map((season, index) => {
-          const isActive = index === selectedIndex;
-          return (
-            <div
-              key={index}
-              className="seasonItem"
-              style={{
-                background: isActive ? 'none' : 'none',
-                padding: isActive ? '0vw' : '0vw',
-                borderBottom: isActive ? 'none' : 'none',
-                transition: 'background 0.3s, padding 0.3s, borderBottom 0.3s',
-              }}
-              onMouseEnter={() => setSelectedIndex(index)}
-              onMouseLeave={() => setSelectedIndex(-1)}
-              onClick={() => setSelectedSeason(season)}
-            >
-              {seasonRender(season)}
-              <HeaderComponent placeholder={season} />
-            </div>
-          );
-        })}
-      </div>
+      <>
+        <div className="feastContainer">
+          {feastSeasons.map((feast, index) => {
+            const isActive = index === selectedIndex;
+            return (
+              <div
+                key={index}
+                className="seasonItem"
+                style={{
+                  background: isActive ? 'none' : 'none',
+                  padding: isActive ? '0vw' : '0vw',
+                  borderBottom: isActive ? 'none' : 'none',
+                  transition: 'background 0.3s, padding 0.3s, borderBottom 0.3s',
+                }}
+                onMouseEnter={() => setSelectedIndex(index)}
+                onMouseLeave={() => setSelectedIndex(-1)}
+                onClick={() => setSelectedSeason(feast)}
+              >
+                {seasonRender(feast)}
+                <HeaderComponent placeholder={feast} />
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="psalmodyContainer">
+          {psalmodySeasons.map((psalm, index) => {
+            const isActive = index === selectedIndex;
+            return (
+              <div
+                key={index}
+                className="seasonItem"
+                style={{
+                  background: isActive ? 'none' : 'none',
+                  padding: isActive ? '0vw' : '0vw',
+                  borderBottom: isActive ? 'none' : 'none',
+                  transition: 'background 0.3s, padding 0.3s, borderBottom 0.3s',
+                }}
+                onMouseEnter={() => setSelectedIndex(index)}
+                onMouseLeave={() => setSelectedIndex(-1)}
+                onClick={() => setSelectedSeason(psalm)}
+              >
+                {seasonRender(psalm)}
+                <HeaderComponent placeholder={psalm} />
+              </div>
+            );
+          })}
+        </div>
+      </>
     );
   };
 
@@ -463,7 +495,7 @@ function App() {
             </li>
           </span>
 
-          {selectedArtist && !selectedSeason && renderSeasons(seasons)}
+          {selectedArtist && !selectedSeason && renderSeasons(feastSeasons, psalmodySeasons)}
 
           {selectedSeason && renderHymn(hymns, artistData)}
 
