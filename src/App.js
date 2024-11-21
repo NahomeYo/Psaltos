@@ -39,6 +39,7 @@ function App() {
   const [tabIndex, setTabIndex] = useState(0);
   const [expandedHymns, setExpandedHymns] = useState(-1);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [seasonChoice, setSeasonChoice] = useState(1);
 
   useEffect(() => {
     const getData = async () => {
@@ -213,12 +214,16 @@ function App() {
             <ArtistIcon />
             <p>CANTOR</p>
           </span>
-          <b style={textStyle}>{artist.artistName}</b>
+          <h3 style={textStyle}>{artist.artistName}</h3>
         </div>
       </div>
       <Robe />
     </div>
   );
+
+  const tab = document.querySelector('.TabList span:first-child .cantorContainer ');
+  const tabStyle = getComputedStyle(tab);
+  const tabHeight = tabStyle.height;
 
   const renderHymn = (hymns, artistData) => {
     return (
@@ -255,7 +260,7 @@ function App() {
                   <ArtistIcon />
                   <p>CANTOR</p>
                 </span>
-                <b style={textStyle}>{selectedArtist?.artistName}</b>
+                <h3 style={textStyle}>{selectedArtist?.artistName}</h3>
               </div>}
 
               {expandedHymns === index && <Audio />}
@@ -266,64 +271,110 @@ function App() {
     );
   };
 
-  const renderSeasons = (feastSeasons, psalmodySeasons) => {
+  const feastOptions = (feastSeasons) => {
     return (
-      <>
-        <div className="feastContainer">
-          {feastSeasons.map((feast, index) => {
-            const isActive = index === selectedIndex;
-            return (
-              <div
-                key={index}
-                className="seasonItem"
-                style={{
-                  background: isActive ? 'none' : 'none',
-                  padding: isActive ? '0vw' : '0vw',
-                  borderBottom: isActive ? 'none' : 'none',
-                  transition: 'background 0.3s, padding 0.3s, borderBottom 0.3s',
-                }}
-                onMouseEnter={() => setSelectedIndex(index)}
-                onMouseLeave={() => setSelectedIndex(-1)}
-                onClick={() => setSelectedSeason(feast)}
-              >
-                {seasonRender(feast)}
-                <HeaderComponent placeholder={feast} />
-              </div>
-            );
-          })}
-        </div>
+      <div className="feastContainer">
+        {feastSeasons.map((feast, index) => {
+          const isActive = index === selectedIndex;
+          return (
+            <div
+              key={index}
+              className="seasonItem"
+              style={{
+                background: isActive ? 'none' : 'none',
+                padding: isActive ? '0vw' : '0vw',
+                borderBottom: isActive ? 'none' : 'none',
+                transition: 'background 0.3s, padding 0.3s, borderBottom 0.3s',
+              }}
+              onMouseEnter={() => setSelectedIndex(index)}
+              onMouseLeave={() => setSelectedIndex(-1)}
+              onClick={() => setSelectedSeason(feast)}
+            >
+              {seasonRender(feast)}
+              <HeaderComponent placeholder={feast} />
+              <p>Feast</p>
+            </div>
+          );
+        })}
+      </div>
+    )
+  }
 
-        <div className="psalmodyContainer">
-          {psalmodySeasons.map((psalm, index) => {
-            const isActive = index === selectedIndex;
-            return (
-              <div
-                key={index}
-                className="seasonItem"
-                style={{
-                  background: isActive ? 'none' : 'none',
-                  padding: isActive ? '0vw' : '0vw',
-                  borderBottom: isActive ? 'none' : 'none',
-                  transition: 'background 0.3s, padding 0.3s, borderBottom 0.3s',
-                }}
-                onMouseEnter={() => setSelectedIndex(index)}
-                onMouseLeave={() => setSelectedIndex(-1)}
-                onClick={() => setSelectedSeason(psalm)}
-              >
-                {seasonRender(psalm)}
-                <HeaderComponent placeholder={psalm} />
-              </div>
-            );
-          })}
-        </div>
-      </>
+  const psalmodyOptions = (psalmodySeasons) => {
+    return (
+      <div className="psalmodyContainer">
+        {psalmodySeasons.map((psalm, index) => {
+          const isActive = index === selectedIndex;
+          return (
+            <div
+              key={index}
+              className="seasonItem"
+              style={{
+                background: isActive ? 'none' : 'none',
+                padding: isActive ? '0vw' : '0vw',
+                borderBottom: isActive ? 'none' : 'none',
+                transition: 'background 0.3s, padding 0.3s, borderBottom 0.3s',
+              }}
+              onMouseEnter={() => setSelectedIndex(index)}
+              onMouseLeave={() => setSelectedIndex(-1)}
+              onClick={() => setSelectedSeason(psalm)}
+            >
+              {seasonRender(psalm)}
+              <HeaderComponent placeholder={psalm} />
+              <p>Psalmody</p>
+            </div>
+          );
+        })}
+      </div>
+    )
+  }
+
+  const renderSeasons = () => {
+    return (
+      <div style={{ marginTop: tabHeight, }} className="seasonsContainer">
+        <row>
+          <column>
+            <row>
+              <t>Find the Hymn Season</t>
+            </row>
+            <row>
+              <b style={{
+                background: seasonChoice === 1 ? 'var(--primary-color)' : 'var(--secondary-color)',
+                transition: "1s ease"
+              }}
+                onClick={() => {
+                  setSeasonChoice(1);
+                }}>
+                Feast</b>
+
+              <b style={{
+                background: seasonChoice === 2 ? 'var(--primary-color)' : 'var(--secondary-color)',
+              }}
+                onClick={() => {
+                  setSeasonChoice(2);
+                }}>Psalmody</b>
+            </row>
+          </column>
+
+          <column>
+            <p>Select a Coptic season you're interested in and see Cantor</p>
+            <h3>{selectedArtist?.artistName}'s</h3>
+            <p>hymns</p>
+          </column>
+        </row>
+
+        <row>
+          {seasonChoice === 1 && feastOptions(feastSeasons)}
+          {seasonChoice === 2 && psalmodyOptions(psalmodySeasons)}
+        </row>
+      </div>
     );
   };
 
   const HeaderComponent = ({ placeholder }) => (
     <div className="headerContainer">
       <Cross />
-      <h>{placeholder}</h>
+      {searchItem ? <h2>{placeholder}</h2> : <h>{placeholder}</h>}
       <Cross />
     </div>
   );
@@ -360,7 +411,7 @@ function App() {
             <ArtistIcon />
             <p>CANTOR</p>
           </span>
-          <b>{hymn.artist}</b>
+          <h3>{hymn.artist}</h3>
         </div>
       </div>
     ))
@@ -449,7 +500,7 @@ function App() {
         </div>
 
         <div className="TabList">
-          <span>
+          <span style={{}}>
             {selectedArtist && !selectedSeason && renderArtist(selectedArtist, cantorContainerStyle, handleArtistClick, imgStyle, textStyle, tabIndex, hymns)}
           </span>
 

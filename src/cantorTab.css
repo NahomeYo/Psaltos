@@ -28,6 +28,7 @@
     width: 100%;
 }
 
+
 .TabList .cantorTab001 .cantorContainer {
     display: flex;
     overflow: hidden;
@@ -133,7 +134,8 @@
 .searchItem h2,
 .searchItem b,
 .searchItem .artistIcon .searchItem .cross,
-.searchItem .artist span p {
+.searchItem .artist span p,
+.searchItem .headerContainer h {
     color: var(--primary-color);
     fill: var(--primary-color);
 }

@@ -1,5 +1,5 @@
 html {
-    font-size: 24px; 
+    font-size: 24px;
 }
 
 @font-face {
@@ -34,12 +34,13 @@ html {
 
 :root {
     --imageTab: 15rem;
+    --borderRadius: 20px;
     --icon: 3.5rem;
-    --max: 2.5rem; 
-    --big: 1.25rem; 
-    --medium: 1.042rem; 
-    --small: 0.916rem; 
-    --mini: 0.5rem; 
+    --max: 2.5rem;
+    --big: 1.25rem;
+    --medium: 1.042rem;
+    --small: 0.916rem;
+    --mini: 0.7rem;
     --primary-color: #2C475C;
     --secondary-color: #426077;
     --thirdly-color: #678399;
@@ -64,7 +65,7 @@ t {
 h1 {
     font-size: var(--big);
     font-family: 'RumRaisin';
-    text-transform: uppercase;
+    text-transform: inherit;
     color: var(--fifthly-color);
     font-weight: 500;
     padding: 0;
@@ -78,7 +79,17 @@ h2 {
     padding: 0;
     margin: 0;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 500;
+}
+
+h3 {
+    font-size: var(--small);
+    color: var(--fifthly-color);
+    font-family: 'Aladin';
+    text-transform: uppercase;
+    font-weight: 300;
+    padding: 0;
+    margin: 0;
 }
 
 b {
@@ -86,26 +97,29 @@ b {
     color: var(--fifthly-color);
     font-family: 'Aladin';
     text-transform: uppercase;
-    font-weight: 500;
-    padding: 0;
-    margin: 0;
+    background: var(--primary-color);
+    border-radius: var(--borderRadius);
+    cursor: pointer;
+    outline: none;
+    box-shadow: none;
+    padding: var(--mini) var(--small);
 }
 
 p {
     font-size: var(--mini);
     font-family: 'Intel-light';
     text-transform: none;
-    color: var(--secondary-color);
+    color: var(--primary-color);
     padding: 0;
     margin: 0;
 }
 
 h {
-    font-size: var(--small);
+    font-size: var(--medium);
     font-family: 'Handwritten';
-    color: var(--secondary-color);
-    padding: 0;
-    margin: 0;
+    color: var(--fifthly-color);
+    letter-spacing: 0.1rem;
+    text-transform: inherit;
 }
 
 .tabList p {

@@ -385,8 +385,7 @@ nav li a h2 {
     flex-direction: column;
     align-items: center;
     background: var(--thirdly-color);
-    justify-content: center;
-    gap: 2vw;
+    justify-content: start;
     list-style: none;
     position: relative;
     border-radius: 0px 20px 20px 20px;
@@ -395,6 +394,8 @@ nav li a h2 {
 
 .TabList span:first-child {
     width: 100%;
+    overflow: visible;
+    position: absolute;
 }
 
 .robe {
@@ -416,6 +417,7 @@ nav li a h2 {
     flex-direction: row;
     width: 100%;
     align-items: center;
+    margin: 0;
 }
 
 .TabList .cross,
@@ -477,35 +479,33 @@ fade {
 .psalmodyContainer {
     display: flex;
     flex-wrap: wrap;
-    gap: 2vw;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
-    border-radius: 30px;
 }
 
 .feastContainer {
     display: flex;
     flex-wrap: wrap;
-    gap: 2vw;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
-    border-radius: 30px;
 }
 
-.feastContainer .seasonItem {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    flex: 0 0 20%;
+.seasonItem {
+    flex: 0 0 25%;
 }
 
-.feastContainer .seasonItem img {
+.seasonItem img {
+    border-bottom: var(--fifthly-color) 5px solid;
     width: var(--imageTab);
     object-fit: cover;
     object-position: 0% 10%;
     border-radius: 20px;
-    transition: filter 0.3s ease;
     height: 50%;
+    box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.177);
+}
+
+.feastContainer .seasonItem b {
+    color: var(--primary-color);
 }
 
 .seasonItem:nth-child(1) img {
@@ -521,30 +521,64 @@ fade {
 }
 
 .seasonItem:nth-child(4) img {
-    object-position: 0% 70%;
+    object-position: 0% 100%;
 }
 
-.seasonItem:nth-child(5) img {
-    object-position: 0% 10%;
-}
-
-.seasonItem:nth-child(6) img {
-    object-position: 0% 0%;
-}
-
-.seasonItem:nth-child(7) img {
+.psalmodyContainer .seasonItem:nth-child(1) img {
     object-position: 0% 20%;
 }
 
-.seasonItem img:hover {
-    filter: grayscale(20)
+.psalmodyContainer .seasonItem:nth-child(2) img {
+    object-position: 0% 0%;
 }
 
-.seasonItem .headerContainer .cross,
-.seasonItem .headerContainer h1 {
-    color: var(--fifthly-color);
+.psalmodyContainer .seasonItem:nth-child(3) img {
+    object-position: 0% 10%;
+}
+
+.seasonItem .headerContainer .cross {
     fill: var(--fifthly-color);
     text-align: center;
+}
+
+.seasonsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    position: relative;
+}
+
+.seasonsContainer row {
+    display: flex;
+    margin-bottom: var(--small);
+}
+
+.seasonsContainer row column:nth-child(1) {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+}
+
+.seasonsContainer row column:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+}
+
+.seasonsContainer row column:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    gap: var(--mini);
+}
+
+.seasonsContainer row column row {
+    display: flex;
+}
+
+.seasonsContainer row column row:nth-child(2) b {
+    margin-right: var(--small);
 }
 
 .hymnContainer {
