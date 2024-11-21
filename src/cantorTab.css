@@ -1,7 +1,7 @@
 .artist {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: calc(var(--mini) - 0.3rem);
     justify-content: flex-start;
 }
 
@@ -9,16 +9,17 @@
     display: flex;
     align-items: center;
     justify-content: start;
-    gap: 5px;
-}
-
-.artist span p {
-    color: var(--fourthy-color);
+    gap: calc(var(--mini) - 0.3rem);
+    height: min-content;
 }
 
 .artist svg {
-    width: 25px;
-    height: 25px;
+    width: var(--icon);
+    height: var(--icon);
+}
+
+.artist h3 {
+    color: var(--fourthy-color);
 }
 
 .TabList .cantorTab001 {

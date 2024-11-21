@@ -390,7 +390,7 @@ nav li a h2 {
     position: relative;
     border-radius: 0px 20px 20px 20px;
     border-bottom: solid var(--fifthly-color) 20px;
-    padding: 0rem var(--max);
+    padding: var(--max);
 }
 
 .TabList span:first-child {
@@ -404,10 +404,6 @@ nav li a h2 {
 
 .TabList span:first-child .boogey {
     flex: 0 0 auto;
-}
-
-.robe {
-    height: 100%;
 }
 
 .TabList span:nth-child(2) li:nth-child(2) {
@@ -494,7 +490,7 @@ fade {
 .feastContainer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
 }
 
@@ -554,8 +550,13 @@ fade {
     flex-direction: column;
     width: 100%;
     position: relative;
-}
+    gap: var(--small)
+;}
 
+.seasonsContainer .artistHeader {
+    position: relative;
+    width: 100%;
+}
 
 .seasonsContainer row {
     display: flex;
@@ -564,15 +565,14 @@ fade {
 .seasonsContainer row column:nth-child(1) {
     display: flex;
     flex-direction: column;
-    flex: 0 0 auto;
+    flex: 2 0 auto;
 }
 
 .seasonsContainer row column:nth-child(2) {
     display: flex;
-    flex-direction: row;
     align-items: center;
     gap: calc(var(--mini) - 0.5rem);
-    flex: 1 0 auto;
+    flex: 0 0 auto;
 }
 
 .seasonsContainer row column:nth-child(2) p {

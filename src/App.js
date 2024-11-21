@@ -9,7 +9,7 @@ import Cross from "./img/icons/cross.js";
 import Church from "./img/church.svg";
 import Deaf from "./img/cymbals.svg";
 import CrossIcon from "./img/icons/crossButton.js";
-import Robe from "./img/icons/robe.js";
+import Robe from "./img/robe.svg";
 import Audio from "./Audio.js";
 import Nativity from "./img/copticIcons/Nativity.jpg";
 import Resurrection from "./img/copticIcons/Ressurection.jpeg"
@@ -35,11 +35,11 @@ function App() {
   const [click, setClick] = useState(false);
   const [cantorContainerStyle, setCantorContainerStyle] = useState({});
   const [imgStyle, setImgStyle] = useState({});
-  const [textStyle, setTextStyle] = useState({});
   const [tabIndex, setTabIndex] = useState(0);
   const [expandedHymns, setExpandedHymns] = useState(-1);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [seasonChoice, setSeasonChoice] = useState(1);
+  const [robePos, setRobePose] = useState("");
 
   useEffect(() => {
     const getData = async () => {
@@ -129,8 +129,6 @@ function App() {
 
       let imgStyle = {};
 
-      let textStyle = {};
-
       switch (tabIndex) {
         case 1:
           cantorTabNewStyle = {
@@ -140,7 +138,7 @@ function App() {
             alignItems: 'start',
             justifyContent: 'start',
             whiteSpace: 'nowrap',
-            margin: '0',
+            margin: '0px',
             height: 'min-content',
             width: '100%',
             borderRadius: '60px 0px 0px 60px',
@@ -148,13 +146,8 @@ function App() {
           };
 
           imgStyle = {
-            width: '100px',
-            height: '100px',
-          };
-
-          textStyle = {
-            whiteSpace: 'nowrap',
-            padding: '0px 30px 30px 0px',
+            width: '70px',
+            height: '70px',
           };
 
           break
@@ -162,7 +155,6 @@ function App() {
           break;
       }
       setImgStyle(imgStyle);
-      setTextStyle(textStyle);
       setCantorContainerStyle(cantorTabNewStyle);
     }
   }, [tabIndex, selectedArtist, selectedSeason]);
@@ -198,7 +190,7 @@ function App() {
     );
   };
 
-  const renderArtist = (artist, cantorContainerStyle, handleArtistClick, imgStyle, textStyle, tabIndex) => (
+  const renderArtist = (artist, cantorContainerStyle, handleArtistClick, imgStyle, tabIndex) => (
     <div className="cantorTab001">
       <div
         className="cantorContainer"
@@ -210,25 +202,20 @@ function App() {
           {tabIndex !== 2 && <img style={imgStyle} src={artist.img} alt={`Artist ${artist.artistName}`} />}
         </div>
 
-        {selectedArtist ? <column>
-          <p>Select a Coptic season you're interested in and see Cantor</p>
-          <h3>{selectedArtist?.artistName}'s</h3>
-          <p>hymns</p>
-        </column> :
-          <div className="artist">
-            <span>
-              <ArtistIcon />
-              <p>CANTOR</p>
-            </span>
-            <h3 style={textStyle}>{artist.artistName}</h3>
-          </div>
-        }
+        <div className="artist">
+          <span>
+            <ArtistIcon />
+            <p>CANTOR</p>
+          </span>
+          <h3>{artist.artistName}</h3>
+        </div>
+
       </div>
-      <Robe />
+      <img src = {Robe} style={{ position: robePos }} />
     </div>
   );
 
-  const renderHymn = (hymns, artistData) => {
+  const renderHymn = (hymns, artist) => {
     return (
       <div className="hymnContainer">
         {(
@@ -237,10 +224,9 @@ function App() {
           </div>
         )}
 
-        {hymns.map((hymn, index) => (
+        {hymns.map((hymn, index, artist) => (
           <div
             className="cantorTab001"
-            style={textStyle}
             key={index}
             onClick={() => {
               if (expandedHymns === index) {
@@ -252,9 +238,7 @@ function App() {
           >
             <div className="cantorContainer" style={renderHymnBox}>
               <div className="topRow">
-                {expandedHymns === index && (
-                  <img style={imgStyle} src={artistData.img} alt={`Artist`} />
-                )}
+                {expandedHymns === index && <img style={imgStyle} src={artist.img} alt={`Artist ${artist.artistName}`} />}
                 <HeaderComponent placeholder={hymn.name} />
               </div>
 
@@ -263,7 +247,7 @@ function App() {
                   <ArtistIcon />
                   <p>CANTOR</p>
                 </span>
-                <h3 style={textStyle}>{selectedArtist?.artistName}</h3>
+                <h3>{selectedArtist?.artistName}</h3>
               </div>}
 
               {expandedHymns === index && <Audio />}
@@ -335,6 +319,10 @@ function App() {
   const renderSeasons = () => {
     return (
       <div style={{}} className="seasonsContainer">
+        <div className="artistHeader">
+          {renderArtist(selectedArtist, cantorContainerStyle, handleArtistClick, imgStyle, tabIndex, hymns)}
+        </div>
+
         <row>
           <column>
             <row>
@@ -360,7 +348,10 @@ function App() {
           </column>
 
           <column>
-            {renderArtist(selectedArtist, cantorContainerStyle, handleArtistClick, imgStyle, textStyle, tabIndex, hymns)}
+            <h3>Select</h3>
+            <p>a Coptic season you're interested in and see Cantor</p>
+            <h3>{selectedArtist?.artistName}'s</h3>
+            <p>hymns</p>
           </column>
         </row>
 
@@ -374,15 +365,15 @@ function App() {
 
   const HeaderComponent = ({ placeholder, searchItem, selectedSeason }) => {
     let content = "";
-  
+
     if (searchItem) {
       content = <h2>{placeholder}</h2>;
     } else if (selectedSeason) {
       content = <h2>{placeholder}</h2>;
     } else {
-      content = <h1>{placeholder}</h1>; 
+      content = <h1>{placeholder}</h1>;
     }
-  
+
     return (
       <div className="headerContainer">
         <Cross />
@@ -390,7 +381,7 @@ function App() {
         <Cross />
       </div>
     );
-  };  
+  };
 
   const seasonRender = (season) => {
     switch (season) {
@@ -441,6 +432,14 @@ function App() {
     }
     return <>{progressBars}</>;
   };
+
+  useEffect(() => {
+    if (!selectedArtist) {
+      setRobePose('absolute');
+    } else {
+      setRobePose('relative');
+    }
+  }, [selectedArtist]);
 
   return (
     <div className="mainContainer">
@@ -532,7 +531,6 @@ function App() {
                           cantorContainerStyle,
                           handleArtistClick,
                           imgStyle,
-                          textStyle,
                           tabIndex
                         )}
                       </div>
@@ -544,7 +542,6 @@ function App() {
                           cantorContainerStyle,
                           handleArtistClick,
                           imgStyle,
-                          textStyle,
                           tabIndex
                         )}
                       </div>
