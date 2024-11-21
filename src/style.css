@@ -137,7 +137,7 @@ nav li a h2 {
     width: 100%;
     font-size: var(--medium);
     margin-left: 2vw;
-    margin-bottom: 1vw;
+    margin-bottom: var(--mini);
 }
 
 .searchBar input:focus {
@@ -390,12 +390,20 @@ nav li a h2 {
     position: relative;
     border-radius: 0px 20px 20px 20px;
     border-bottom: solid var(--fifthly-color) 20px;
+    padding: 0rem var(--max);
 }
 
 .TabList span:first-child {
+    display: flex;
     width: 100%;
-    overflow: visible;
-    position: absolute;
+}
+
+.TabList span:first-child .artistHeader {
+    flex: 1 0 auto;
+}
+
+.TabList span:first-child .boogey {
+    flex: 0 0 auto;
 }
 
 .robe {
@@ -544,13 +552,13 @@ fade {
 .seasonsContainer {
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 100%;
     position: relative;
 }
 
+
 .seasonsContainer row {
     display: flex;
-    margin-bottom: var(--small);
 }
 
 .seasonsContainer row column:nth-child(1) {
@@ -561,16 +569,18 @@ fade {
 
 .seasonsContainer row column:nth-child(2) {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    gap: calc(var(--mini) - 0.5rem);
     flex: 1 0 auto;
 }
 
-.seasonsContainer row column:nth-child(2) {
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-    align-items: center;
-    gap: var(--mini);
+.seasonsContainer row column:nth-child(2) p {
+    color: var(--fifthly-color);
+}
+
+.seasonsContainer row column:nth-child(2) h3 {
+    color: var(--fourthy-color);
 }
 
 .seasonsContainer row column row {

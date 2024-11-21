@@ -209,21 +209,24 @@ function App() {
           {tabIndex === 2 && <HeaderComponent placeholder={hymn.name} />}
           {tabIndex !== 2 && <img style={imgStyle} src={artist.img} alt={`Artist ${artist.artistName}`} />}
         </div>
-        <div className="artist">
-          <span>
-            <ArtistIcon />
-            <p>CANTOR</p>
-          </span>
-          <h3 style={textStyle}>{artist.artistName}</h3>
-        </div>
+
+        {selectedArtist ? <column>
+          <p>Select a Coptic season you're interested in and see Cantor</p>
+          <h3>{selectedArtist?.artistName}'s</h3>
+          <p>hymns</p>
+        </column> :
+          <div className="artist">
+            <span>
+              <ArtistIcon />
+              <p>CANTOR</p>
+            </span>
+            <h3 style={textStyle}>{artist.artistName}</h3>
+          </div>
+        }
       </div>
       <Robe />
     </div>
   );
-
-  const tab = document.querySelector('.TabList span:first-child .cantorContainer ');
-  const tabStyle = getComputedStyle(tab);
-  const tabHeight = tabStyle.height;
 
   const renderHymn = (hymns, artistData) => {
     return (
@@ -331,7 +334,7 @@ function App() {
 
   const renderSeasons = () => {
     return (
-      <div style={{ marginTop: tabHeight, }} className="seasonsContainer">
+      <div style={{}} className="seasonsContainer">
         <row>
           <column>
             <row>
@@ -357,9 +360,7 @@ function App() {
           </column>
 
           <column>
-            <p>Select a Coptic season you're interested in and see Cantor</p>
-            <h3>{selectedArtist?.artistName}'s</h3>
-            <p>hymns</p>
+            {renderArtist(selectedArtist, cantorContainerStyle, handleArtistClick, imgStyle, textStyle, tabIndex, hymns)}
           </column>
         </row>
 
@@ -371,13 +372,25 @@ function App() {
     );
   };
 
-  const HeaderComponent = ({ placeholder }) => (
-    <div className="headerContainer">
-      <Cross />
-      {searchItem ? <h2>{placeholder}</h2> : <h>{placeholder}</h>}
-      <Cross />
-    </div>
-  );
+  const HeaderComponent = ({ placeholder, searchItem, selectedSeason }) => {
+    let content = "";
+  
+    if (searchItem) {
+      content = <h2>{placeholder}</h2>;
+    } else if (selectedSeason) {
+      content = <h2>{placeholder}</h2>;
+    } else {
+      content = <h1>{placeholder}</h1>; 
+    }
+  
+    return (
+      <div className="headerContainer">
+        <Cross />
+        {content}
+        <Cross />
+      </div>
+    );
+  };  
 
   const seasonRender = (season) => {
     switch (season) {
@@ -500,8 +513,7 @@ function App() {
         </div>
 
         <div className="TabList">
-          <span style={{}}>
-            {selectedArtist && !selectedSeason && renderArtist(selectedArtist, cantorContainerStyle, handleArtistClick, imgStyle, textStyle, tabIndex, hymns)}
+          <span>
           </span>
 
           <span>
