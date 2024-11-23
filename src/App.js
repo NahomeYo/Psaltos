@@ -46,13 +46,6 @@ function App() {
   const mainContentRef = useRef(null);
 
   useEffect(() => {
-    window.scroll({
-      top: 0,
-      behavior: "smooth",
-    });  
-  }, []);
-
-  useEffect(() => {
     const getData = async () => {
       try {
         setHymnData(HymnsData);
@@ -418,7 +411,7 @@ function App() {
     let content = "";
 
     if (searchItem) {
-      content = <h2>{placeholder}</h2>;
+      content = <h3>{placeholder}</h3>;
     } else if (selectedSeason) {
       content = <h2>{placeholder}</h2>;
     } else {

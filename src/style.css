@@ -46,7 +46,6 @@ body::before {
 }
 
 .contents {
-    display: flex;
     flex-direction: column;
     margin: 0px 139px;
 }

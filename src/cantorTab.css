@@ -14,8 +14,7 @@
 }
 
 .artist svg {
-    width: var(--icon);
-    height: var(--icon);
+    width: calc(var(--icon) / 2);
 }
 
 .artist h3 {
@@ -139,6 +138,11 @@
 .searchItem .headerContainer h {
     color: var(--primary-color);
     fill: var(--primary-color);
+    letter-spacing: 0.02rem;
+}
+
+.searchItem h3 {
+    color: var(--thirdly-color);
 }
 
 .searchItem:hover {
@@ -150,7 +154,8 @@
 .searchItem:hover b,
 .searchItem:hover .artistIcon,
 .searchItem:hover .cross,
-.searchItem:hover .artist span p {
+.searchItem:hover .artist span p,
+.searchItem:hover h3 {
     color: var(--fifthly-color);
     fill: var(--fifthly-color);
 }
