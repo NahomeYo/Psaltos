@@ -46,6 +46,13 @@ function App() {
   const mainContentRef = useRef(null);
 
   useEffect(() => {
+    window.scroll({
+      top: 0,
+      behavior: "smooth",
+    });  
+  }, []);
+
+  useEffect(() => {
     const getData = async () => {
       try {
         setHymnData(HymnsData);
@@ -77,11 +84,14 @@ function App() {
 
   useEffect(() => {
     const body = document.body;
+    const content = document.querySelector('.contents')
 
     if (loading) {
       body.style.overflowY = 'hidden';
+      content.style.display = 'none';
     } else {
       body.style.overflowY = "visible";
+      content.style.display = 'flex';
     }
 
     return () => {
