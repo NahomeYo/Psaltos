@@ -1,4 +1,4 @@
-function LoadingScreenAnim() {
+const LoadingScreenAnim = ({ loadingScreenRef }) => {
     const clash = () => (
         <svg className="clash" width="76" height="66" viewBox="0 0 76 66" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M27.5669 65.2867C27.5669 65.2867 13.7566 18.3178 9.02582 15.2898C4.29506 12.2619 -1.13571 14.0577 1.06951 25.0644C3.27473 36.071 27.5669 65.2867 27.5669 65.2867Z" fill="#8BA8BE" />
@@ -31,7 +31,7 @@ function LoadingScreenAnim() {
         </svg>
     )
     return (
-        <div className="loadingContainer">
+        <div className="loadingContainer" ref={loadingScreenRef}>
             {clash()}
             {leftCymbal()}
             {rightCymbal()}

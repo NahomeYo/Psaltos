@@ -70,6 +70,8 @@ h1 {
     font-weight: 500;
     padding: 0;
     margin: 0;
+    text-transform: uppercase;
+    letter-spacing: calc(var(--mini) - 0.5rem);
 }
 
 h2 {
@@ -112,6 +114,7 @@ p {
     color: var(--primary-color);
     padding: 0;
     margin: 0;
+    font-weight: bold;
 }
 
 h {

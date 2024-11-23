@@ -161,6 +161,34 @@ nav li a h2 {
     background: linear-gradient(180deg, rgba(237, 242, 245, 1) 0%, rgba(154, 187, 202, 1) 100%);
 }
 
+.fadeIn {
+    animation: fadeInAnimation 1s forwards;
+}
+
+.fadeOut {
+    animation: fadeOutAnimation 1s forwards;
+}
+
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOutAnimation {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
 .loadingContainer .leftCymbal {
     animation: clashRight 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
@@ -296,7 +324,6 @@ nav li a h2 {
 
 .flowSection row {
     display: flex;
-    align-items: start;
     position: relative;
     overflow: hidden;
 }
@@ -305,63 +332,52 @@ nav li a h2 {
     display: flex;
     justify-content: center;
     position: relative;
-    border-radius: 3rem 5rem 0 0;
+    border-radius: var(--mini) var(--mini) 0 0;
     overflow: hidden;
     background: var(--thirdly-color);
     flex: 0 1 auto;
     z-index: 3;
     order: 2;
+    padding: var(--mini) var(--mini) 0rem var(--mini);
 }
 
 .flowSection>row>span:nth-child(2) {
     display: flex;
+    padding: 0rem var(--mini);
     justify-content: center;
-    position: relative;
-    border-radius: 3rem 5rem 0 0;
+    position: absolute;
+    border-radius: var(--mini) var(--mini) 0 0;
     overflow: hidden;
     background: var(--secondary-color);
     flex: 0 1 auto;
     z-index: 2;
     order: 1;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.29);
+    padding: var(--mini) var(--mini) 0rem var(--mini);
 }
 
 .flowSection>row>span:nth-child(3) {
     display: flex;
     justify-content: center;
-    position: relative;
-    border-radius: 3rem 5rem 0 0;
+    position: absolute;
+    border-radius: var(--mini) var(--mini) 0 0;
     overflow: hidden;
     background: var(--thirdly-color);
     flex: 0 1 auto;
     z-index: 1;
+    padding: var(--mini) var(--mini) 0rem var(--mini);
 }
 
-.flowSection row>span:nth-of-type(1) img {
-    width: 80px;
+.flowSection>row>span .cross {
+    fill: var(--fourthy-color);
 }
 
-.instructions h {
-    text-transform: uppercase;
-    font-size: var(--max);
-    background: -webkit-linear-gradient(90deg, rgba(66, 96, 119, 0) 25%, rgb(178, 203, 221) 100%);
+.flowSection>row>span .headerContainer h1 {
+    font-family: 'Handwritten';
+    font-size: calc(var(--max) - 0.4rem);
+    background-image: linear-gradient(var(--fourthy-color), var(--thirdly-color));
     -webkit-background-clip: text;
-    width: 100%;
     -webkit-text-fill-color: transparent;
-    text-align: center;
-}
-
-.instructions p {
-    color: var(--fifthly-color);
-    font-size: 30px;
-    font-family: 'cursive';
-    z-index: 1;
-    margin: 10px 0px 0px 30px;
-}
-
-.instructions .headerContainer {
-    margin: -30px 0px -50px 0px;
-    width: 100%;
 }
 
 .leftBtn {
@@ -490,7 +506,7 @@ fade {
 .feastContainer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
 }
 
@@ -512,20 +528,40 @@ fade {
     color: var(--primary-color);
 }
 
+@keyframes fadeDown {
+    from {
+        transform: translateY(-200px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
 .seasonItem:nth-child(1) img {
     object-position: 0% 25%;
+    animation: fadeDown 1s ease-in-out;
+    animation-delay: 1s;
 }
 
 .seasonItem:nth-child(2) img {
     object-position: 0% 50%;
+    animation: fadeDown 1s ease-in-out;
+    animation-delay: 1.5s;
 }
 
 .seasonItem:nth-child(3) img {
     object-position: 0% 30%;
+    animation: fadeDown 1s ease-in-out;
+    animation-delay: 2s;
 }
 
 .seasonItem:nth-child(4) img {
     object-position: 0% 100%;
+    animation: fadeDown 1s ease-in-out;
+    animation-delay: 2.5s;
 }
 
 .psalmodyContainer .seasonItem:nth-child(1) img {
@@ -550,8 +586,8 @@ fade {
     flex-direction: column;
     width: 100%;
     position: relative;
-    gap: var(--small)
-;}
+    gap: var(--small);
+}
 
 .seasonsContainer .artistHeader {
     position: relative;
