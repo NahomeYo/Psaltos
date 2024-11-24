@@ -494,30 +494,33 @@ function App() {
         <div className="contents">
           <Navbar />
           <img className="Jesus" src={jesus} alt="Jesus" />
-          <div className="titleContainer">
-            <img className="mainLogo" src={logo} alt="logo" />
-            <t>Psaltos</t>
-          </div>
 
-          <div className="searchBarContainer">
-
-            <div className="background">
-              <div className="searchBar">
-                <input
-                  type="text"
-                  value={hymn}
-                  placeholder="Peace be with you..."
-                  onChange={hymnSearch}
-                />
-                <img src={search} alt="search" />
+          <div className="titleSearch"
+            style={{ flexDirection: selectedArtist ? 'row' : 'column', }}>
+            <div className="titleContainer" style={{ width: selectedArtist ? 'min-content' : '100%' }}>
+              <img className="mainLogo" src={logo} alt="logo" />
+              <copt>Psaltos</copt>       
               </div>
 
-              {typing && searchItem()}
-            </div>
+            <div className="searchBarContainer">
+              <div className="background">
+                <div className="searchBar">
+                  <input
+                    type="text"
+                    value={hymn}
+                    placeholder="Peace be with you..."
+                    onChange={hymnSearch}
+                  />
+                  <img src={search} alt="search" />
+                </div>
 
-            <div className="caption">
-              <p>The ultimate search engine to house all the hymns in the Coptic church</p>
-              <img className="deaf" src={Deaf} alt="deaf" />
+                {typing && searchItem()}
+              </div>
+
+              <div className="caption">
+                <p>The ultimate search engine to house all the hymns in the Coptic church</p>
+                <img className="deaf" src={Deaf} alt="deaf" />
+              </div>
             </div>
           </div>
 

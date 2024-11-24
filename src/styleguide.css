@@ -8,6 +8,12 @@ html {
 }
 
 @font-face {
+    font-family: 'Coptic';
+    src: url('./Fonts/Coptic/Antonious-Bold.ttf');
+    font-display: swap;
+}
+
+@font-face {
     font-family: 'Intel-light';
     src: url(./Fonts/Inter/Inter_18pt-Medium.ttf);
 }
@@ -48,18 +54,16 @@ html {
     --fifthly-color: #eff9ff;
 }
 
-.rum-raisin-regular {
-    font-family: "Rum Raisin", sans-serif;
-    font-weight: 400;
-    font-style: normal;
+copt {
+    font-family: 'Coptic';
+    font-size: var(--max);
+    color: var(--secondary-color);
 }
 
 t {
     font-size: var(--max);
     color: var(--secondary-color);
     font-family: 'Aladin';
-    padding: 0;
-    margin: 0;
 }
 
 h1 {

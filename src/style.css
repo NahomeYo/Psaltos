@@ -22,17 +22,18 @@ body::before {
     content: "";
 }
 
-.mainLogo {
-    width: 180px;
-    height: 180px;
-}
-
 .titleContainer {
     display: flex;
     flex-direction: column;
     width: 100%;
     align-items: center;
     height: min-content;
+}
+
+.titleContainer t {
+    visibility: none;
+    initial-letter: none;
+    font-size: 'Coptic';
 }
 
 .churchImg {
@@ -114,37 +115,28 @@ nav li a h2 {
 .searchBarContainer .background {
     background: var(--fifthly-color);
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.29);
-    border-radius: 40px;
-    padding-top: 0.5vw;
-    max-width: 90%;
-    min-width: 80%;
-    width: 100%;
+    border-radius: var(--big);
     overflow: hidden;
+    width: 100%;
 }
 
-
 .searchBar {
-    width: 100%;
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
+    padding: var(--mini);
+    margin-right: var(--max);
 }
 
 .searchBar input {
     background-color: transparent;
     border: 0px solid;
     outline: none;
-    width: 100%;
     font-size: var(--medium);
-    margin-left: 2vw;
-    margin-bottom: var(--mini);
+    width: 100%;
 }
 
 .searchBar input:focus {
     outline: none;
-}
-
-.searchBar img {
-    margin-right: 5vw;
 }
 
 .loadingContainer {
@@ -403,9 +395,10 @@ nav li a h2 {
     justify-content: start;
     list-style: none;
     position: relative;
-    border-radius: 0px 20px 20px 20px;
-    border-bottom: solid var(--fifthly-color) 20px;
+    border-radius: 0px var(--big) var(--big) var(--big);
+    border-bottom: solid var(--fifthly-color) var(--big);
     padding: var(--max);
+    height: min-content;
 }
 
 .TabList span:first-child {
@@ -519,7 +512,7 @@ fade {
     object-fit: cover;
     object-position: 0% 10%;
     border-radius: 20px;
-    height: 50%;
+    max-height: 50%;
     box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.177);
 }
 
@@ -626,6 +619,12 @@ fade {
     margin-right: var(--small);
 }
 
+.seasonsContainer row:nth-child(3) {
+    padding: 0;
+    margin: 0;
+    height: min-content;
+}
+
 .hymnContainer {
     width: 100%;
     display: flex;
@@ -684,4 +683,10 @@ fade {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+}
+
+.titleSearch {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }

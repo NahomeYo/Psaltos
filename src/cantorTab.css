@@ -124,10 +124,10 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 95%;
-    padding-right: 2vw;
-    border-radius: 0px 60px 60px 0px;
-    margin-bottom: 0.5vw;
+    padding-right: var(--medium);
+    border-radius: 0rem var(--big) var(--big) 0rem;
+    margin-right: var(--max);
+    margin-bottom: calc(var(--mini) - 0.2rem);
 }
 
 .searchItem h1,
