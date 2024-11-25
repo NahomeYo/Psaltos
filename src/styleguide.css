@@ -10,7 +10,6 @@ html {
 @font-face {
     font-family: 'Coptic';
     src: url('./Fonts/Coptic/Antonious-Bold.ttf');
-    font-display: swap;
 }
 
 @font-face {
@@ -39,14 +38,17 @@ html {
 }
 
 :root {
-    --imageTab: 15rem;
+    --img: 15rem;
     --borderRadius: 20px;
-    --icon: 3.5rem;
     --max: 2.5rem;
     --big: 1.25rem;
     --medium: 1.042rem;
     --small: 0.916rem;
     --mini: 0.6rem;
+    --minSpacing: 0.05rem;
+    --medSpacing: 0.1rem;
+    --bigSpacing: 0.2rem;
+    --smoothAnim: cubic-bezier(.42, .04, .42, 1.31);
     --primary-color: #2C475C;
     --secondary-color: #426077;
     --thirdly-color: #678399;
@@ -56,8 +58,9 @@ html {
 
 copt {
     font-family: 'Coptic';
-    font-size: var(--max);
-    color: var(--secondary-color);
+    font-size: var(--big);
+    width: min-content;
+    white-space: nowrap;
 }
 
 t {
@@ -75,7 +78,7 @@ h1 {
     padding: 0;
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: calc(var(--mini) - 0.5rem);
+    letter-spacing: var(--minSpacing);
 }
 
 h2 {
@@ -86,6 +89,7 @@ h2 {
     margin: 0;
     text-transform: uppercase;
     font-weight: 500;
+    letter-spacing: var(--minSpacing);
 }
 
 h3 {
@@ -125,8 +129,9 @@ h {
     font-size: var(--medium);
     font-family: 'Handwritten';
     color: var(--fifthly-color);
-    letter-spacing: 0.1rem;
-    text-transform: inherit;
+    text-transform: uppercase;
+    font-weight: 200;
+    letter-spacing: var(--medSpacing);
 }
 
 .tabList p {

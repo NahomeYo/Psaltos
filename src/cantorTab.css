@@ -14,7 +14,7 @@
 }
 
 .artist svg {
-    width: calc(var(--icon) / 2);
+    width: calc(var(--big));
 }
 
 .artist h3 {
@@ -128,11 +128,13 @@
     border-radius: 0rem var(--big) var(--big) 0rem;
     margin-right: var(--max);
     margin-bottom: calc(var(--mini) - 0.2rem);
+    padding-left: var(--big);
 }
 
 .searchItem h1,
 .searchItem h2,
 .searchItem b,
+.searchItem copt,
 .searchItem .artistIcon .searchItem .cross,
 .searchItem .artist span p,
 .searchItem .headerContainer h {
@@ -146,23 +148,41 @@
 }
 
 .searchItem:hover {
-    background: var(--fourthy-color);
+    background: var(--thirdly-color);
+    transition: 0.2s ease-in-out;
 }
 
-.searchItem:hover h1,
 .searchItem:hover h2,
 .searchItem:hover b,
 .searchItem:hover .artistIcon,
 .searchItem:hover .cross,
 .searchItem:hover .artist span p,
+.searchItem:hover copt,
 .searchItem:hover h3 {
     color: var(--fifthly-color);
     fill: var(--fifthly-color);
+    transition: 0.2s ease-in-out;
 }
 
 .searchItem .topRow {
     background: none;
-    padding-left: 1.5vw
+    display: flex;
+    align-items: center;
+}
+
+.searchItem .headerContainer {
+    font-family: 'Coptic';
+}
+
+@keyframes swipeLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0px);
+    }
 }
 
 .searchItem .artist {

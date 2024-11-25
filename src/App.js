@@ -233,7 +233,7 @@ function App() {
         style={cantorContainerStyle}
       >
         <div className="topRow">
-          {tabIndex === 2 && <HeaderComponent placeholder={hymn.name} />}
+          {tabIndex === 2 && <HeaderComponent placeholder={hymn.name} customFont='Aladin' />}
           {tabIndex !== 2 && <img style={imgStyle} src={artist.img} alt={`Artist ${artist.artistName}`} />}
         </div>
 
@@ -264,7 +264,7 @@ function App() {
       <div className="hymnContainer">
         {(
           <div className="header">
-            <HeaderComponent placeholder={selectedSeason} />
+            <HeaderComponent placeholder={selectedSeason} customFont='Aladin' />
           </div>
         )}
 
@@ -283,7 +283,7 @@ function App() {
             <div className="cantorContainer" style={renderHymnBox}>
               <div className="topRow">
                 {expandedHymns === index && <img style={imgStyle} src={artist.img} alt={`Artist ${artist.artistName}`} />}
-                <HeaderComponent placeholder={hymn.name} />
+                <HeaderComponent placeholder={hymn.name} customFont='Aladin' />
               </div>
 
               {expandedHymns === index && <div className="artist">
@@ -322,7 +322,7 @@ function App() {
               onClick={() => setSelectedSeason(feast)}
             >
               {seasonRender(feast)}
-              <HeaderComponent placeholder={feast} />
+              <HeaderComponent placeholder={feast} customFont='Aladin' />
               <p>Feast</p>
             </div>
           );
@@ -351,7 +351,7 @@ function App() {
               onClick={() => setSelectedSeason(psalm)}
             >
               {seasonRender(psalm)}
-              <HeaderComponent placeholder={psalm} />
+              <HeaderComponent placeholder={psalm} customFont='Aladin' />
               <p>Psalmody</p>
             </div>
           );
@@ -407,21 +407,12 @@ function App() {
     );
   };
 
-  const HeaderComponent = ({ placeholder, searchItem, selectedSeason }) => {
-    let content = "";
-
-    if (searchItem) {
-      content = <h3>{placeholder}</h3>;
-    } else if (selectedSeason) {
-      content = <h2>{placeholder}</h2>;
-    } else {
-      content = <h1>{placeholder}</h1>;
-    }
+  const HeaderComponent = ({ placeholder, customFont }) => {
 
     return (
       <div className="headerContainer">
         <Cross />
-        {content}
+        <h2 style={{ fontFamily: `${customFont}` }}>{placeholder}</h2>
         <Cross />
       </div>
     );
@@ -449,20 +440,42 @@ function App() {
   };
 
   const searchItem = () => (
-    filteredHymns.slice(0, 10).map((hymn, index) => (
-      <div key={index} className="searchItem" onClick={() => { }}>
-        <div className="topRow">
-          <HeaderComponent placeholder={hymn.name} />
+    filteredHymns.slice(0, 10).map((hymn, index) => {
+      const isActive = index === selectedIndex;
+
+      return (
+        <div
+          key={index}
+          className="searchItem"
+          onMouseEnter={() => {
+            setSelectedIndex(index);
+          }}
+          onMouseLeave={() => {
+            setSelectedIndex(-1);
+          }}
+          onClick={() => {
+          }}
+          style={{
+            background: isActive ? 'var(--thirdly-color)' : 'none',
+            transition: 'background 0.3s ease'
+          }}
+        >
+          <div className="topRow">
+            <HeaderComponent placeholder={hymn.name} customFont='Coptic' />
+            <h style={{ color: 'var(--fourthy-color)', opacity: isActive ? '1' : '0', animation: isActive ? 'swipeLeft 0.5s var(--smoothAnim)' : 'none' }}>
+              {hymn.name}
+            </h>
+          </div>
+          <div className="artist">
+            <span>
+              <ArtistIcon />
+              <p>CANTOR</p>
+            </span>
+            <h3>{hymn.artist}</h3>
+          </div>
         </div>
-        <div className="artist">
-          <span>
-            <ArtistIcon />
-            <p>CANTOR</p>
-          </span>
-          <h3>{hymn.artist}</h3>
-        </div>
-      </div>
-    ))
+      );
+    })
   );
 
   const ProgressBar = ({ artistData }) => {
@@ -492,34 +505,35 @@ function App() {
       {loading && <LoadingScreenAnim ref={loadingScreenRef} />}
       <div className="mainContainer" ref={mainContentRef}>
         <div className="contents">
-          <Navbar />
-          <img className="Jesus" src={jesus} alt="Jesus" />
+          <div className="topSection" style={{ flexDirection: selectedArtist ? 'row' : 'column', marginBottom: 'var(--mini)', transition: '1s var(--smoothAnim)' }}>
+            <Navbar selectedArtist={selectedArtist} />
 
-          <div className="titleSearch"
-            style={{ flexDirection: selectedArtist ? 'row' : 'column', }}>
-            <div className="titleContainer" style={{ width: selectedArtist ? 'min-content' : '100%' }}>
-              <img className="mainLogo" src={logo} alt="logo" />
-              <copt>Psaltos</copt>       
+            <div className="titleSearch"
+              style={{ flexDirection: selectedArtist ? 'row' : 'column', marginBottom: 'var(--mini)', transition: '1s var(--smoothAnim)' }}>
+              <div className="titleContainer" style={{ position: selectedArtist ? 'absolute' : 'relative', transition: '1s var(--smoothAnim)', opacity: selectedArtist ? 0 : 1 }}>
+                <img className="mainLogo" src={logo} alt="logo" />
+                <copt>Paltoc</copt>
               </div>
 
-            <div className="searchBarContainer">
-              <div className="background">
-                <div className="searchBar">
-                  <input
-                    type="text"
-                    value={hymn}
-                    placeholder="Peace be with you..."
-                    onChange={hymnSearch}
-                  />
-                  <img src={search} alt="search" />
+              <div className="searchBarContainer">
+                <div className="background">
+                  <div className="searchBar">
+                    <input
+                      type="text"
+                      value={hymn}
+                      placeholder="Peace be with you..."
+                      onChange={hymnSearch}
+                    />
+                    <img src={search} alt="search" />
+                  </div>
+
+                  {typing && searchItem()}
                 </div>
 
-                {typing && searchItem()}
-              </div>
-
-              <div className="caption">
-                <p>The ultimate search engine to house all the hymns in the Coptic church</p>
-                <img className="deaf" src={Deaf} alt="deaf" />
+                <div className="caption">
+                  <p style={{ position: selectedArtist ? 'absolute' : 'relative', transition: '1s ease', opacity: selectedArtist ? 0 : 1 }}>The ultimate search engine to house all the hymns in the Coptic church</p>
+                  <img style={{ position: selectedArtist ? 'absolute' : 'relative', transition: '1s ease', opacity: selectedArtist ? 0 : 1 }} className="deaf" src={Deaf} alt="deaf" />
+                </div>
               </div>
             </div>
           </div>
@@ -528,18 +542,18 @@ function App() {
             <row>
 
               <span>
-                <HeaderComponent placeholder="cantor" />
+                <HeaderComponent placeholder="cantor" customFont='Aladin' />
               </span>
 
               {selectedArtist && (
                 <span style={{ left: `calc(${width} * 1)`, }}>
-                  <HeaderComponent placeholder="season" />
+                  <HeaderComponent placeholder="season" customFont='Aladin' />
                 </span>
               )}
 
               {selectedSeason && (
                 <span style={{ left: `calc(${width} * 2)`, }}>
-                  <HeaderComponent placeholder="hymn" />
+                  <HeaderComponent placeholder="hymn" customFont='Aladin' />
                 </span>
               )}
 
@@ -614,8 +628,10 @@ function App() {
             <p>Copyright @ 2024 Psaltos | All rights reserved</p>
           </div>
         </div>
-        <img className="churchImg" src={Church} alt="church" />
+
+        <img className="Jesus" src={jesus} alt="Jesus" />
       </div>
+      <img className="churchImg" src={Church} alt="church" />
     </>
   );
 }

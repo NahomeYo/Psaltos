@@ -46,34 +46,40 @@ body::before {
     opacity: 60%;
 }
 
+.cross {
+    width: var(--medium)
+}
+
 .contents {
     flex-direction: column;
-    margin: 0px 139px;
+    width: 100%;
 }
 
 .mainContainer {
     position: relative;
+    margin: 0px 139px;
 }
 
 nav {
-    width: 100%;
     display: flex;
+    flex-direction: row;
     list-style: none;
     justify-content: flex-start;
     align-items: center;
-    gap: 60px;
-    padding-top: 20px;
+    gap: var(--max);
+    flex: 0 0 0;
 }
 
 nav li {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: var(--mini);
+    flex: 0 0 auto;
 }
 
 nav li:nth-of-type(1) img {
-    height: var(--icon);
+    width: var(--max);
 }
 
 nav li a {
@@ -110,6 +116,7 @@ nav li a h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
 .searchBarContainer .background {
@@ -133,6 +140,7 @@ nav li a h2 {
     outline: none;
     font-size: var(--medium);
     width: 100%;
+    padding-left: var(--big);
 }
 
 .searchBar input:focus {
@@ -392,13 +400,14 @@ nav li a h2 {
     flex-direction: column;
     align-items: center;
     background: var(--thirdly-color);
-    justify-content: start;
     list-style: none;
     position: relative;
     border-radius: 0px var(--big) var(--big) var(--big);
     border-bottom: solid var(--fifthly-color) var(--big);
-    padding: var(--max);
-    height: min-content;
+    padding-left: var(--max);
+    padding-right: var(--max);
+    padding-bottom: var(--mini);
+    gap: var(--small);
 }
 
 .TabList span:first-child {
@@ -506,9 +515,13 @@ fade {
     flex: 0 0 25%;
 }
 
+.searchItem .headerContainer {
+    font-family: 'Coptic';
+}
+
 .seasonItem img {
     border-bottom: var(--fifthly-color) 5px solid;
-    width: var(--imageTab);
+    width: var(--img);
     object-fit: cover;
     object-position: 0% 10%;
     border-radius: 20px;
@@ -689,4 +702,12 @@ fade {
     display: flex;
     flex-direction: column;
     width: 100%;
+}
+
+.topSection {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: var(--max);
+    padding-top: var(--big);
 }
