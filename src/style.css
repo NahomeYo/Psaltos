@@ -415,14 +415,6 @@ nav li a h2 {
     width: 100%;
 }
 
-.TabList span:first-child .artistHeader {
-    flex: 1 0 auto;
-}
-
-.TabList span:first-child .boogey {
-    flex: 0 0 auto;
-}
-
 .TabList span:nth-child(2) li:nth-child(2) {
     width: 100%;
     display: flex;
@@ -597,6 +589,7 @@ fade {
 .seasonsContainer .artistHeader {
     position: relative;
     width: 100%;
+    clip-path: polygon(0% 0, 100% 0%, 100% 500%, 0 500%);
 }
 
 .seasonsContainer row {
@@ -711,3 +704,18 @@ fade {
     gap: var(--max);
     padding-top: var(--big);
 }
+
+.transition-smooth {
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .selected-artist, .selected-season {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0; 
+  }
+  
+  .selected-artist.active, .selected-season.active {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  

@@ -500,11 +500,22 @@ function App() {
     }
   }, [selectedArtist, selectedSeason])
 
+  useEffect(() => {
+    if (selectedArtist || selectedSeason) {
+      document.querySelector('.selected-artist').classList.add('active');
+      document.querySelector('.selected-season').classList.add('active');
+    } else {
+      document.querySelector('.selected-artist').classList.remove('active');
+      document.querySelector('.selected-season').classList.remove('active');
+    }
+  }, [selectedArtist, selectedSeason]);
+
   return (
     <>
       {loading && <LoadingScreenAnim ref={loadingScreenRef} />}
       <div className="mainContainer" ref={mainContentRef}>
         <div className="contents">
+
           <div className="topSection" style={{ flexDirection: selectedArtist ? 'row' : 'column', marginBottom: 'var(--mini)', transition: '1s var(--smoothAnim)' }}>
             <Navbar selectedArtist={selectedArtist} />
 
@@ -604,9 +615,13 @@ function App() {
               </li>
             </span>
 
-            {selectedArtist && !selectedSeason && renderSeasons(feastSeasons, psalmodySeasons)}
+            <div className={`selected-artist ${selectedArtist ? 'active' : ''}`}>
+              {selectedArtist && !selectedSeason && renderSeasons(feastSeasons, psalmodySeasons)}
+            </div>
 
-            {selectedSeason && renderHymn(hymns, artistData)}
+            <div className={`selected-season ${selectedSeason ? 'active' : ''}`}>
+              {selectedSeason && renderHymn(hymns, artistData)}
+            </div>
 
             {!selectedArtist && <div className="progressContainer">
               <ProgressBar artistData={artistData} />
