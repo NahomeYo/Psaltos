@@ -9,7 +9,6 @@ import Cross from "./img/icons/cross.js";
 import Church from "./img/church.svg";
 import Deaf from "./img/cymbals.svg";
 import CrossIcon from "./img/icons/crossButton.js";
-import Robe from "./img/robe.svg";
 import Audio from "./Audio.js";
 import Nativity from "./img/copticIcons/Nativity.jpg";
 import Resurrection from "./img/copticIcons/Ressurection.jpeg"
@@ -19,8 +18,10 @@ import SundayTesbaha from "./img/copticIcons/SundayTesbaha.jpg";
 import Weekday from "./img/copticIcons/WeekdayTesbaha.jpg";
 import SundayVespers from "./img/copticIcons/SundayVespers.jpg";
 import ArtistIcon from "./img/icons/artistIcon.js";
+import RenderArtist from './cantorTab.js';
 import HymnsData from "./output.json";
 import ArtistData from "./artists.json";
+import Robe from "./img/robe.svg";
 import { useEffect, useState, useRef } from "react";
 import crossIcon from "./img/icons/crossButton.svg"
 import LoadingScreenAnim from "./loadingScreenAnim.js";
@@ -143,7 +144,6 @@ function App() {
     setSelectedArtist(artist);
   };
 
-
   const nextFour = () => {
     setClick(!click);
   }
@@ -225,39 +225,6 @@ function App() {
       </svg>
     );
   };
-
-  const renderArtist = (artist, cantorContainerStyle, handleArtistClick, imgStyle, tabIndex) => (
-    <div className="cantorTab001">
-      <div className="cantorContainer"
-        onClick={() => { handleArtistClick(artist) }}
-        style={cantorContainerStyle}
-      >
-        <div className="topRow">
-          {tabIndex === 2 && <HeaderComponent placeholder={hymn.name} customFont='Aladin' />}
-          {tabIndex !== 2 && <img style={imgStyle} src={artist.img} alt={`Artist ${artist.artistName}`} />}
-        </div>
-
-        <div className="artist">
-          <span>
-            <ArtistIcon />
-            <p>CANTOR</p>
-          </span>
-          <h3>{artist.artistName}</h3>
-        </div>
-      </div>
-      <img
-        style={{
-          width: 'var(--max)',
-          position: !selectedArtist ? 'relative' : 'absolute',
-          right: !selectedArtist ? 'none' : '0',
-          top: '0',
-        }}
-        className="robe"
-        src={Robe}
-        alt="robe"
-      />
-    </div>
-  );
 
   const renderHymn = (hymns, artist) => {
     return (
@@ -364,7 +331,14 @@ function App() {
     return (
       <div style={{}} className="seasonsContainer">
         <div className="artistHeader">
-          {renderArtist(selectedArtist, cantorContainerStyle, handleArtistClick, imgStyle, tabIndex, hymns)}
+          <RenderArtist selectedArtist={selectedArtist}
+            cantorContainerStyle={cantorContainerStyle}
+            handleArtistClick={handleArtistClick}
+            imgStyle={imgStyle}
+            tabIndex={tabIndex}
+            hymns={hymns}
+            robe = {Robe}
+          />
         </div>
 
         <row>
@@ -500,16 +474,6 @@ function App() {
     }
   }, [selectedArtist, selectedSeason])
 
-  useEffect(() => {
-    if (selectedArtist || selectedSeason) {
-      document.querySelector('.selected-artist').classList.add('active');
-      document.querySelector('.selected-season').classList.add('active');
-    } else {
-      document.querySelector('.selected-artist').classList.remove('active');
-      document.querySelector('.selected-season').classList.remove('active');
-    }
-  }, [selectedArtist, selectedSeason]);
-
   return (
     <>
       {loading && <LoadingScreenAnim ref={loadingScreenRef} />}
@@ -586,24 +550,26 @@ function App() {
                     {click === true
                       ? artistData.slice(4).map((artist, index) => (
                         <div key={index}>
-                          {renderArtist(
-                            artist,
-                            cantorContainerStyle,
-                            handleArtistClick,
-                            imgStyle,
-                            tabIndex
-                          )}
+                          <RenderArtist selectedArtist={artist}
+                            cantorContainerStyle={cantorContainerStyle}
+                            handleArtistClick={handleArtistClick}
+                            imgStyle={imgStyle}
+                            tabIndex={tabIndex}
+                            hymns={hymns} 
+                            robe = {Robe}
+                            />
                         </div>
                       ))
                       : artistData.slice(0, 4).map((artist, index) => (
                         <div key={index}>
-                          {renderArtist(
-                            artist,
-                            cantorContainerStyle,
-                            handleArtistClick,
-                            imgStyle,
-                            tabIndex
-                          )}
+                          <RenderArtist selectedArtist={artist}
+                            cantorContainerStyle={cantorContainerStyle}
+                            handleArtistClick={handleArtistClick}
+                            imgStyle={imgStyle}
+                            tabIndex={tabIndex}
+                            hymns={hymns} 
+                            robe = {Robe}
+                            />
                         </div>
                       ))}
                   </>
@@ -615,13 +581,9 @@ function App() {
               </li>
             </span>
 
-            <div className={`selected-artist ${selectedArtist ? 'active' : ''}`}>
-              {selectedArtist && !selectedSeason && renderSeasons(feastSeasons, psalmodySeasons)}
-            </div>
+            {selectedArtist && !selectedSeason && renderSeasons(feastSeasons, psalmodySeasons)}
 
-            <div className={`selected-season ${selectedSeason ? 'active' : ''}`}>
-              {selectedSeason && renderHymn(hymns, artistData)}
-            </div>
+            {selectedSeason && renderHymn(hymns, artistData)}
 
             {!selectedArtist && <div className="progressContainer">
               <ProgressBar artistData={artistData} />
@@ -631,22 +593,22 @@ function App() {
               <img src={crossIcon} alt="cross" />
             </span>
           </div>
+        </div>
 
-          <div className="footer">
-            <nav>
-              <li><img src={logo} alt="logo" /></li>
-              <CrossIcon />
-              <li><a href="about.html"><h2>About</h2></a></li>
-              <CrossIcon />
-              <li><a href="contact.html"><h2>Contact</h2></a></li>
-            </nav>
-            <p>Copyright @ 2024 Psaltos | All rights reserved</p>
-          </div>
+        <div className="footer">
+          <nav>
+            <li><img src={logo} alt="logo" /></li>
+            <CrossIcon />
+            <li><a href="about.html"><h2>About</h2></a></li>
+            <CrossIcon />
+            <li><a href="contact.html"><h2>Contact</h2></a></li>
+          </nav>
+          <p>Copyright @ 2024 Psaltos | All rights reserved</p>
         </div>
 
         <img className="Jesus" src={jesus} alt="Jesus" />
+        <img className="churchImg" src={Church} alt="church" />
       </div>
-      <img className="churchImg" src={Church} alt="church" />
     </>
   );
 }

@@ -1,25 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 
 body {
-    background: linear-gradient(180deg, var(--fifthly-color) 0%, var(--fourthy-color) 100%);
     margin: 0;
-    padding: 0;
     position: relative;
     overflow-x: hidden;
     overflow-y: visible;
-}
-
-body::before {
-    background-image:
-        url('./img/backgroundPattern.png');
-    background-repeat: repeat;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -4;
-    content: "";
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--fifthly-color) 0%, var(--fourthy-color) 100%);
 }
 
 .titleContainer {
@@ -39,10 +27,10 @@ body::before {
 .churchImg {
     position: absolute;
     mix-blend-mode: luminosity;
-    z-index: -2;
+    z-index: 1;
     left: 0px;
     bottom: 0px;
-    width: 60vw;
+    width: 50vw;
     opacity: 60%;
 }
 
@@ -52,12 +40,30 @@ body::before {
 
 .contents {
     flex-direction: column;
-    width: 100%;
+    margin: 0px 140px;
+    z-index: 3;
+    height: 100%;
 }
 
 .mainContainer {
-    position: relative;
-    margin: 0px 139px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+}
+
+.mainContainer::before {
+    background-image:
+        url('./img/backgroundPattern.png');
+    background-repeat: repeat;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+    content: "";
 }
 
 nav {
@@ -94,7 +100,7 @@ nav li a h2 {
     position: absolute;
     top: -100px;
     right: -100px;
-    z-index: -3;
+    z-index: 2;
     mix-blend-mode: multiply;
     opacity: 80%;
 }
@@ -408,6 +414,7 @@ nav li a h2 {
     padding-right: var(--max);
     padding-bottom: var(--mini);
     gap: var(--small);
+    height: auto;
 }
 
 .TabList span:first-child {
@@ -458,12 +465,11 @@ nav ul li h2 {
 }
 
 .footer {
-    width: 100%;
+    width: 100vw;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 40px 0px;
+    z-index: 4;
 }
 
 .footer nav {
@@ -471,22 +477,13 @@ nav ul li h2 {
     list-style: none;
     align-items: center;
     justify-content: space-around;
+    width: 100%;
 }
 
 .footer nav .cross {
     width: 30px;
     height: 30px;
     fill: var(--primary-color);
-}
-
-fade {
-    position: absolute;
-    z-index: -1;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 20%;
-    background: linear-gradient(0deg, rgba(154, 187, 202, 1) 50%, rgba(154, 187, 202, 0) 100%);
 }
 
 .psalmodyContainer {
@@ -705,17 +702,13 @@ fade {
     padding-top: var(--big);
 }
 
-.transition-smooth {
-    transition: all 0.5s ease-in-out;
-  }
-  
-  .selected-artist, .selected-season {
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    opacity: 0; 
-  }
-  
-  .selected-artist.active, .selected-season.active {
+.selected-artist,
+.selected-season {
+    transition: opacity 1s ease;
+    opacity: 0;
+}
+
+.selected-artist.active,
+.selected-season.active {
     opacity: 1;
-    transform: translateX(0);
-  }
-  
+}
