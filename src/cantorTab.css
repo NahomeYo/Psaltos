@@ -25,8 +25,8 @@
     overflow: hidden;
     display: flex;
     flex-direction: row;
+    position: relative;
 }
-
 
 .TabList .cantorTab001 .cantorContainer {
     display: flex;
@@ -34,9 +34,13 @@
     flex-direction: column;
     background: var(--primary-color);
     border-radius: var(--medium) 0px 0px var(--medium);
-    height: 100%;
     margin: 0;
     padding: 0rem var(--medium) var(--medium) 0rem;
+    height: min-content;
+}
+
+.TabList .robe {
+    animation: swipeDown 0.5s ease;
 }
 
 .cantorTab001 .artist {
@@ -207,11 +211,6 @@
 .topRow .title {
     display: flex;
     flex-direction: column;
-}
-
-.robe {
-    position: relative;
-    animation: swipeDown 0.5s ease;
 }
 
 @keyframes swipeDown {

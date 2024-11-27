@@ -414,7 +414,6 @@ nav li a h2 {
     padding-right: var(--max);
     padding-bottom: var(--mini);
     gap: var(--small);
-    height: auto;
 }
 
 .TabList span:first-child {

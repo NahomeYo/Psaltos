@@ -21,7 +21,6 @@ import ArtistIcon from "./img/icons/artistIcon.js";
 import RenderArtist from './cantorTab.js';
 import HymnsData from "./output.json";
 import ArtistData from "./artists.json";
-import Robe from "./img/robe.svg";
 import { useEffect, useState, useRef } from "react";
 import crossIcon from "./img/icons/crossButton.svg"
 import LoadingScreenAnim from "./loadingScreenAnim.js";
@@ -179,11 +178,13 @@ function App() {
             width: '100%',
             borderRadius: '60px 0px 0px 60px',
             paddingBottom: '0px',
+            transition: 'all 0.3s ease-in-out',
           };
 
           imgStyle = {
             width: '70px',
             height: '70px',
+            transition: 'all 0.3s ease-in-out',
           };
 
           break
@@ -330,16 +331,7 @@ function App() {
   const renderSeasons = () => {
     return (
       <div style={{}} className="seasonsContainer">
-        <div className="artistHeader">
-          <RenderArtist selectedArtist={selectedArtist}
-            cantorContainerStyle={cantorContainerStyle}
-            handleArtistClick={handleArtistClick}
-            imgStyle={imgStyle}
-            tabIndex={tabIndex}
-            hymns={hymns}
-            robe = {Robe}
-          />
-        </div>
+
 
         <row>
           <column>
@@ -535,7 +527,12 @@ function App() {
             </row>
           </div>
 
-          <div className="TabList">
+          <div className="TabList"
+            style={{
+              height: selectedArtist ? "min-content" : "500px",
+              transition: 'all 0.3s ease-in-out',
+            }}
+          >
             <span>
             </span>
 
@@ -550,26 +547,26 @@ function App() {
                     {click === true
                       ? artistData.slice(4).map((artist, index) => (
                         <div key={index}>
-                          <RenderArtist selectedArtist={artist}
+                          <RenderArtist
+                            selectedArtist={artist}
                             cantorContainerStyle={cantorContainerStyle}
                             handleArtistClick={handleArtistClick}
                             imgStyle={imgStyle}
                             tabIndex={tabIndex}
-                            hymns={hymns} 
-                            robe = {Robe}
-                            />
+                            hymns={hymns}
+                          />
                         </div>
                       ))
                       : artistData.slice(0, 4).map((artist, index) => (
                         <div key={index}>
-                          <RenderArtist selectedArtist={artist}
+                          <RenderArtist
+                            selectedArtist={artist}
                             cantorContainerStyle={cantorContainerStyle}
                             handleArtistClick={handleArtistClick}
                             imgStyle={imgStyle}
                             tabIndex={tabIndex}
-                            hymns={hymns} 
-                            robe = {Robe}
-                            />
+                            hymns={hymns}
+                          />
                         </div>
                       ))}
                   </>
@@ -580,6 +577,17 @@ function App() {
                 {!selectedArtist && <button className="rightBtn">{rightArrow()}</button>}
               </li>
             </span>
+
+            {selectedArtist &&
+              <RenderArtist
+                selectedArtist={selectedArtist}
+                cantorContainerStyle={cantorContainerStyle}
+                handleArtistClick={handleArtistClick}
+                imgStyle={imgStyle}
+                tabIndex={tabIndex}
+                hymns={hymns}
+              />
+            }
 
             {selectedArtist && !selectedSeason && renderSeasons(feastSeasons, psalmodySeasons)}
 
