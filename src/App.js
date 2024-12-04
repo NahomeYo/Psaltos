@@ -198,8 +198,8 @@ function App() {
   const feastSeasons = feasts(seasons);
   const psalmodySeasons = psalmody(seasons);
 
-  const hymns = selectedArtist && selectedSeason && selectedHymn
-    ? hymnData.filter(hymn => hymn.artist === selectedArtist?.artistName && hymn.season === selectedSeason)
+  const hymns = selectedArtist && selectedSeason
+    ? hymnData.filter(hymn => hymn.artist === selectedArtist?.artistName && hymn.season === selectedSeason && (!selectedHymn || selectedHymn.name === hymn.name))
     : [];
 
   const handleArtistClick = (artist) => {
@@ -571,7 +571,7 @@ function App() {
               style={{ flexDirection: selectedArtist ? 'row' : 'column', marginBottom: 'var(--mini)', transition: '1s var(--smoothAnim)' }}>
               <div className="titleContainer" style={{ position: selectedArtist ? 'absolute' : 'relative', transition: '1s var(--smoothAnim)', opacity: selectedArtist ? 0 : 1 }}>
                 <img className="mainLogo" src={logo} alt="logo" />
-                <copt>Paltoc</copt>
+                <copt>yaltoc</copt>
               </div>
 
               <div className="searchBarContainer">
