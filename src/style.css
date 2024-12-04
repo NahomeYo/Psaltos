@@ -396,6 +396,7 @@ nav li a h2 {
     border-bottom: solid var(--fifthly-color) var(--big);
     width: 80vw;
     align-items: center;
+    gap: var(--medium);
 }
 
 .TabList span:first-child {
@@ -425,7 +426,7 @@ nav li a h2 {
     display: flex;
     justify-content: start;
     margin: 0vw 1vw;
-    width: 2vw;
+    min-width: 2vw;
 }
 
 .rightBtn {
@@ -434,7 +435,7 @@ nav li a h2 {
     display: flex;
     justify-content: end;
     margin: 0vw 1vw;
-    width: 2vw;
+    min-width: 2vw;
 }
 
 .TabList .cross,
@@ -625,12 +626,10 @@ nav ul li h2 {
 }
 
 .hymnContainer {
-    width: 100%;
     display: flex;
     flex-direction: column;
     margin: 0;
     padding: 0;
-    align-items: center;
 }
 
 .hymnContainer .header {
@@ -656,7 +655,6 @@ nav ul li h2 {
 }
 
 .audioContainer {
-    display: grid;
 }
 
 .audioContainer ul {

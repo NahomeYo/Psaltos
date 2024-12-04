@@ -31,6 +31,7 @@ function App() {
   const [artistData, setArtistData] = useState([]);
   const [filteredHymns, setFilteredHymns] = useState([]);
   const [typing, setTyping] = useState(false);
+  const [selectedHymn, setSelectedHymn] = useState();
   const [selectedSeason, setSelectedSeason] = useState();
   const [selectedArtist, setSelectedArtist] = useState();
   const [click, setClick] = useState(0);
@@ -43,7 +44,6 @@ function App() {
   const [robePOS, setRobePOS] = useState(false);
   const [boxStyle, setBoxStyle] = useState({});
   const [contentsStyle, setContentsStyle] = useState({});
-  const [imgStyle, setImgStyle] = useState({});
   const loadingScreenRef = useRef(null);
   const mainContentRef = useRef(null);
 
@@ -57,42 +57,106 @@ function App() {
         console.error(error);
       }
     };
-    getData();
 
-    setSelectedIndex()
+    getData();
+    setSelectedIndex();
   }, [click]);
 
   useEffect(() => {
-    if (hymnData.length > 0 && artistData.length > 0) {
+    if (hymnData.length && artistData.length) {
       setTimeout(() => {
         setLoading(false);
-
-        if (loadingScreenRef.current) {
-          loadingScreenRef.current.classList.add('fadeOut');
-        }
-        if (mainContentRef.current) {
-          mainContentRef.current.classList.add('fadeIn');
-        }
+        loadingScreenRef.current?.classList.add('fadeOut');
+        mainContentRef.current?.classList.add('fadeIn');
       }, 2000);
     }
   }, [hymnData, artistData]);
 
   useEffect(() => {
     const body = document.body;
-    const content = document.querySelector('.contents')
+    const content = document.querySelector('.contents');
 
-    if (loading) {
-      body.style.overflowY = 'hidden';
-      content.style.display = 'none';
-    } else {
-      body.style.overflowY = "visible";
-      content.style.display = 'flex';
-    }
+    body.style.overflowY = loading ? 'hidden' : 'visible';
+    content.style.display = loading ? 'none' : 'flex';
 
-    return () => {
-      body.style.overflowY = "auto";
-    }
+    return () => { body.style.overflowY = 'auto'; };
   }, [loading]);
+
+  useEffect(() => {
+    setRobePOS(!!selectedArtist);
+  }, [selectedArtist]);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const section = document.querySelector('.TabList span:nth-child(2) li:nth-child(2)');
+    const tabs = document.querySelectorAll('.cantorTab001');
+    const progress = document.querySelector('.progressContainer');
+    const arrows = document.querySelectorAll('.leftBtn, .rightBtn');
+
+    const isMobile = window.innerWidth < 1170;
+    if (isMobile) {
+      section.style.cssText = 'display: flex; flex-direction: column; justify-content: start; overflow-x: hidden; width: 72vw; height: 100vh; margin: 0;';
+      arrows.forEach(arrow => arrow.style.display = 'none');
+      progress.style.display = 'none';
+      tabs.forEach(tab => {
+        tab.style.width = '72vw';
+        tab.style.marginTop = '0';
+        tab.style.marginBottom = '0';
+      });
+    } else {
+      section.style = '';
+      progress.style = '';
+      tabs.forEach(tab => {
+        tab.style = '';
+      });
+    }
+  }, [width]);
+
+  useEffect(() => {
+    const searchItems = document.querySelectorAll('.searchItem');
+    const titles = document.querySelectorAll('.searchItem h2');
+    const artistNames = document.querySelectorAll('.searchItem .artist h3');
+
+    const isMobile = window.innerWidth <= 1170;
+    if (isMobile) {
+      searchItems.forEach(item => item.style.cssText = 'padding: 0vw 5vw 0vw 2.5vw; width: 70vw; margin-bottom: calc(var(--mini));');
+      titles.forEach(t => t.style.cssText = 'white-space: wrap; width: min-content; text-align: center;');
+      artistNames.forEach(name => name.style.cssText = 'white-space: wrap; text-align: end;');
+    } else {
+      searchItems.forEach(item => item.style = '');
+      titles.forEach(t => t.style = '');
+      artistNames.forEach(name => name.style = '');
+    }
+  }, [width]);
+
+  useEffect(() => {
+    switch (tabIndex) {
+      case 0:
+        setBoxStyle()
+        setContentsStyle()
+        break;
+      case 1:
+        setBoxStyle({
+          width: '100%',
+          transition: 'all 1s ease',
+        })
+
+        setContentsStyle({
+          flexDirection: 'row',
+          width: '100%',
+          paddingBottom: '0',
+          transition: 'all 1s ease',
+        })
+        break;
+      default:
+    }
+  }, [selectedArtist, tabIndex]);
 
   const hymnSearch = (event) => {
     const input = event.target.value.toLowerCase();
@@ -134,7 +198,7 @@ function App() {
   const feastSeasons = feasts(seasons);
   const psalmodySeasons = psalmody(seasons);
 
-  const hymns = selectedArtist && selectedSeason
+  const hymns = selectedArtist && selectedSeason && selectedHymn
     ? hymnData.filter(hymn => hymn.artist === selectedArtist?.artistName && hymn.season === selectedSeason)
     : [];
 
@@ -157,16 +221,6 @@ function App() {
     if (click > 0) {
       setClick(click - 4);
     }
-  };
-
-  const renderHymnBox = {
-    overflow: 'hidden',
-    display: 'flex',
-    flexDirection: 'column',
-    background: 'var(--primary-color)',
-    borderRadius: '30px',
-    height: 'min-content',
-    width: '100%',
   };
 
   const rightArrow = () => {
@@ -201,157 +255,15 @@ function App() {
     );
   };
 
-  useEffect(() => {
-    if (selectedArtist) {
-      setRobePOS(true);
-    } else {
-      setRobePOS(false);
-    }
-  }, [selectedArtist]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const currentWidth = window.innerWidth;
-      setWidth(currentWidth);
-
-      const section = document.querySelector('.TabList span:nth-child(2) li:nth-child(2)');
-      const tabs = document.querySelectorAll('.TabList span:nth-child(2) li:nth-child(2) .cantorTab001');
-      const img = document.querySelectorAll('.cantorTab001 .cantorContainer .topRow img');
-      const progress = document.querySelector('.progressContainer');
-      const searchItem = document.querySelectorAll('.searchItem');
-      const titles = document.querySelectorAll('.searchItem h2');
-      const artistName = document.querySelectorAll('.searchItem .artist h3');
-
-
-      if (section && tabs.length > 0) {
-        if (currentWidth <= 720) {
-          section.style.display = 'flex';
-          section.style.flexDirection = 'column';
-          section.style.justifyContent = 'start';
-          section.style.overflowX = 'hidden';
-          section.style.width = '72vw';
-          section.style.height = '100vh';
-          section.style.margin = '0';
-          progress.style.display = 'none';
-
-          tabs.forEach((tab) => {
-            if (tab) {
-              img.forEach((i) => {
-                i.style.width = '100px';
-                i.style.height = '100px';
-              })
-              tab.style.width = '72vw';
-              tab.style.marginTop = '0vw';
-              tab.style.marginBottom = '0vw';
-            }
-          });
-
-        } else {
-          section.style = '';
-          progress.style = '';
-
-          tabs.forEach((tab) => {
-            if (tab) {
-              img.forEach((i) => {
-                i.style = '';
-              })
-              tab.style = '';
-            }
-          });
-        }
-      }
-
-      if (searchItem.length > 0 && titles.length > 0 && artistName.length > 0) {
-        if (currentWidth <= 720) {
-          searchItem.forEach((item) => {
-            if (item) {
-              item.style.padding = '0vw 5vw';
-              item.style.width = '70vw';
-              item.style.marginBottom = 'calc(var(--mini)';
-            }
-          })
-
-          titles.forEach((t) => {
-            t.style.whiteSpace = 'wrap';
-            t.style.width = 'min-content';
-            t.style.textAlign = 'start';
-          })
-
-          artistName.forEach((name) => {
-            name.style.whiteSpace = 'wrap';
-            name.style.textAlign = 'end';
-          })
-
-        } else {
-
-          searchItem.forEach((item) => {
-            if (item) {
-              item.style = '';
-            }
-          })
-
-          titles.forEach((t) => {
-            t.style = '';
-          })
-
-          artistName.forEach((name) => {
-            name.style = '';
-          })
-        }
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [width])
-
-  useEffect(() => {
-    switch (tabIndex) {
-      case 0:
-        setBoxStyle({
-          width: '',
-          transition: '',
-        })
-
-        setContentsStyle({
-          flexDirection: '',
-          width: '',
-          paddingBottom: '',
-          transition: '',
-        })
-
-        setImgStyle({
-          borderRadius: '',
-          transition: '',
-          width: '',
-          height: '',
-        })
-        break;
-      case 1:
-        setBoxStyle({
-          width: '100%',
-          transition: 'all 1s ease',
-        })
-
-        setContentsStyle({
-          flexDirection: 'row',
-          width: '100%',
-          paddingBottom: '0',
-          transition: 'all 1s ease',
-        })
-
-        setImgStyle({
-          borderRadius: '0rem 0rem var(--max) 0rem',
-          transition: 'all 1s ease',
-        })
-        break;
-      default:
-    }
-  }, [selectedArtist, tabIndex]);
+  const renderHymnBox = {
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    background: 'var(--primary-color)',
+    borderRadius: '30px',
+    height: 'min-content',
+    width: '80vw',
+  };
 
   const RenderArtist = ({
     selectedArtist,
@@ -360,10 +272,8 @@ function App() {
     HeaderComponent,
     hymn,
     contentsStyle,
-    imgStyle,
     boxStyle,
   }) => {
-    if (!selectedArtist) return null;
 
     return (
       <div
@@ -383,7 +293,6 @@ function App() {
               <HeaderComponent placeholder={hymn.name} customFont="Aladin" />
             ) : (
               <img
-                style={imgStyle}
                 src={selectedArtist.img}
                 alt={`Artist ${selectedArtist.artistName}`}
               />
@@ -424,21 +333,21 @@ function App() {
           </div>
         )}
 
-        {hymns.map((hymn, index, artist) => (
+        {hymns.map((hymn, index) => (
           <div
             className="cantorTab001"
+            style = {{width: '100%', marginRight: "0", marginBottom: 'var(--mini)'}}
             key={index}
             onClick={() => {
-              if (expandedHymns === index) {
-                setExpandedHymns(-1);
-              } else {
-                setExpandedHymns(index);
+              if (expandedHymns !== index) {
+                  setExpandedHymns(index);
               }
             }}
           >
             <div className="cantorContainer" style={renderHymnBox}>
-              <div className="topRow" style={imgStyle}>
-                {expandedHymns === index && <img src={selectedArtist.img} alt={`Artist ${selectedArtist.artistName}`} />}
+              <div className="topRow">
+                {expandedHymns === index && <img 
+                style = {{ width: '100px', height: '100px' }} src={selectedArtist.img} alt={`Artist ${selectedArtist.artistName}`} />}
                 <HeaderComponent placeholder={hymn.name} customFont='Aladin' />
               </div>
 
@@ -519,8 +428,6 @@ function App() {
   const renderSeasons = () => {
     return (
       <div style={{}} className="seasonsContainer">
-
-
         <row>
           <column>
             <row>
@@ -608,6 +515,11 @@ function App() {
             setSelectedIndex(-1);
           }}
           onClick={() => {
+            setSelectedHymn(hymn)
+            setSelectedArtist(artistData.find(a => a.artistName === hymn.artist))
+            setSelectedSeason(hymn.season)
+            setTyping(false);
+            setSelectedIndex(hymn);
           }}
           style={{
             background: isActive ? 'var(--thirdly-color)' : 'none',
@@ -615,10 +527,7 @@ function App() {
           }}
         >
           <div className="topRow">
-            <HeaderComponent placeholder={hymn.name} customFont='Coptic' />
-            <h style={{ color: 'var(--fourthy-color)', opacity: isActive ? '1' : '0', animation: isActive ? 'swipeLeft 0.5s var(--smoothAnim)' : 'none' }}>
-              {hymn.name}
-            </h>
+            <HeaderComponent placeholder={hymn.name} customFont={isActive ? 'Coptic' : 'Aladin'} />
           </div>
           <div className="artist">
             <span>
@@ -745,7 +654,6 @@ function App() {
                         tabIndex={tabIndex}
                         hymns={hymns}
                         contentsStyle={contentsStyle}
-                        imgStyle={imgStyle}
                         boxStyle={boxStyle}
                       />
                     </div>
@@ -766,17 +674,13 @@ function App() {
                 selectedArtist={selectedArtist}
                 handleArtistClick={handleArtistClick}
                 tabIndex={tabIndex}
-                HeaderComponent={HeaderComponent}
                 hymns={hymns}
-                contentsStyle={contentsStyle}
-                imgStyle={imgStyle}
-                boxStyle={boxStyle}
               />
             }
-
             {selectedArtist && !selectedSeason && renderSeasons(feastSeasons, psalmodySeasons)}
 
             {selectedSeason && renderHymn(hymns, selectedArtist)}
+
 
             {!selectedArtist && <div className="progressContainer">
               <ProgressBar artistData={artistData} />
