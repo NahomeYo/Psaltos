@@ -1,0 +1,192 @@
+[
+    {
+        "seasonName": "Vespers Praise",
+        "img": "https://live.staticflickr.com/65535/54183973096_94ef6d95b9_b.jpg",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Raising of Incense",
+        "img": "https://live.staticflickr.com/65535/54183973096_94ef6d95b9_b.jpg",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Sunday Midnight Praises",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/f5879c37-ee8d-41a6-af5b-3bae69148c10/Three+Youth+Print+Product.jpg?format=2500w",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Weekday Midnight Praises",
+        "img": "https://live.staticflickr.com/65535/54183973096_94ef6d95b9_b.jpg",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Offering of the Lamb",
+        "img": "",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Liturgy of the Word",
+        "img": "",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Liturgy of St. Basil",
+        "img": "",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Liturgy of St. Gregory",
+        "img": "",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Liturgy of St. Cyril",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1602006375787-WPOQ70NTQ93OBR7YAE3M/Cyril+Dioscorus+Severus+print+Product.jpg?format=2500w",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Veneration",
+        "img": "",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Papal Hymns",
+        "img": "",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Crowning Prayer",
+        "img": "",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Coptic New Year",
+        "img": "",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Feast of the Cross",
+        "img": "",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Kiahk Vespers Praise",
+        "img": "",
+        "group": "fast"
+    },
+    {
+        "seasonName": "Kiahk Midnight Praises",
+        "img": "",
+        "group": "fast"
+    },
+    {
+        "seasonName": "Kiahk",
+        "img": "",
+        "group": "fast"
+    },
+    {
+        "seasonName": "Nativity Paramoun",
+        "img": "",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Nativity",
+        "img": "https://live.staticflickr.com/65535/54183973116_0b99aa7128_b.jpg",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Cicumcision",
+        "img": "",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Theophany Paramoun",
+        "img": "",
+        "group": "annual"
+    },
+    {
+        "seasonName": "Theophany",
+        "img": "https://live.staticflickr.com/65535/54184420000_97f46f6e3f_b.jpg",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Cana of Galilee",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1607532130113-FZV8J5DO1F713RYPH091/Wedding+at+Cana+Product.jpg?format=2500w",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Entry into the Temple",
+        "img": "",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Nineveh",
+        "img": "",
+        "group": "fast"
+    },
+    {
+        "seasonName": "Great Lent",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1720618667883-1KU3B5RR78JW356VQPXW/Christ+the+High+Priest+Print+Product.jpg?format=2500w",
+        "group": "fast"
+    },
+    {
+        "seasonName": "Annunciation",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1720617995964-AWGKW5HZ65XOURG4TX73/Annunciation+June+1st+Print+Product.jpg?format=2500w",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Lazarus Saturday",
+        "img": "",
+        "group": "holy week"
+    },
+    {
+        "seasonName": "Palm Sunday",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1666901049436-83EUVR9JZ28N3KLR6AJK/Palm+Sunday+Rhodes+Print+Product.jpg",
+        "group": "holy week"
+    },
+    {
+        "seasonName": "Holy Week",
+        "img": "https://live.staticflickr.com/65535/54183973091_d77f89d86e_b.jpg",
+        "group": "holy week"
+    },
+    {
+        "seasonName": "Bright Saturday",
+        "img": "https://live.staticflickr.com/65535/54184420025_382f594391_b.jpg",
+        "group": "holy week"
+    },
+    {
+        "seasonName": "Resurrection",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1602006248605-3ZTGUJMMO64FZYHQ292Q/Anastasis+product.jpg?format=2500w",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Entry into Egypt",
+        "img": "",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Ascension",
+        "img": "https://live.staticflickr.com/65535/54184263994_d77f89d86e_b.jpg",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Pentecost",
+        "img": "https://live.staticflickr.com/65535/54184263994_d77f89d86e_b.jpg",
+        "group": "feast"
+    },
+    {
+        "seasonName": "Fast of the Apostles",
+        "img": "https://live.staticflickr.com/65535/54184263994_d77f89d86e_b.jpg",
+        "group": "fast"
+    },
+    {
+        "seasonName": "Transfiguration",
+        "img": "",
+        "group": "feast"
+    },
+    {
+        "seasonName": "St. Mary's Fast",
+        "img": "",
+        "group": "fast"
+    }
+]

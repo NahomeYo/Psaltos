@@ -10,17 +10,11 @@ import Church from "./img/church.svg";
 import Deaf from "./img/cymbals.svg";
 import CrossIcon from "./img/icons/crossButton.js";
 import Audio from "./Audio.js";
-import Nativity from "./img/copticIcons/Nativity.jpg";
-import Resurrection from "./img/copticIcons/Ressurection.jpeg"
-import Theophany from "./img/copticIcons/Theophany.jpg";
-import Apostles from "./img/copticIcons/Apostles.jpg";
-import SundayTesbaha from "./img/copticIcons/SundayTesbaha.jpg";
-import Weekday from "./img/copticIcons/WeekdayTesbaha.jpg";
-import SundayVespers from "./img/copticIcons/SundayVespers.jpg";
 import ArtistIcon from "./img/icons/artistIcon";
 import Robe from "./img/robe.svg";
 import HymnsData from "./output.json";
 import ArtistData from "./artists.json";
+import SeasonData from "./seasons.json";
 import { useEffect, useState, useRef } from "react";
 import crossIcon from "./img/icons/crossButton.svg"
 import LoadingScreenAnim from "./loadingScreenAnim.js";
@@ -38,7 +32,7 @@ function App() {
   const [tabIndex, setTabIndex] = useState(0);
   const [expandedHymns, setExpandedHymns] = useState(-1);
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [seasonChoice, setSeasonChoice] = useState(1);
+  const [seasonChoice, setSeasonChoice] = useState('annual');
   const [width, setWidth] = useState(window.innerWidth);
   const [loading, setLoading] = useState(true);
   const [robePOS, setRobePOS] = useState(false);
@@ -68,7 +62,7 @@ function App() {
         setLoading(false);
         loadingScreenRef.current?.classList.add('fadeOut');
         mainContentRef.current?.classList.add('fadeIn');
-      }, 2000);
+      }, 0);
     }
   }, [hymnData, artistData]);
 
@@ -367,14 +361,13 @@ function App() {
     );
   };
 
-  const feastOptions = (feastSeasons) => {
+  const seasonOptions = () => {
     return (
       <div className="feastContainer">
-        {feastSeasons.map((feast, index) => {
-          const isActive = index === selectedIndex;
+        {SeasonData.filter(s => s.group === seasonChoice).map((season) => {
+          const isActive = false
           return (
             <div
-              key={index}
               className="seasonItem"
               style={{
                 background: isActive ? 'none' : 'none',
@@ -382,13 +375,12 @@ function App() {
                 borderBottom: isActive ? 'none' : 'none',
                 transition: 'background 0.3s, padding 0.3s, borderBottom 0.3s',
               }}
-              onMouseEnter={() => setSelectedIndex(index)}
-              onMouseLeave={() => setSelectedIndex(-1)}
-              onClick={() => setSelectedSeason(feast)}
+              // onMouseEnter={() => setSelectedIndex(index)}
+              // onMouseLeave={() => setSelectedIndex(-1)}
+              onClick={() => setSelectedSeason(season.seasonName)}
             >
-              {seasonRender(feast)}
-              <HeaderComponent placeholder={feast} customFont='Aladin' />
-              <p>Feast</p>
+              {seasonRender(season)}
+              <HeaderComponent placeholder={season.seasonName} customFont='Aladin' />
             </div>
           );
         })}
@@ -434,21 +426,14 @@ function App() {
               <t>Find the Hymn Season</t>
             </row>
             <row>
-              <b style={{
-                background: seasonChoice === 1 ? 'var(--primary-color)' : 'var(--secondary-color)',
-                transition: "1s ease"
-              }}
-                onClick={() => {
-                  setSeasonChoice(1);
-                }}>
-                Feast</b>
-
-              <b style={{
-                background: seasonChoice === 2 ? 'var(--primary-color)' : 'var(--secondary-color)',
-              }}
-                onClick={() => {
-                  setSeasonChoice(2);
-                }}>Psalmody</b>
+              {
+                Array.from(new Set(SeasonData.map(s => s.group))).map(group => {
+                  return (<b style={{background: seasonChoice === 1 ? 'var(--primary-color)' : 'var(--secondary-color)', transition: "1s ease"}}
+                    onClick={() => setSeasonChoice(group)}>
+                  {group}
+                </b>)
+                })
+              }
             </row>
           </column>
 
@@ -461,8 +446,9 @@ function App() {
         </row>
 
         <row>
-          {seasonChoice === 1 && feastOptions(feastSeasons)}
-          {seasonChoice === 2 && psalmodyOptions(psalmodySeasons)}
+          {/* {seasonChoice === 1 && feastOptions(feastSeasons)} */}
+          {/* {seasonChoice === 2 && psalmodyOptions(psalmodySeasons)} */}
+          {seasonOptions()}
         </row>
       </div>
     );
@@ -480,24 +466,25 @@ function App() {
   };
 
   const seasonRender = (season) => {
-    switch (season) {
-      case 'Nativity':
-        return <img src={Nativity} alt="Nativity Season" />;
-      case 'Resurrection':
-        return <img src={Resurrection} alt="Resurrection Season" />;
-      case 'Theophany':
-        return <img src={Theophany} alt="Theophany Season" />;
-      case 'Apostles Fast':
-        return <img src={Apostles} alt="Apostles Fast Season" />;
-      case 'Sunday Tasbeha (Midnight Praises)':
-        return <img src={SundayTesbaha} alt="Sunday Tasbeha" />;
-      case 'Weekday Tasbeha (Midnight Praises)':
-        return <img src={Weekday} alt="Weekday Tasbeha" />;
-      case 'Sunday Vespers Praise':
-        return <img src={SundayVespers} alt="Sunday Vespers" />;
-      default:
-        return null;
-    }
+    return <img src={season.img} alt={season.seasonName} />
+    // switch (season) {
+    //   case 'Nativity':
+    //     return <img src={Nativity} alt="Nativity Season" />;
+    //   case 'Resurrection':
+    //     return <img src={Resurrection} alt="Resurrection Season" />;
+    //   case 'Theophany':
+    //     return <img src={Theophany} alt="Theophany Season" />;
+    //   case 'Apostles Fast':
+    //     return <img src={Apostles} alt="Apostles Fast Season" />;
+    //   case 'Sunday Tasbeha (Midnight Praises)':
+    //     return <img src={SundayTesbaha} alt="Sunday Tasbeha" />;
+    //   case 'Weekday Tasbeha (Midnight Praises)':
+    //     return <img src={Weekday} alt="Weekday Tasbeha" />;
+    //   case 'Sunday Vespers Praise':
+    //     return <img src={SundayVespers} alt="Sunday Vespers" />;
+    //   default:
+    //     return null;
+    // }
   };
 
   const searchItem = () => (
