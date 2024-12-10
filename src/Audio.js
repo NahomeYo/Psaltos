@@ -25,7 +25,7 @@ function Audio() {
     );
 
     const previousSong = () => (
-        <svg onClick = {() => {
+        <svg onClick={() => {
             wavesurfer && wavesurfer.setTime(0)
         }} className="previousSong" width="21" height="21" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
             <path d="M4.96665 10.5796L20.8 2.03033V19.1288L4.96665 10.5796Z" />

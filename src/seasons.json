@@ -6,12 +6,12 @@
     },
     {
         "seasonName": "Raising of Incense",
-        "img": "https://live.staticflickr.com/65535/54183973096_94ef6d95b9_b.jpg",
+        "img": "https://live.staticflickr.com/65535/54194631020_4e7a502104_c.jpg",
         "group": "annual"
     },
     {
         "seasonName": "Sunday Midnight Praises",
-        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/f5879c37-ee8d-41a6-af5b-3bae69148c10/Three+Youth+Print+Product.jpg?format=2500w",
+        "img": "https://live.staticflickr.com/65535/54193291052_e775f0de2e_n.jpg",
         "group": "annual"
     },
     {
@@ -21,27 +21,27 @@
     },
     {
         "seasonName": "Offering of the Lamb",
-        "img": "",
+        "img": "https://live.staticflickr.com/201951252@N04/54192266364_b.jph",
         "group": "annual"
     },
     {
         "seasonName": "Liturgy of the Word",
-        "img": "",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1685775623969-OPQ1FOQJUE5ET1R9Y8ON/Triumph+of+the+Virgin+Shokry.jpg?format=750w",
         "group": "annual"
     },
     {
         "seasonName": "Liturgy of St. Basil",
-        "img": "",
+        "img": "https://live.staticflickr.com/65535/54193291082_301b7017b0_c.jpg",
         "group": "annual"
     },
     {
         "seasonName": "Liturgy of St. Gregory",
-        "img": "",
+        "img": "https://live.staticflickr.com/65535/54194631050_698b837964_m.jpg",
         "group": "annual"
     },
     {
         "seasonName": "Liturgy of St. Cyril",
-        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1602006375787-WPOQ70NTQ93OBR7YAE3M/Cyril+Dioscorus+Severus+print+Product.jpg?format=2500w",
+        "img": "https://live.staticflickr.com/65535/54193291047_30e785a2d1_c.jpg",
         "group": "annual"
     },
     {
@@ -51,7 +51,7 @@
     },
     {
         "seasonName": "Papal Hymns",
-        "img": "",
+        "img": "https://live.staticflickr.com/65535/54194877214_402ca7bfa9_h.jpg",
         "group": "annual"
     },
     {
@@ -61,12 +61,12 @@
     },
     {
         "seasonName": "Coptic New Year",
-        "img": "",
+        "img": "https://live.staticflickr.com/65535/54194774428_be446de81c_c.jpg",
         "group": "feast"
     },
     {
         "seasonName": "Feast of the Cross",
-        "img": "",
+        "img": "https://live.staticflickr.com/65535/54194457059_2cff614db6_b.jpg",
         "group": "feast"
     },
     {
@@ -86,17 +86,17 @@
     },
     {
         "seasonName": "Nativity Paramoun",
-        "img": "",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1685775623969-OPQ1FOQJUE5ET1R9Y8ON/Triumph+of+the+Virgin+Shokry.jpg?format=750w",
         "group": "annual"
     },
     {
         "seasonName": "Nativity",
-        "img": "https://live.staticflickr.com/65535/54183973116_0b99aa7128_b.jpg",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1666899406894-F5VEUDKJH796272IVY0Q/Nativity+Rhodes+comp.jpg?format=750w",
         "group": "feast"
     },
     {
         "seasonName": "Cicumcision",
-        "img": "",
+        "img": "https://live.staticflickr.com/65535/54194435343_c6c4a029b0_c.jpg",
         "group": "feast"
     },
     {
@@ -111,7 +111,7 @@
     },
     {
         "seasonName": "Cana of Galilee",
-        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1607532130113-FZV8J5DO1F713RYPH091/Wedding+at+Cana+Product.jpg?format=2500w",
+        "img" : "https://live.staticflickr.com/65535/54194958810_34fc31121c_c.jpg",
         "group": "feast"
     },
     {
@@ -126,22 +126,22 @@
     },
     {
         "seasonName": "Great Lent",
-        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1720618667883-1KU3B5RR78JW356VQPXW/Christ+the+High+Priest+Print+Product.jpg?format=2500w",
+        "img": "https://live.staticflickr.com/65535/54194819983_d4b03305a6_z.jpg",
         "group": "fast"
     },
     {
         "seasonName": "Annunciation",
-        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1720617995964-AWGKW5HZ65XOURG4TX73/Annunciation+June+1st+Print+Product.jpg?format=2500w",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1666899752595-KTOVY8JTC3GA2DARX3AA/Rhodes+Annunciation+comp.jpg?format=750w",
         "group": "feast"
     },
     {
         "seasonName": "Lazarus Saturday",
-        "img": "",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1699467473924-JAFDGGGXNNBTVQNJATUQ/Good+Samaritan+Comp.jpg?format=750w",
         "group": "holy week"
     },
     {
         "seasonName": "Palm Sunday",
-        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1666901049436-83EUVR9JZ28N3KLR6AJK/Palm+Sunday+Rhodes+Print+Product.jpg",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1652822346457-8X3JKJBYN4HWR1M5H9VY/Palm+Sunday+Rhodes+comp.jpg?format=750w",
         "group": "holy week"
     },
     {
@@ -156,7 +156,7 @@
     },
     {
         "seasonName": "Resurrection",
-        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1602006248605-3ZTGUJMMO64FZYHQ292Q/Anastasis+product.jpg?format=2500w",
+        "img": "https://live.staticflickr.com/65535/54194788949_a2f335955b_c.jpg",
         "group": "feast"
     },
     {
@@ -171,7 +171,7 @@
     },
     {
         "seasonName": "Pentecost",
-        "img": "https://live.staticflickr.com/65535/54184263994_d77f89d86e_b.jpg",
+        "img": "https://live.staticflickr.com/65535/54194195796_6def793d1c_c.jpg",
         "group": "feast"
     },
     {
@@ -181,12 +181,12 @@
     },
     {
         "seasonName": "Transfiguration",
-        "img": "",
+        "img": "https://live.staticflickr.com/65535/54194457009_c9b4a7e868_c.jpg",
         "group": "feast"
     },
     {
         "seasonName": "St. Mary's Fast",
-        "img": "",
+        "img": "https://images.squarespace-cdn.com/content/v1/5b68b2cd25bf0272973242c4/1652821838259-ABB2QSVLV5MYAI8RAUPE/St+Joanna+comp.jpg?format=750w",
         "group": "fast"
     }
 ]

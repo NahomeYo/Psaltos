@@ -42,7 +42,7 @@
 }
 
 .TabList .robe {
-    width: var(--max);
+    height: 40vh;
 }
 
 .cantorTab001 .artist {
