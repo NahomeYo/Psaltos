@@ -1,0 +1,491 @@
+* {
+  font-size: 30px;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: 'Aladin';
+  src: url(./fonts/RumRaisin-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'Intel-light';
+  src: url(./fonts/Inter_18pt-Medium.ttf);
+}
+
+@font-face {
+  font-family: 'IntelExtraLight';
+  src: url(./fonts/Inter_24pt-ExtraLight.ttf);
+}
+
+@font-face {
+  font-family: 'SeoulNamson';
+  src: url(./fonts/SeoulNamsan\ EB.ttf);
+}
+
+@font-face {
+  font-family: 'RumRaisin';
+  src: url(./fonts/RumRaisin-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'Akshar';
+  src: url(./fonts/Akshar-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: 'Gyptienne';
+  src: url(./fonts/GyptienneNormal-L3wZ.ttf);
+}
+
+@font-face {
+  font-family: 'BoucherieSans';
+  src: url(./fonts/Boucherie\ Sans.ttf);
+}
+
+@media screen and (max-width: 1440px) and (min-width: 1000px) {
+  * {
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 1000px) and (min-width: 465px) {
+  * {
+    font-size: 25px;
+  }
+}
+
+:root {
+  --primary: #2C475C;
+  --secondary: #426077;
+  --thirdly: #678399;
+  --fourthy: #8baab9;
+  --fifthly: #e1ecf3;
+  --margin: 10vw;
+  --profile: 3rem;
+  --iconSize: 2rem;
+  --sectionSpacing: 1rem;
+  --border: 0.75rem;
+  --padding: 0.5rem;
+  --spacing: 0.1rem;
+  --letterSpacing: 0.05rem;
+  --pageWidth: 80vw;
+  --paddingSides: 0vw 10vw;
+  --motion: cubic-bezier(.36, 0, .41, 1.29);
+}
+
+body {
+  position: relative;
+  overflow-y: visible;
+  overflow-x: hidden;
+  background: var(--fifthly);
+}
+
+t {
+  font-size: 2rem;
+  color: var(--fifthly);
+  font-family: 'Aladin';
+  text-transform: uppercase;
+  padding: 0;
+  margin: 0;
+}
+
+h1 {
+  font-size: 1rem;
+  font-family: 'RumRaisin';
+  text-transform: uppercase;
+  color: var(--fifthly);
+  font-weight: 500;
+  padding: 0;
+  margin: 0;
+}
+
+h2 {
+  font-size: 0.75rem;
+  color: var(--fourthy);
+  font-family: 'BoucherieSans';
+  padding: 0;
+  margin: 0;
+  letter-spacing: var(--letterSpacing);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 0.5rem;
+  color: var(--fourthy);
+  font-family: 'BoucherieSans';
+  padding: 0;
+  margin: 0;
+  letter-spacing: var(--letterSpacing);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+p {
+  font-size: 0.9rem;
+  font-family: 'BoucherieSans';
+  text-transform: none;
+  color: var(--fourthy);
+  padding: 0;
+  margin: 0;
+  letter-spacing: var(--letterSpacing);
+}
+
+p2 {
+  font-size: 0.35rem;
+  font-family: 'BoucherieSans';
+  text-transform: none;
+  color: var(--secondary);
+  padding: 0;
+  margin: 0;
+}
+
+.patternBackground {
+  background-image: url('./img/Frame\ 41.png');
+  background-repeat: repeat;
+  background-size: 10%;
+  mix-blend-mode: normal;
+  opacity: 100%;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -1;
+  left: 0;
+  top: 0;
+}
+
+.artistTab {
+  display: flex;
+  align-items: start;
+  position: relative;
+  width: 100%;
+}
+
+.artistTab span {
+  display: flex;
+  gap: var(--padding);
+  flex-direction: column;
+  background: var(--primary);
+  overflow: hidden;
+  height: min-content;
+  align-items: center;
+}
+
+.secondaryButton {
+  background: none;
+  border-radius: 20px;
+  color: var(--fourthy);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 5px solid var(--fourthy);
+  border-bottom: 10px solid var(--fourthy);
+  padding: calc(var(--padding) / 2) 0;
+}
+
+.profilePic {
+  display: inline-flex;
+  align-items: end;
+  gap: var(--padding);
+}
+
+.profilePic img {
+  position: relative;
+  width: var(--sectionSpacing);
+  height: var(--sectionSpacing);
+}
+
+.profilePic img:nth-child(1) {
+  background: blue;
+  border-radius: 100%;
+  width: calc(var(--sectionSpacing) + 0.5rem);
+  height: calc(var(--sectionSpacing) + 0.5rem);
+}
+
+.robeImg {
+  height: 100%;
+  position: absolute;
+  scale: 1.1;
+  transform-origin: top center;
+  top: 0;
+  right: 0;
+  transform: translate(50%, 0);
+}
+
+.typeBox:focus {
+  border: none;
+  outline: none;
+}
+
+.typeBox::placeholder {
+  color: var(--fourthy);
+}
+
+.typeBox {
+  font-family: SeoulNamson;
+  font-size: 0.75rem;
+}
+
+.seasonBox gradient {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, rgba(103, 131, 153, 1) 3%, rgba(103, 131, 153, 0) 100%);
+  mix-blend-mode: normal;
+  z-index: 2;
+}
+
+.feastBox {
+  /*
+  border-width: 20px;
+  border-style: solid;
+  border-image-source: url(./img/border.svg);
+  border-image-repeat: stretch;
+  border-image-slice: 300;
+  position: relative;
+  */
+}
+
+.bookCover::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: solid var(--fifthly);
+  border-width: 20px 20px 0px 0px;
+  filter: drop-shadow(-5px 5px 0px #162836);
+}
+
+.bookCover::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: solid var(--fifthly);
+  border-width: 0px 20px 20px 0px;
+  filter: drop-shadow(-5px 5px 0px #162836);
+}
+
+.bookCover img {
+  position: absolute;
+  opacity: 30%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.lengthyTab span:nth-of-type(1) div {
+  margin-bottom: var(--spacing);
+}
+
+.seasonBox li {
+  opacity: 0;
+}
+
+.hymnSearchNav li {
+  position: relative;
+  transform: translateY(-100px);
+  transition: all 0.5s ease-in-out;
+  overflow: visible;
+  z-index: 3;
+  width: 1rem;
+  height: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hymnSearchNav li img {
+  object-fit: fill;
+  width: 100%;
+  height: 4rem;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+@font-face {
+  font-family: 'Mena';
+  src: url(./fonts/TarusaLight-8OY5A.otf);
+}
+
+.hymnSearchNav li p {
+  font-family: 'Mena';
+  text-transform: inherit;
+  letter-spacing: 0.05rem;
+  margin: 0;
+  color: var(--fourthy);
+  transform-origin: center center;
+  transform: rotate(90deg);
+  font-weight: bold;
+  height: min-content;
+  width: min-content;
+  z-index: 2;
+}
+
+.dropdownElement {
+  display: flex;
+  width: 100%;
+}
+
+.titleArtist {
+  width: min-content;
+  transition: background 0.1s ease-in-out;
+}
+
+.titleArtist:hover {
+  background: var(--fourthy);
+}
+
+nav span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  flex-grow: 1;
+}
+
+nav span p {
+  color: var(--fourthy);
+}
+
+primaryButton {
+  background: var(--primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.25rem;
+  padding: var(--padding);
+}
+
+.hymnRecording div li {
+  text-align: left;
+  list-style-position: inside;
+}
+
+.hymnRecording p,
+.hymnRecording h1 {
+  font-size: 0.75rem;
+}
+
+.trackMenu p {
+  color: var(--fifthly);
+  white-space: nowrap;
+}
+
+.introRow {
+  list-style: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: var(--padding);
+}
+
+.introRow li:nth-of-type(1) {
+  flex-grow: 2;
+}
+
+.introRow li:nth-of-type(2) {
+  flex-grow: 0;
+}
+
+.introRow li:nth-of-type(3) {
+  flex-grow: 0;
+}
+
+.bookCover * {
+  transition: all 0.5s ease-in-out;
+}
+
+.rightButton {
+  z-index: 999;
+}
+
+.barSwipe {
+  animation: 1s barSwipe ease-in-out forwards;
+}
+
+@keyframes barSwipe {
+  to {
+    transform: translateX(200px);
+    opacity: 0;
+  }
+}
+
+.songOptions img {
+  width: 15px;
+  height: 15px;
+  margin: var(--padding);
+}
+
+.songOptions li {
+  display: flex;
+}
+
+.hymnBackgroundWrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 75%;
+  background: linear-gradient(0deg, rgba(49, 82, 105, 1) 27%, rgba(214, 229, 253, 0.812) 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hymnBackgroundWrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(5px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hymnBackgroundWrapper img {
+  z-index: 0;
+}
+
+.feastBox img {
+  transition: all 0.25s ease-in-out;
+}
+
+.gradientBackdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, rgba(49, 82, 105, 1) 27%, rgba(153, 183, 128, 0) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.blurBackdrop {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(0px);
+  z-index: 1;
+  pointer-events: none;
+  transition: all 0.25s ease-in-out;
+}

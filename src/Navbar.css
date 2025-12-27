@@ -1,0 +1,194 @@
+.hamburgerMenu {
+  margin: 0;
+}
+
+.menuContainer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 999;
+  padding: 0 10vw;
+  overflow: visible;
+  transition: all 0.5s var(--motion);
+}
+
+.menuContainer.mobile {
+  background: var(--primary);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  padding: var(--paddingSides);
+  border-radius: 0 0 100% 0;
+}
+
+.menuContainer.mobile:not(.expanded) {
+  width: 4rem;
+  height: 4rem;
+  background: var(--fifthly);
+  padding: 0;
+}
+
+.hamburgerMenu {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2.5rem;
+  height: 3rem;
+  margin-left: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--border);
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 999;
+  padding: 0;
+}
+
+/* Hide hamburger on desktop */
+.menuContainer.fullScreen .hamburgerMenu {
+  display: none;
+}
+
+.hamburgerMenu span {
+  width: 100%;
+  height: var(--border);
+  background: var(--thirdly);
+  border-radius: var(--border);
+  transition: all 0.5s var(--motion);
+}
+
+.hamburgerMenu.open span:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburgerMenu.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburgerMenu.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+.navGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space);
+  list-style: none;
+  height: 100%;
+}
+
+@media screen and (max-width: 1000px) and (min-width: 465px) {
+  .navGroup {
+    flex-direction: column;
+  }
+}
+
+.leftNav {
+  flex-grow: 1;
+  justify-content: flex-start;
+  width: 30%;
+}
+
+.rightNav {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-around;
+  width: 30%;
+}
+
+.socialLinks {
+  display: flex;
+  gap: var(--space);
+  align-items: center;
+  justify-content: space-between;
+  width: 50%;
+
+}
+
+.mobile.expanded .mainNav {
+  flex-direction: row;
+  width: 100%;
+  padding: 0;
+  height: 100%;
+}
+
+.mobile.expanded .rightNav {
+  flex-direction: column;
+  width: 100%;
+  flex-grow: 0;
+  align-items: flex-start;
+}
+
+.backgroundLogo {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  overflow: visible;
+}
+
+.backgroundLogo img {
+  width: 100%;
+  pointer-events: none;
+  opacity: 50%;
+  mix-blend-mode: hard-light;
+}
+
+.linksExpand {
+  width: 100%;
+}
+
+.navContainer.hiddenNav {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s var(--motion);
+}
+
+.menuContainer.fullScreen {
+  background: var(--fifthly);
+  width: 100vw;
+  height: auto;
+  padding: 0;
+  border-radius: 0;
+  overflow: visible;
+  transition: all 0.5s var(--motion);
+}
+
+.menuContainer.mobile {
+  background: var(--primary);
+  width: 4rem;
+  height: 4rem;
+  overflow: hidden;
+  border-radius: 0 0 100% 0;
+  transition: all 0.5s var(--motion);
+}
+
+.menuContainer.mobile.expanded {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  padding: 0;
+  background: var(--fifthly);
+  overflow: hidden;
+  transition: all 0.5s var(--motion);
+}
+
+.navContainer {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.5s var(--motion);
+  width: 80vw;
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  z-index: 999;
+}
+
+.menuContainer.fullScreen .hamburgerMenu {
+  display: none;
+}
