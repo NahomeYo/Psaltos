@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import logo from "./img/logoV2.svg";
 import outlineLogo from "./img/outlinelogoV2.svg";
@@ -10,6 +10,8 @@ import "./Navbar.css";
 import "./App.css";
 import { SearchBarComp } from "./Home.js";
 import { Login, Signup } from "./Login.js";
+import { AuthContext } from "./AuthContext.js";
+import { logout, resolveMediaUrl } from "./api.js";
 
 export const Navbar = () => {
     const [resize, setResize] = useState(() => {
@@ -23,8 +25,8 @@ export const Navbar = () => {
     const [scroll, setScroll] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [showSignUp, setShowSignUp] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [profileDropdown, setProfileDropdown] = useState(false);
+    const { authenticated, user, refresh } = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -105,11 +107,21 @@ export const Navbar = () => {
     };
 
     const handleUploadClick = () => {
-        if (isAuthenticated) {
+        if (authenticated) {
             activateLoad(2);
         } else {
             setShowSignUp(true);
         }
+    };
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+        } catch (err) {
+            // ignore for now
+        }
+        refresh();
+        setProfileDropdown(false);
     };
 
     return (
@@ -157,8 +169,8 @@ export const Navbar = () => {
                             alignItems: "center",
                         }}>
 
-                        <div style = {{ padding: 0, margin: 0, display: "flex", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: "var(--padding)"}}>
-                            <img src={profileIcon} alt="profile" className="profileIcon" onClick={() => setProfileDropdown(true)}
+                        <div onClick={() => setProfileDropdown((prev) => !prev)} style={{ padding: 0, margin: 0, display: "flex", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: "var(--padding)" }}>
+                            <img src={resolveMediaUrl(user?.profile?.avatar) || profileIcon} alt="profile" className="profileIcon"
                                 style={{
                                     borderRadius: "50%",
                                     cursor: "pointer",
@@ -168,13 +180,13 @@ export const Navbar = () => {
                                 }}
                             />
 
-                            <img src = {downCaret} className="downCaret" style = {{ filter: "brightness(1.5)" }}/>
+                            <img src={downCaret} className="downCaret" style={{ filter: "brightness(1.5)"}} />
                         </div>
 
-                        {profileDropdown && (
+                        {profileDropdown && authenticated && (
                             <div
                                 className="profileDropdown">
-                                <li>
+                                <li onClick = {() =>  navigate("/Profile")}>
                                     <img src={profileIcon} />
                                     <p>Profile</p>
                                 </li>
@@ -188,6 +200,11 @@ export const Navbar = () => {
                                     <img src={followingIcon} />
                                     <p>Following</p>
                                 </li>
+
+                                <li onClick={handleLogout}>
+                                    <img src={profileIcon} />
+                                    <p>Logout</p>
+                                </li>
                             </div>
                         )}
                     </span>
@@ -196,7 +213,7 @@ export const Navbar = () => {
                         className="secondaryButton"
                         onClick={() => setShowPopup(true)}
                     >
-                        Sign In
+                        {authenticated ? (user?.username || 'Account') : 'Sign In'}
                     </div>
 
                     <div
@@ -208,13 +225,13 @@ export const Navbar = () => {
             </div>
 
             {showSignUp && (
-                <Signup onClose={handlePopupClose} />
+                <Signup onClose={handlePopupClose} onAuthSuccess={refresh} />
             )}
 
             {showPopup && (
                 <div className="popupOverlay" onClick={handlePopupClose}>
                     <div className="popupContent" onClick={(e) => e.stopPropagation()}>
-                        <Login onClose={handlePopupClose} displaySignUp={handleSignUpPopUp} />
+                        <Login onClose={handlePopupClose} displaySignUp={handleSignUpPopUp} onAuthSuccess={refresh} />
                     </div>
                 </div>
             )}

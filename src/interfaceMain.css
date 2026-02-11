@@ -8,16 +8,22 @@
 
 .interfaceLeft {
     background: #bcd3df;
-    width: 20%;
+    flex-basis: 20%;
+    border-bottom: solid white calc(var(--spacing) / 2);
+    border-radius: var(--border) 0 var(--border) 0;
 }
 
 .interfaceCenter {
-    width: 50%;
+    flex-basis: 50%;
     background: #d3e4f0;
     background: linear-gradient(180deg, rgba(211, 228, 240, 1) 0%, rgba(188, 211, 223, 1) 51%, rgba(188, 211, 223, 1) 100%);
+    border-radius: 0 var(--border) var(--border) 0;
+    border-bottom: solid white calc(var(--spacing) / 2);
 }
 
 .interfaceRight {
-    width: 20%;
+    flex-basis: 20%;
     background: rgb(153, 183, 200);
+    border-bottom: solid white calc(var(--spacing) / 2);
+    border-radius: 0 var(--border) 0 var(--border);
 }

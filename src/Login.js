@@ -1,14 +1,26 @@
 import React, { useState } from 'react';
 import './App.css';
+import { login, register } from './api.js';
 
-export function Login({ onClose, displaySignUp }) {
+export function Login({ onClose, displaySignUp, onAuthSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log('Login submitted:', { email, password });
+    setLoading(true);
+    setError('');
+    try {
+      await login({ username_or_email: email, password });
+      await onAuthSuccess?.();
+      onClose?.();
+    } catch (err) {
+      setError(err.message || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
   }
 
   function handleGoogleLogin() {
@@ -145,30 +157,60 @@ export function Login({ onClose, displaySignUp }) {
         </span>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+            style={{
+              padding: 'var(--padding)',
+              borderRadius: '4px',
+              border: '1px solid var(--primary)',
+              fontSize: 'var(--border)',
+              fontFamily: "BoucherieSans",
+              background: 'var(--sixthly)',
+              color: 'var(--fourthy)',
+              outline: 'none',
+              paddingLeft: "var(--padding)",
+            }}
+          />
 
-          <div
+          {error && (
+            <div style={{
+              background: '#ff4444',
+              color: 'white',
+              padding: '1rem',
+              borderRadius: '4px',
+              textAlign: 'center'
+            }}>
+              {error}
+            </div>
+          )}
+
+          <button
             className="secondaryButton"
             type="submit"
             disabled={loading}
           >
-            <h2 style={{ color: "var(--primaryColor)" }}>Continue</h2>
-          </div>
+            <h2 style={{ color: "var(--primaryColor)" }}>{loading ? 'Signing in...' : 'Continue'}</h2>
+          </button>
 
-          <div
+          <button
             className="thirdlyButton"
-            type="submit"
+            type="button"
             disabled={loading}
             onClick={displaySignUp}
           >
             <h2 style={{ color: "var(--primaryColor)" }}>Don't have an account? Sign up!</h2>
-          </div>
+          </button>
         </form>
       </div>
     </>
   );
 }
 
-export function Signup({ onClose }) {
+export function Signup({ onClose, onAuthSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -176,7 +218,7 @@ export function Signup({ onClose }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -188,7 +230,21 @@ export function Signup({ onClose }) {
     }
 
     setError('');
-    console.log('Signup submitted:', { email, password, displayName });
+    setLoading(true);
+    try {
+      await register({
+        username: email.split('@')[0],
+        email,
+        password,
+        display_name: displayName,
+      });
+      await onAuthSuccess?.();
+      onClose?.();
+    } catch (err) {
+      setError(err.message || 'Signup failed');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -325,13 +381,13 @@ export function Signup({ onClose }) {
             }}
           />
 
-          <div
+          <button
             type="submit"
             disabled={loading}
             className="thirdlyButton"
           >
             {loading ? 'Creating Account...' : 'Sign Up'}
-          </div>
+          </button>
         </form>
       </div>
     </>

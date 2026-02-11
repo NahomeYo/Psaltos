@@ -189,6 +189,10 @@
   filter: sepia(50%) brightness(50%);
 }
 
+.downCaret {
+  cursor: pointer;
+}
+
 @media screen and (max-width: 1000px) and (min-width: 465px) {
   .navGroup {
     flex-direction: column;

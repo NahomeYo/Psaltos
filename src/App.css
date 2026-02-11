@@ -98,7 +98,7 @@ body,
   --thirdly: #517794;
   --fourthy: #bed3df;
   --fifthly: #e1ecf3;
-    --sixthly: #172127;
+  --sixthly: #172127;
   --margin: 10vw;
   --profile: 3rem;
   --iconSize: 50px;
@@ -227,6 +227,26 @@ p2 {
   white-space: wrap;
 }
 
+.primaryButton img,
+.secondaryButton img,
+.thirdlyButton img {
+  width: var(--sectionSpacing);
+  height: var(--sectionSpacing);
+  margin-right: var(--spacing);
+}
+
+.primaryButton,
+.secondaryButton,
+.thirdlyButton {
+  transition: filter 0.25s ease-in-out;
+}
+
+.primaryButton:hover,
+.secondaryButton:hover,
+.thirdlyButton:hover {
+  filter:saturate(25%);
+}
+
 .primaryButton {
   border-radius: var(--spacing);
   text-align: center;
@@ -272,7 +292,7 @@ p2 {
   color: var(--fourthy);
   font-size: 0.75rem;
   letter-spacing: var(--letterSpacing);
-    font-family: 'BoucherieSans';
+  font-family: 'BoucherieSans';
   text-transform: uppercase;
   padding: var(--spacing) var(--padding);
   cursor: pointer;
@@ -282,8 +302,7 @@ p2 {
   background: transparent;
   border: none;
   border-bottom: 5px solid transparent;
-  color: inherit;
-  font: inherit;
+  color: var(--secondary);
   padding: var(--padding);
   cursor: pointer;
   font-size: var(--border);

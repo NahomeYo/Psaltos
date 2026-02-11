@@ -6,10 +6,11 @@ import "./animation.css";
 import "./media.css";
 import "./interfaceMain.css";
 import { profileData } from './profiles.js';
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useContext } from "react";
 import { hymnsData } from "./hymns.js";
 import WavesurferPlayer from '@wavesurfer/react';
-import { Login } from "./Login.js";
+import { AuthContext } from './AuthContext.js';
+import { getPlaylists, getLikes, resolveMediaUrl, createPlaylist, addPlaylistItem } from './api.js';
 
 // Images
 import DeaconsBackImg from "./img/deaconsBack.jpg";
@@ -21,7 +22,6 @@ import coverBorder from "./img/coverBorder.png";
 import standEdge from "./img/edge.svg";
 import Stool from "./img/stool.svg";
 import deaconStand from "./img/board.png";
-import Jesus from "./img/Jesus.svg";
 import heart from "./img/heart.svg";
 import repost from "./img/repost.svg";
 import share from "./img/share.svg";
@@ -354,6 +354,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
   // ============================================
   // STATE - Data
   // ============================================
+  const { authenticated } = useContext(AuthContext);
   const hymns = hymnsData();
   const profiles = profileData();
 
@@ -368,6 +369,16 @@ export function Home({ height, showSearch, loading, setLoading }) {
   const [menuHeight, setMenuHeight] = useState("0px");
   const [artistPage, setArtistPage] = useState(0);
   const [likedHymns, setLikedHymns] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
+  const [likes, setLikes] = useState([]);
+  const [libraryTab, setLibraryTab] = useState('playlists');
+  const [librarySearch, setLibrarySearch] = useState('');
+  const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
+  const [showAddToPlaylist, setShowAddToPlaylist] = useState(false);
+  const [newPlaylistTitle, setNewPlaylistTitle] = useState('');
+  const [newPlaylistPublic, setNewPlaylistPublic] = useState(false);
+  const [newPlaylistThumbnail, setNewPlaylistThumbnail] = useState(null);
+  const [libraryStatus, setLibraryStatus] = useState('');
 
   // ============================================
   // STATE - Selection State
@@ -948,38 +959,154 @@ export function Home({ height, showSearch, loading, setLoading }) {
     }
   }, [selectedHymn])
 
+  useEffect(() => {
+    let active = true;
+    if (!authenticated) {
+      setPlaylists([]);
+      setLikes([]);
+      return;
+    }
+
+    const loadLibrary = async () => {
+      try {
+        const [playlistData, likeData] = await Promise.all([getPlaylists(), getLikes()]);
+        if (!active) return;
+        setPlaylists(Array.isArray(playlistData) ? playlistData : []);
+        setLikes(Array.isArray(likeData) ? likeData : []);
+      } catch (err) {
+        if (!active) return;
+        setPlaylists([]);
+        setLikes([]);
+      }
+    };
+
+    loadLibrary();
+
+    return () => {
+      active = false;
+    };
+  }, [authenticated])
+
+  const handleCreatePlaylist = async (e) => {
+    e.preventDefault();
+    if (!newPlaylistTitle.trim()) {
+      setLibraryStatus('Please enter a playlist title.');
+      return;
+    }
+    try {
+      await createPlaylist({
+        title: newPlaylistTitle.trim(),
+        is_public: newPlaylistPublic,
+        thumbnail: newPlaylistThumbnail,
+      });
+      const playlistData = await getPlaylists();
+      setPlaylists(Array.isArray(playlistData) ? playlistData : []);
+      setNewPlaylistTitle('');
+      setNewPlaylistPublic(false);
+      setNewPlaylistThumbnail(null);
+      setLibraryStatus('Playlist created.');
+      setShowCreatePlaylist(false);
+    } catch (err) {
+      setLibraryStatus(err.message || 'Failed to create playlist.');
+    }
+  };
+
+  const handleAddToPlaylist = async (playlistId) => {
+    if (!selectedHymn?.id) {
+      setLibraryStatus('This hymn is not in the upload library yet.');
+      setShowAddToPlaylist(false);
+      return;
+    }
+    try {
+      await addPlaylistItem(playlistId, selectedHymn.id);
+      setLibraryStatus('Added to playlist.');
+    } catch (err) {
+      setLibraryStatus(err.message || 'Failed to add to playlist.');
+    }
+    setShowAddToPlaylist(false);
+  };
+
   const LibraryItems = () => {
+    const searchValue = librarySearch.trim().toLowerCase();
+    const playlistItems = playlists.filter((p) =>
+      p.title.toLowerCase().includes(searchValue)
+    );
+    const likeItems = likes.filter((l) =>
+      l.hymn?.title?.toLowerCase().includes(searchValue)
+    );
+
+    const renderPlaylist = (item) => (
+      <div className="libraryItem"
+        key={`playlist-${item.id}`}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "calc(var(--padding) / 2) 0",
+          gap: "var(--spacing)",
+        }}>
+        <img
+          style={{
+            width: "var(--iconSize)",
+            height: "var(--iconSize",
+            minWidth: "var(--iconSize)",
+            minHeight: "var(--iconSize)",
+            maxWidth: "var(--iconSize)",
+            maxHeight: "var(--iconSize)",
+            objectFit: "cover",
+            background: "var(--primary)",
+            borderRadius: "var(--border)",
+          }}
+          src={resolveMediaUrl(item.thumbnail)}
+          alt="playlist thumbnail"
+        />
+        {(resize === 1) &&
+          <span style={{ display: "flex", flexDirection: "column" }}>
+            <p style={{ color: "var(--secondary)", whiteSpace: "nowrap" }}>{item.title}</p>
+            <p2 style={{ color: "var(--thirdly)" }}>{item.is_public ? 'Public' : 'Private'}</p2>
+          </span>
+        }
+      </div>
+    );
+
+    const renderLike = (item) => (
+      <div className="libraryItem"
+        key={`like-${item.id}`}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "calc(var(--padding) / 2) 0",
+          gap: "var(--spacing)",
+        }}>
+        <img
+          style={{
+            width: "var(--iconSize)",
+            height: "var(--iconSize",
+            minWidth: "var(--iconSize)",
+            minHeight: "var(--iconSize)",
+            maxWidth: "var(--iconSize)",
+            maxHeight: "var(--iconSize)",
+            objectFit: "cover",
+            background: "var(--primary)",
+            borderRadius: "var(--border)",
+          }}
+          src={""}
+          alt="liked hymn"
+        />
+        {(resize === 1) &&
+          <span style={{ display: "flex", flexDirection: "column" }}>
+            <p style={{ color: "var(--secondary)", whiteSpace: "nowrap" }}>{item.hymn?.title || 'Liked hymn'}</p>
+            <p2 style={{ color: "var(--thirdly)" }}>Like</p2>
+          </span>
+        }
+      </div>
+    );
+
     return (
       <div style={{ display: "flex", flexDirection: "column", position: "relative" }}>
-        <div className="libraryItem"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "calc(var(--padding) / 2) 0",
-            gap: "var(--spacing)",
-          }}>
-          <img
-            style={{
-              width: "var(--iconSize)",
-              height: "var(--iconSize",
-              minWidth: "var(--iconSize)",
-              minHeight: "var(--iconSize)",
-              maxWidth: "var(--iconSize)",
-              maxHeight: "var(--iconSize)",
-              objectFit: "cover",
-              background: "purple",
-            }}
-            src={""}
-            alt="library item"
-          />
-          {(resize === 1) &&
-            <span style={{ display: "flex", flexDirection: "column" }}>
-              <p style={{ color: "var(--secondary)", whiteSpace: "nowrap" }}>Japanese Lofi HipHop</p>
-              <p2 style={{ color: "var(--thirdly)" }}>Nahome Yohannes</p2>
-            </span>
-          }
-        </div>
+        {libraryTab === 'playlists' && playlistItems.map(renderPlaylist)}
+        {libraryTab === 'likes' && likeItems.map(renderLike)}
       </div>
     )
   }
@@ -1185,7 +1312,18 @@ export function Home({ height, showSearch, loading, setLoading }) {
             <li><img src={repost}></img></li>
             <li><img src={share}></img></li>
             <li><img src={copyLink}></img></li>
-            <li><img src={addToQueue}></img></li>
+            <li>
+              <img
+                src={addToQueue}
+                onClick={() => {
+                  if (!authenticated) {
+                    setLibraryStatus('Please sign in to add to playlists.');
+                    return;
+                  }
+                  setShowAddToPlaylist(true);
+                }}
+              />
+            </li>
           </span>
         </div>
       )
@@ -1237,24 +1375,57 @@ export function Home({ height, showSearch, loading, setLoading }) {
                   {(resize === 1) && <t2 style = {{ background: ""}}>Your Library</t2>}
 
                   <span style={{ background: "#96adb9", borderRadius: "100%", display: "flex", justifyContent: "center", alignItems: "center", width: "calc(var(--iconSize))", height: "var(--iconSize)", padding: (resize === 1) ?  0 : "calc(var(--spacing)) calc(var(--spacing))"}}>
-                    <h2 style={{ fontSize: "calc(var(--sectionSpacing) * 1.5)",fontWeight: "100", color: "var(--fourthy)", textAlign: "center", cursor: "pointer" }}>+</h2>
+                    <h2
+                      style={{ fontSize: "calc(var(--sectionSpacing) * 1.5)",fontWeight: "100", color: "var(--fourthy)", textAlign: "center", cursor: "pointer" }}
+                      onClick={() => {
+                        if (!authenticated) {
+                          setLibraryStatus('Please sign in to create a playlist.');
+                          return;
+                        }
+                        setShowCreatePlaylist(true);
+                      }}
+                    >
+                      +
+                    </h2>
                   </span>
                 </span>
 
                 {(resize === 1) && 
                 <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
-                  <div style={{ flexGrow: 1 }} class="primaryButton">Playlists</div>
-                  <div style={{ flexGrow: 1 }} class="thirdlyButton">Likes</div>
+                  <div
+                    style={{ flexGrow: 1 }}
+                    className={libraryTab === 'playlists' ? "primaryButton" : "thirdlyButton"}
+                    onClick={() => setLibraryTab('playlists')}
+                  >
+                    Playlists
+                  </div>
+                  <div
+                    style={{ flexGrow: 1 }}
+                    className={libraryTab === 'likes' ? "primaryButton" : "thirdlyButton"}
+                    onClick={() => setLibraryTab('likes')}
+                  >
+                    Likes
+                  </div>
                 </div>}
 
               </span>
 
-              <span style={{ display: "flex", flexDirection: "column", padding: "calc(var(--padding) / 2)", position: "relative", gap: "var(--padding)" }}>
-                {(resize === 1) &&
+                <span style={{ display: "flex", flexDirection: "column", padding: "calc(var(--padding) / 2)", position: "relative", gap: "var(--padding)" }}>
+                  {(resize === 1) &&
                 <span style={{ display: "flex", alignItems: "center", gap: "var(--spacing)" }}>
                   <img src={searchIcon} alt="search icon" style={{ width: "calc(var(--iconSize) / 2)", height: "calc(var(--iconSize) / 2)" }} />
-                  <input className="librarySearcBar" type="text" placeholder="Search library..." style={{ fontSize: "0.75rem", border: "none", background: "var(--fifthly)", width: "100%" }} />
+                  <input
+                    className="librarySearcBar"
+                    type="text"
+                    placeholder="Search library..."
+                    value={librarySearch}
+                    onChange={(e) => setLibrarySearch(e.target.value)}
+                    style={{ fontSize: "0.75rem", border: "none", background: "var(--fifthly)", width: "100%" }}
+                  />
                 </span>}
+                {libraryStatus && (
+                  <p style={{ color: "var(--thirdly)", margin: 0 }}>{libraryStatus}</p>
+                )}
                 {LibraryItems()}
               </span>
 
@@ -1662,7 +1833,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
             }
           </div>
 
-          <img style={{ position: "absolute", zIndex: -1, right: 0, top: 0, transform: "translate(100px, -100px)", mixBlendMode: "multiply", opacity: "30%" }} src={Jesus} />
         </div >
       </div>
     )
@@ -1671,6 +1841,70 @@ export function Home({ height, showSearch, loading, setLoading }) {
   return (
     <>
       {mainContainer()}
+      {showCreatePlaylist && (
+        <div className="popupOverlay" onClick={() => setShowCreatePlaylist(false)}>
+          <div className="popupContent" onClick={(e) => e.stopPropagation()}>
+            <h2>Create Playlist</h2>
+            <form onSubmit={handleCreatePlaylist} style={{ display: "flex", flexDirection: "column", gap: "var(--padding)" }}>
+              <input
+                type="text"
+                placeholder="Playlist title"
+                value={newPlaylistTitle}
+                onChange={(e) => setNewPlaylistTitle(e.target.value)}
+                required
+                style={{
+                  padding: 'var(--padding)',
+                  borderRadius: '4px',
+                  border: '1px solid var(--primary)',
+                  fontSize: 'var(--border)',
+                  fontFamily: "BoucherieSans",
+                  background: 'var(--sixthly)',
+                  color: 'var(--fourthy)',
+                  outline: 'none',
+                  paddingLeft: "var(--padding)",
+                }}
+              />
+              <label style={{ color: "var(--thirdly)", display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <input
+                  type="checkbox"
+                  checked={newPlaylistPublic}
+                  onChange={(e) => setNewPlaylistPublic(e.target.checked)}
+                />
+                Public playlist
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setNewPlaylistThumbnail(e.target.files?.[0] || null)}
+              />
+              <button className="primaryButton" type="submit">Create</button>
+              <button className="secondaryButton" type="button" onClick={() => setShowCreatePlaylist(false)}>Cancel</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showAddToPlaylist && (
+        <div className="popupOverlay" onClick={() => setShowAddToPlaylist(false)}>
+          <div className="popupContent" onClick={(e) => e.stopPropagation()}>
+            <h2>Add To Playlist</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              {playlists.map((playlist) => (
+                <button
+                  key={`add-${playlist.id}`}
+                  className="thirdlyButton"
+                  onClick={() => handleAddToPlaylist(playlist.id)}
+                >
+                  {playlist.title}
+                </button>
+              ))}
+              {playlists.length === 0 && (
+                <p style={{ color: "var(--thirdly)" }}>No playlists yet.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }
