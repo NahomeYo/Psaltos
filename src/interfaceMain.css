@@ -1,0 +1,23 @@
+.interfaceMain {
+    gap: 10px;
+}
+
+.interfaceMain div {
+    border-radius: 10px;
+}
+
+.interfaceLeft {
+    background: #bcd3df;
+    width: 20%;
+}
+
+.interfaceCenter {
+    width: 50%;
+    background: #d3e4f0;
+    background: linear-gradient(180deg, rgba(211, 228, 240, 1) 0%, rgba(188, 211, 223, 1) 51%, rgba(188, 211, 223, 1) 100%);
+}
+
+.interfaceRight {
+    width: 20%;
+    background: rgb(153, 183, 200);
+}

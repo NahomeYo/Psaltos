@@ -14,7 +14,7 @@ export function LoadingScreen({ loading, setLoading }) {
     <div
       className={`loadingContainer ${loading ? "fadeout" : ""}`}
       style={{
-        zIndex: 1000,
+        zIndex: 9999,
         opacity: loading ? 0 : 1,
         pointerEvents: "none",
         background: "var(--thirdly)",

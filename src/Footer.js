@@ -10,17 +10,6 @@ export function Footer() {
                         <img src={outlineLogo} style={{ width: "100%", height: "100%" }} />
                     </span>
 
-                    <span style={{ display: "flex", flexDirection: "column", flexGrow: 2, position: "relative", flexBasis: "20%", gap: "var(--padding)" }}>
-                        <t style={{ fontFamily: "BoucherieSans", lineHeight: "75%", color: "transparent", webkitTextStroke: "2px var(--secondary)" }}>SITEMAP</t>
-                        <span style={{ display: "flex", justifyContent: "space-between", flexDirection: "column", height: "100%" }}>
-                            <p>Home</p>
-                            <p>About</p>
-                            <p>Menu</p>
-                            <p>Reservation</p>
-                            <p>Order Online</p>
-                        </span>
-                    </span>
-
                     <span style={{ display: "flex", flexDirection: "column", flexGrow: 2, flexBasis: "60%", gap: "var(--padding)" }}>
                         <p style={{ flexGrow: 0 }}>Subscribe to our Email Newsletter</p>
                         <input type="text" style={{

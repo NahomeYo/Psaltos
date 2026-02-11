@@ -321,7 +321,7 @@ export const Logo = () => {
 
 export const SearchIcon = (props) => {
     return (
-        <svg width="0.75rem" height="0.75rem" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width={25} height={25} viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M30.5804 26.688L24.5716 20.6792C24.3004 20.408 23.9328 20.2573 23.5471 20.2573H22.5647C24.2281 18.1298 25.2165 15.4539 25.2165 12.5429C25.2165 5.61809 19.6055 0.00708008 12.6806 0.00708008C5.75578 0.00708008 0.144775 5.61809 0.144775 12.5429C0.144775 19.4678 5.75578 25.0788 12.6806 25.0788C15.5916 25.0788 18.2675 24.0904 20.395 22.427V23.4094C20.395 23.7951 20.5457 24.1627 20.8169 24.4339L26.8257 30.4427C27.3922 31.0092 28.3083 31.0092 28.8688 30.4427L30.5744 28.7371C31.1409 28.1706 31.1409 27.2545 30.5804 26.688ZM12.6806 20.2573C8.41965 20.2573 4.96626 16.81 4.96626 12.5429C4.96626 8.28196 8.41363 4.82857 12.6806 4.82857C16.9416 4.82857 20.395 8.27593 20.395 12.5429C20.395 16.8039 16.9477 20.2573 12.6806 20.2573Z" fill={props.fill} />
         </svg>
     )
@@ -420,7 +420,7 @@ export const TitleCrossHeader = (props) => {
         <>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 4, width: "100%" }}>
                 <CopticCross fill={props.fillOne} />
-                <t style={{ textAlign: "center", width: "min-content", whiteSpace: "nowrap" }}>{props.caption}</t>
+                <span style={{ textAlign: "center", width: "min-content", whiteSpace: "nowrap" }}>{props.caption}</span>
                 <CopticCross fill={props.fillTwo} />
             </div>
         </>

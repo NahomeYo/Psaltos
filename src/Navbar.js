@@ -1,13 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import logo from "./img/logoV2.svg";
+import outlineLogo from "./img/outlinelogoV2.svg";
+import followingIcon from "./img/followingIcon.svg";
+import heart from "./img/lightHeart.svg";
+import profileIcon from "./img/profileIcon.svg";
+import downCaret from "./img/downCaret.svg";
 import "./Navbar.css";
 import "./App.css";
-import downCaret from "./img/downCaret.svg";
 import { SearchBarComp } from "./Home.js";
+import { Login, Signup } from "./Login.js";
 
-export const Navbar = ({ showSearch }) => {
-    const [dropdown, setDropdown] = useState(null);
+export const Navbar = () => {
     const [resize, setResize] = useState(() => {
         if (typeof window !== "undefined") {
             if (window.innerWidth <= 1440 && window.innerWidth >= 1000) return 1;
@@ -17,6 +21,10 @@ export const Navbar = ({ showSearch }) => {
     });
     const [expandBurger, setExpandBurger] = useState(false);
     const [scroll, setScroll] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [showSignUp, setShowSignUp] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [profileDropdown, setProfileDropdown] = useState(false);
 
     const navigate = useNavigate();
 
@@ -42,14 +50,8 @@ export const Navbar = ({ showSearch }) => {
         setTimeout(() => {
             const routes = [
                 "/",
-                "/LiveStream",
-                "/Location",
-                "/COC",
-                "/PT",
-                "/Saints",
-                "/Ministries",
-                "/Calendar",
-                "/Gallery",
+                "/Profile",
+                "/Upload",
             ];
             navigate(routes[pageNum] || "/");
         }, 2000);
@@ -84,69 +86,34 @@ export const Navbar = ({ showSearch }) => {
         }
     }, [resize, expandBurger]);
 
-    const dropdownOptions = (index) => {
-        const isActive = dropdown === index;
-        const className = isActive ? "options" : "noOptions";
+    const handlePopupClose = () => {
+        setShowPopup(false);
+        setShowSignUp(false);
+    };
 
-        const linkStyle = {
-            background: "var(--secondary)",
-            color: expandBurger && resize === 2 ? "var(--thirdly)" : "",
-        };
+    const handleSignUpPopUp = () => {
+        setShowPopup(false);
+        setShowSignUp(true);
+    };
 
-        switch (index) {
-            case 1:
-                return (
-                    <div className={className}>
-                        <button
-                            style={linkStyle}
-                            onClick={() => activateLoad(1)}
-                            className="dropdownLink"
-                        >
-                            <p>LiveStream</p>
-                        </button>
-                        <button
-                            style={linkStyle}
-                            onClick={() => activateLoad(2)}
-                            className="dropdownLink"
-                        >
-                            <p>Location</p>
-                        </button>
-                    </div>
-                );
-            case 2:
-                return (
-                    <div className={className}>
-                        <button
-                            style={linkStyle}
-                            onClick={() => activateLoad(3)}
-                            className="dropdownLink"
-                        >
-                            <p>The Coptic Orthodox Church</p>
-                        </button>
-                        <button
-                            style={linkStyle}
-                            onClick={() => activateLoad(4)}
-                            className="dropdownLink"
-                        >
-                            <p>H.H Pope Tawadros II</p>
-                        </button>
-                        <button
-                            style={linkStyle}
-                            onClick={() => activateLoad(5)}
-                            className="dropdownLink"
-                        >
-                            <p>Our Saints</p>
-                        </button>
-                    </div>
-                );
-            default:
-                return null;
+    const handleLogoClick = () => {
+        if (resize === 2) {
+            setExpandBurger((prev) => !prev);
+        } else {
+            navigate("/");
+        }
+    };
+
+    const handleUploadClick = () => {
+        if (isAuthenticated) {
+            activateLoad(2);
+        } else {
+            setShowSignUp(true);
         }
     };
 
     return (
         <>
-
             <div
                 className={`menuContainer ${resize === 2
                     ? expandBurger
@@ -154,60 +121,103 @@ export const Navbar = ({ showSearch }) => {
                         : "mobile"
                     : "fullScreen"
                     }`}
-                onClick={() => !expandBurger && resize === 2 && setExpandBurger(true)}
+
+                style={{
+                    width: "var(--pageWidth)",
+                    padding: "var(--paddingSides)"
+                }}
             >
-                {resize === 2 && (
-                    <button
-                        className={`hamburgerMenu ${expandBurger ? "open" : ""}`}
-                        onClick={() => setExpandBurger((prev) => !prev)}
-                    >
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                )}
+
+                <span onClick={handleLogoClick} style={{ cursor: resize === 2 ? "pointer" : "default" }}>
+                    <img
+                        src={logo}
+                        alt="logo"
+                        style={{ width: "100px", height: "100px" }}
+                    />
+                </span>
 
                 <nav className={`navContainer ${scroll ? "scroll" : ""}`}>
                     <span>
-                        <img
-                            onClick={() => activateLoad(3)}
-                            src={logo}
-                            alt="logo"
-                            style={{ width: "100px", height: "100px" }}
+                        <SearchBarComp
+                            barWidth="100%"
+                            searchBarBackground="var(--fifthly)"
+                            borderRadius="1rem"
+                            searchIconFill="white"
+                            textColor="white"
+                            borderColor="white"
                         />
+
                     </span>
 
-                    <span>
-                        {showSearch && (
-                            <SearchBarComp
-                                barWidth="20rem"
-                                searchBarBackground="white"
-                                borderRadius="1rem"
-                                searchIconFill="var(--primary)"
-                                textColor="var(--primary)"
-                                borderColor="none"
+                    <span className="userDropdown"
+                        style={{
+                            position: "relative",
+                            gap: "var(--sectionSpacing)",
+                            display: "flex",
+                            alignItems: "center",
+                        }}>
+
+                        <div style = {{ padding: 0, margin: 0, display: "flex", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: "var(--padding)"}}>
+                            <img src={profileIcon} alt="profile" className="profileIcon" onClick={() => setProfileDropdown(true)}
+                                style={{
+                                    borderRadius: "50%",
+                                    cursor: "pointer",
+                                    width: "calc(var(--profile) / 2)",
+                                    height: "calc(var(--profile) / 2)",
+                                    background: "var(--primary)",
+                                }}
                             />
+
+                            <img src = {downCaret} className="downCaret" style = {{ filter: "brightness(1.5)" }}/>
+                        </div>
+
+                        {profileDropdown && (
+                            <div
+                                className="profileDropdown">
+                                <li>
+                                    <img src={profileIcon} />
+                                    <p>Profile</p>
+                                </li>
+
+                                <li>
+                                    <img src={heart} />
+                                    <p>Likes</p>
+                                </li>
+
+                                <li>
+                                    <img src={followingIcon} />
+                                    <p>Following</p>
+                                </li>
+                            </div>
                         )}
                     </span>
 
-                    <span>
-                        <li onClick={() => activateLoad(1)} className="link">
-                            <p>Feed</p>
-                        </li>
-                        <li onClick={() => activateLoad(2)} className="link">
-                            <p>Library</p>
-                        </li>
-                        <li onClick={() => activateLoad(2)} className="link">
-                            <primaryButton><p>Upload</p></primaryButton>
-                        </li>
+                    <div
+                        className="secondaryButton"
+                        onClick={() => setShowPopup(true)}
+                    >
+                        Sign In
+                    </div>
 
-                        <div className="profilePic">
-                            <img></img>
-                            <img src={downCaret} />
-                        </div>
-                    </span>
+                    <div
+                        onClick={handleUploadClick}
+                        className="primaryButton">
+                        Upload
+                    </div>
                 </nav>
             </div>
+
+            {showSignUp && (
+                <Signup onClose={handlePopupClose} />
+            )}
+
+            {showPopup && (
+                <div className="popupOverlay" onClick={handlePopupClose}>
+                    <div className="popupContent" onClick={(e) => e.stopPropagation()}>
+                        <Login onClose={handlePopupClose} displaySignUp={handleSignUpPopUp} />
+                    </div>
+                </div>
+            )}
         </>
     );
 };

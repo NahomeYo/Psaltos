@@ -1,77 +1,29 @@
-.hamburgerMenu {
-  margin: 0;
-}
-
 .menuContainer {
   position: fixed;
   left: 0;
   top: 0;
   display: flex;
   justify-content: center;
-  z-index: 999;
-  padding: 0 10vw;
+  z-index: 997;
+  gap: var(--sectionSpacing);
   overflow: visible;
   transition: all 0.5s var(--motion);
 }
 
 .menuContainer.mobile {
   background: var(--primary);
-  width: 100vw;
-  height: 100vh;
+  width: 4rem;
+  height: 4rem;
   overflow: hidden;
-  padding: var(--paddingSides);
-  border-radius: 0 0 100% 0;
+  transition: all 0.5s var(--motion);
 }
 
 .menuContainer.mobile:not(.expanded) {
   width: 4rem;
   height: 4rem;
   background: var(--fifthly);
-  padding: 0;
-}
-
-.hamburgerMenu {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 2.5rem;
-  height: 3rem;
-  margin-left: 0.25rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--border);
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 999;
-  padding: 0;
-}
-
-/* Hide hamburger on desktop */
-.menuContainer.fullScreen .hamburgerMenu {
-  display: none;
-}
-
-.hamburgerMenu span {
-  width: 100%;
-  height: var(--border);
-  background: var(--thirdly);
-  border-radius: var(--border);
-  transition: all 0.5s var(--motion);
-}
-
-.hamburgerMenu.open span:nth-child(1) {
-  transform: rotate(45deg) translate(8px, 8px);
-}
-
-.hamburgerMenu.open span:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburgerMenu.open span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
+  padding: var(--padding);
+  border-radius: 0 0 50% 0;
 }
 
 .navGroup {
@@ -80,12 +32,6 @@
   gap: var(--space);
   list-style: none;
   height: 100%;
-}
-
-@media screen and (max-width: 1000px) and (min-width: 465px) {
-  .navGroup {
-    flex-direction: column;
-  }
 }
 
 .leftNav {
@@ -164,14 +110,12 @@
   width: 4rem;
   height: 4rem;
   overflow: hidden;
-  border-radius: 0 0 100% 0;
   transition: all 0.5s var(--motion);
 }
 
 .menuContainer.mobile.expanded {
   width: 100vw;
   height: 100vh;
-  border-radius: 0;
   padding: 0;
   background: var(--fifthly);
   overflow: hidden;
@@ -182,13 +126,71 @@
   opacity: 1;
   pointer-events: auto;
   transition: opacity 0.5s var(--motion);
-  width: 80vw;
+  flex-basis: 100%;
+  flex-grow: 1;
   display: flex;
   align-items: center;
   list-style-type: none;
   z-index: 999;
+  gap: var(--sectionSpacing);
+  justify-content: space-between;
+}
+
+.navContainer span:nth-of-type(1) {
+  flex-grow: 6;
+  cursor: pointer;
 }
 
 .menuContainer.fullScreen .hamburgerMenu {
   display: none;
+}
+
+.userDropdown {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: start;
+
+  img {
+    width: calc(var(--profile) / 3);
+    height: calc(var(--profile) / 3);
+  }
+
+  p {
+    font-size: 0.65rem;
+    font-weight: 1000;
+  }
+}
+
+.profileDropdown {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: min-content;
+  z-index: 9999 !important;
+  transform: translateY(110%);
+  background: var(--primary);
+  border-radius: var(--spacing);
+  border: 0.1rem solid var(--thirdly);
+  padding: var(--spacing);
+}
+
+.profileDropdown li {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: var(--padding);
+  padding: var(--padding);
+  transition: filter 0.3s var(--motion);
+  filter: sepia(0);
+}
+
+.profileDropdown li:hover {
+  filter: sepia(50%) brightness(50%);
+}
+
+@media screen and (max-width: 1000px) and (min-width: 465px) {
+  .navGroup {
+    flex-direction: column;
+  }
 }

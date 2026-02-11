@@ -1,0 +1,10 @@
+.fourthlyButton {
+  background: transparent;
+  border: none;
+  border-bottom: 10px solid var(--secondary);
+  color: inherit;
+  font: inherit;
+  padding: var(--padding);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
