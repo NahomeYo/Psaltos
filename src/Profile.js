@@ -2,7 +2,6 @@ import './App.css';
 import "./animation.css";
 import "./media.css";
 import "./interfaceMain.css";
-import { ArtistIcon } from './icons.js';
 import { useState, useEffect, useContext, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import Robe from "./img/robe.svg";
@@ -166,7 +165,7 @@ export function Profile({ height }) {
                 <img className="robeImg" src={Robe} style={{ height: "150%", boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)", background: "none" }} alt="robeImg" />
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", padding: 0, justifyContent: "space-between", gap: "var(--sectionSpacing)", margin: "var(--sectionSpacing) 0" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", padding: 0, gap: "var(--sectionSpacing)", margin: "var(--sectionSpacing) 0" }}>
                 <span className="interfaceLeft" style={{ flexBasis: "80%", flexGrow: 2, flexDirection: "row", display: "flex", justifyContent: "space-between", padding: "var(--padding)" }}>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                         <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", margin: 0, color: "var(--thirdly)" }}>1</h2>
@@ -182,7 +181,7 @@ export function Profile({ height }) {
                     </div>
                 </span>
 
-                <span style={{ flexBasis: "20%", flexGrow: 0, display: "flex", justifyContent: "space-between", height: "100%", alignItems: "center", flexGrow: 0, borderRadius: "var(--padding)", gap: "calc(var(--sectionSpacing) /2)" }}>
+                <span style={{ flexBasis: "20%", flexGrow: 0, display: "flex", justifyContent: "space-between", height: "100%", alignItems: "center", borderRadius: "var(--padding)", gap: "calc(var(--sectionSpacing) /2)" }}>
                     <div className="primaryButton">
                         <img src={shareButton} alt="Share" />
                         Share
