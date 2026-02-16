@@ -72,10 +72,6 @@ export function Profile({ height }) {
         loadLibrary();
     }, [authenticated]);
 
-    const handleImageClick = () => {
-        setShowImagePopup(true);
-    };
-
     const handleUpdateImage = async (action) => {
         if (action === "replace") {
             fileInputRef.current?.click();
