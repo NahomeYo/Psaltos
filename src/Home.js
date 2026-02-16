@@ -7,10 +7,11 @@ import "./media.css";
 import "./interfaceMain.css";
 import { profileData } from './profiles.js';
 import { useState, useEffect, useCallback, useRef, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { hymnsData } from "./hymns.js";
 import WavesurferPlayer from '@wavesurfer/react';
 import { AuthContext } from './AuthContext.js';
-import { getPlaylists, getLikes, resolveMediaUrl, createPlaylist, addPlaylistItem } from './api.js';
+import { getPlaylists, getLikes, resolveMediaUrl, addPlaylistItem, getHymns, likeHymn, unlikeHymn, proxyAudioUrl } from './api.js';
 
 // Images
 import DeaconsBackImg from "./img/deaconsBack.jpg";
@@ -355,6 +356,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
   // STATE - Data
   // ============================================
   const { authenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
   const hymns = hymnsData();
   const profiles = profileData();
 
@@ -373,12 +375,14 @@ export function Home({ height, showSearch, loading, setLoading }) {
   const [likes, setLikes] = useState([]);
   const [libraryTab, setLibraryTab] = useState('playlists');
   const [librarySearch, setLibrarySearch] = useState('');
-  const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
   const [showAddToPlaylist, setShowAddToPlaylist] = useState(false);
-  const [newPlaylistTitle, setNewPlaylistTitle] = useState('');
-  const [newPlaylistPublic, setNewPlaylistPublic] = useState(false);
-  const [newPlaylistThumbnail, setNewPlaylistThumbnail] = useState(null);
   const [libraryStatus, setLibraryStatus] = useState('');
+  const [backendHymns, setBackendHymns] = useState([]);
+  const [hymnIdMap, setHymnIdMap] = useState({});
+  const [translateInput, setTranslateInput] = useState('');
+  const [translateOutput, setTranslateOutput] = useState('');
+  const [leftLang, setLeftLang] = useState('english');
+  const [rightLang, setRightLang] = useState('coptic-english');
 
   // ============================================
   // STATE - Selection State
@@ -437,7 +441,12 @@ export function Home({ height, showSearch, loading, setLoading }) {
   // HANDLERS - Hymn Actions
   // ============================================
   const handleLikeToggle = async (hymnId) => {
-    console.log('Like clicked - auth removed');
+    const backendId = hymnIdMap[hymnId] || hymnId;
+    if (typeof backendId !== 'number') {
+      setLibraryStatus('This hymn is not in the upload library yet.');
+      return;
+    }
+    await toggleLike(backendId);
   };
 
   const handleDownload = async (hymnUrl, hymnTitle) => {
@@ -987,29 +996,32 @@ export function Home({ height, showSearch, loading, setLoading }) {
     };
   }, [authenticated])
 
-  const handleCreatePlaylist = async (e) => {
-    e.preventDefault();
-    if (!newPlaylistTitle.trim()) {
-      setLibraryStatus('Please enter a playlist title.');
-      return;
-    }
-    try {
-      await createPlaylist({
-        title: newPlaylistTitle.trim(),
-        is_public: newPlaylistPublic,
-        thumbnail: newPlaylistThumbnail,
-      });
-      const playlistData = await getPlaylists();
-      setPlaylists(Array.isArray(playlistData) ? playlistData : []);
-      setNewPlaylistTitle('');
-      setNewPlaylistPublic(false);
-      setNewPlaylistThumbnail(null);
-      setLibraryStatus('Playlist created.');
-      setShowCreatePlaylist(false);
-    } catch (err) {
-      setLibraryStatus(err.message || 'Failed to create playlist.');
-    }
-  };
+  useEffect(() => {
+    let active = true;
+    const loadHymns = async () => {
+      try {
+        const data = await getHymns();
+        if (!active) return;
+        const items = Array.isArray(data) ? data : [];
+        setBackendHymns(items);
+        const map = {};
+        items.forEach((hymn) => {
+          if (hymn.audio_url) {
+            map[hymn.audio_url] = hymn.id;
+          }
+        });
+        setHymnIdMap(map);
+      } catch (err) {
+        if (!active) return;
+        setBackendHymns([]);
+        setHymnIdMap({});
+      }
+    };
+    loadHymns();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleAddToPlaylist = async (playlistId) => {
     if (!selectedHymn?.id) {
@@ -1110,6 +1122,179 @@ export function Home({ height, showSearch, loading, setLoading }) {
       </div>
     )
   }
+
+  const isHymnLiked = (hymnId) => {
+    return likes.some((like) => like.hymn?.id === hymnId);
+  };
+
+  const digraphs = {
+    ou: "ⲟⲩ",
+    th: "ⲑ",
+    sh: "ϣ",
+    ch: "ϭ",
+    ph: "ⲫ",
+    ps: "ⲯ",
+    kh: "ⲭ",
+    gh: "ⲅ",
+    ti: "ϯ"
+  };
+
+  const englishToCopticMap = {
+    a: "ⲁ",
+    b: "ⲃ",
+    c: "ⲥ",
+    d: "ⲇ",
+    e: "ⲉ",
+    f: "ⲫ",
+    g: "ⲅ",
+    h: "ϩ",
+    i: "ⲓ",
+    j: "ϫ",
+    k: "ⲕ",
+    l: "ⲗ",
+    m: "ⲙ",
+    n: "ⲛ",
+    o: "ⲟ",
+    p: "ⲡ",
+    q: "ϧ",
+    r: "ⲣ",
+    s: "ⲥ",
+    t: "ⲧ",
+    u: "ⲩ",
+    v: "ⲃ",
+    w: "ⲱ",
+    x: "ⲝ",
+    y: "ⲓ",
+    z: "ⲍ"
+  };
+
+  const copticToBohairicMap = {
+    "ⲁ": "a",
+    "ⲃ": "v",
+    "ⲅ": "g",
+    "ⲇ": "d",
+    "ⲉ": "e",
+    "ⲍ": "z",
+    "ⲏ": "ee",
+    "ⲑ": "th",
+    "ⲓ": "i",
+    "ⲕ": "k",
+    "ⲗ": "l",
+    "ⲙ": "m",
+    "ⲛ": "n",
+    "ⲝ": "ks",
+    "ⲟ": "o",
+    "ⲡ": "p",
+    "ⲣ": "r",
+    "ⲥ": "s",
+    "ⲧ": "t",
+    "ⲫ": "f",
+    "ⲭ": "kh",
+    "ⲯ": "ps",
+    "ⲱ": "oo",
+    "ϣ": "sh",
+    "ϧ": "h",
+    "ϫ": "j",
+    "ϭ": "ch",
+    "ϩ": "h"
+  };
+
+  const englishToCopticWord = (text) => {
+    let result = "";
+    const lower = text.toLowerCase();
+    let i = 0;
+    while (i < lower.length) {
+      const two = lower.slice(i, i + 2);
+      if (digraphs[two]) {
+        result += digraphs[two];
+        i += 2;
+        continue;
+      }
+      const char = lower[i];
+      if (englishToCopticMap[char]) {
+        result += englishToCopticMap[char];
+      } else {
+        result += char;
+      }
+      i += 1;
+    }
+    return result;
+  };
+
+  const copticToBohairicWord = (text) => {
+    let result = "";
+    let i = 0;
+    while (i < text.length) {
+      if (text.slice(i, i + 2) === "ⲟⲩ") {
+        result += "ou";
+        i += 2;
+        continue;
+      }
+      const char = text[i];
+      if (copticToBohairicMap[char]) {
+        result += copticToBohairicMap[char];
+      } else {
+        result += char;
+      }
+      i += 1;
+    }
+    return result;
+  };
+
+  const transliterateEnglishToBohairic = (text) => {
+    const coptic = englishToCopticWord(text);
+    return copticToBohairicWord(coptic);
+  };
+
+  const phraseOverrides = {
+    "through the intercessions": "Hithen ni-presvia"
+  };
+
+  const computeTranslation = (value, from, to) => {
+    const key = value.trim().toLowerCase();
+    if (from === 'english' && to === 'coptic') {
+      return englishToCopticWord(value);
+    }
+    if (from === 'english' && to === 'coptic-english') {
+      if (phraseOverrides[key]) {
+        return phraseOverrides[key];
+      }
+      return transliterateEnglishToBohairic(value);
+    }
+    if (from === 'coptic' && to === 'coptic-english') {
+      return copticToBohairicWord(value);
+    }
+    if (to === 'english') {
+      return value;
+    }
+    return value;
+  };
+
+  useEffect(() => {
+    setTranslateOutput(computeTranslation(translateInput, leftLang, rightLang));
+  }, [translateInput, leftLang, rightLang]);
+
+  const toggleLike = async (hymnId) => {
+    if (!authenticated) {
+      setLibraryStatus('Please sign in to like hymns.');
+      return;
+    }
+    if (!hymnId) {
+      setLibraryStatus('This hymn is not in the upload library yet.');
+      return;
+    }
+    try {
+      if (isHymnLiked(hymnId)) {
+        await unlikeHymn(hymnId);
+      } else {
+        await likeHymn(hymnId);
+      }
+      const likeData = await getLikes();
+      setLikes(Array.isArray(likeData) ? likeData : []);
+    } catch (err) {
+      setLibraryStatus(err.message || 'Failed to update like.');
+    }
+  };
 
   const mainContainer = () => {
 
@@ -1308,7 +1493,22 @@ export function Home({ height, showSearch, loading, setLoading }) {
           </span>
 
           <span className="songOptions" style={{ overflow: "hidden", transition: "all 0.5s ease-in-out", flexGrow: selectedHymn && displayHymnAudio ? 0 : 1, opacity: selectedHymn && displayHymnAudio ? 1 : 0, display: "flex", height: "100%", zIndex: 2, alignItems: "center", justifyContent: "space-between" }}>
-            <li><img src={heart}></img></li>
+            <li>
+              <button
+                onClick={() => toggleLike(selectedHymn?.id)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  color: selectedHymn?.id && isHymnLiked(selectedHymn.id) ? '#e53935' : 'var(--fourthy)',
+                }}
+              >
+                <svg width={20} height={20} viewBox="0 0 24 24" fill={selectedHymn?.id && isHymnLiked(selectedHymn.id) ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2}>
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+            </li>
             <li><img src={repost}></img></li>
             <li><img src={share}></img></li>
             <li><img src={copyLink}></img></li>
@@ -1377,13 +1577,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
                   <span style={{ background: "#96adb9", borderRadius: "100%", display: "flex", justifyContent: "center", alignItems: "center", width: "calc(var(--iconSize))", height: "var(--iconSize)", padding: (resize === 1) ?  0 : "calc(var(--spacing)) calc(var(--spacing))"}}>
                     <h2
                       style={{ fontSize: "calc(var(--sectionSpacing) * 1.5)",fontWeight: "100", color: "var(--fourthy)", textAlign: "center", cursor: "pointer" }}
-                      onClick={() => {
-                        if (!authenticated) {
-                          setLibraryStatus('Please sign in to create a playlist.');
-                          return;
-                        }
-                        setShowCreatePlaylist(true);
-                      }}
+                      onClick={() => navigate("/Profile?tab=playlists&create=1")}
                     >
                       +
                     </h2>
@@ -1449,9 +1643,24 @@ export function Home({ height, showSearch, loading, setLoading }) {
                 <div style={{ display: "flex", alignItems: "center", gap: "var(--padding)"}}>
                   {/* Language row selector (left) */}
                   <div style={{ display: "flex" }}>
-                    <button className="fourthlyButton" onClick={e => { const parent = e.currentTarget.parentNode; Array.from(parent.children).forEach(btn => btn.classList.remove('clicked')); e.currentTarget.classList.add('clicked'); }}>English</button>
-                    <button className="fourthlyButton" onClick={e => { const parent = e.currentTarget.parentNode; Array.from(parent.children).forEach(btn => btn.classList.remove('clicked')); e.currentTarget.classList.add('clicked'); }}>Coptic</button>
-                    <button className="fourthlyButton" onClick={e => { const parent = e.currentTarget.parentNode; Array.from(parent.children).forEach(btn => btn.classList.remove('clicked')); e.currentTarget.classList.add('clicked'); }}>Coptish</button>
+                    <button
+                      className={`fourthlyButton ${leftLang === 'english' ? 'clicked' : ''}`}
+                      onClick={() => {
+                        setLeftLang('english');
+                        setTranslateOutput(computeTranslation(translateInput, 'english', rightLang));
+                      }}
+                    >
+                      English
+                    </button>
+                    <button
+                      className={`fourthlyButton ${leftLang === 'coptic' ? 'clicked' : ''}`}
+                      onClick={() => {
+                        setLeftLang('coptic');
+                        setTranslateOutput(computeTranslation(translateInput, 'coptic', rightLang));
+                      }}
+                    >
+                      Coptic
+                    </button>
                   </div>
                 </div>
 
@@ -1463,9 +1672,33 @@ export function Home({ height, showSearch, loading, setLoading }) {
                 <div style={{ display: "flex", alignItems: "center", gap: "var(--padding)" }}>
                   {/* Language row selector (right) */}
                   <div style={{ display: "flex" }}>
-                    <button className="fourthlyButton" onClick={e => { const parent = e.currentTarget.parentNode; Array.from(parent.children).forEach(btn => btn.classList.remove('clicked')); e.currentTarget.classList.add('clicked'); }}>English</button>
-                    <button className="fourthlyButton" onClick={e => { const parent = e.currentTarget.parentNode; Array.from(parent.children).forEach(btn => btn.classList.remove('clicked')); e.currentTarget.classList.add('clicked'); }}>Coptic</button>
-                    <button className="fourthlyButton" onClick={e => { const parent = e.currentTarget.parentNode; Array.from(parent.children).forEach(btn => btn.classList.remove('clicked')); e.currentTarget.classList.add('clicked'); }}>Coptish</button>
+                    <button
+                      className={`fourthlyButton ${rightLang === 'english' ? 'clicked' : ''}`}
+                      onClick={() => {
+                        setRightLang('english');
+                        setTranslateOutput(computeTranslation(translateInput, leftLang, 'english'));
+                      }}
+                    >
+                      English
+                    </button>
+                    <button
+                      className={`fourthlyButton ${rightLang === 'coptic' ? 'clicked' : ''}`}
+                      onClick={() => {
+                        setRightLang('coptic');
+                        setTranslateOutput(computeTranslation(translateInput, leftLang, 'coptic'));
+                      }}
+                    >
+                      Coptic
+                    </button>
+                    <button
+                      className={`fourthlyButton ${rightLang === 'coptic-english' ? 'clicked' : ''}`}
+                      onClick={() => {
+                        setRightLang('coptic-english');
+                        setTranslateOutput(computeTranslation(translateInput, leftLang, 'coptic-english'));
+                      }}
+                    >
+                      Coptic (English)
+                    </button>
                   </div>
                 </div>
 
@@ -1475,12 +1708,26 @@ export function Home({ height, showSearch, loading, setLoading }) {
 
                 {/* Left Language Selector and Input */}
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "var(--primary-bg, #fff)", borderRadius: "var(--border)", boxShadow: "var(--shadow, 0 2px 8px 0 rgba(0,0,0,0.04))" }}>
-                  <textarea placeholder="Enter text" style={{ width: "100%", height: "100%", border: "none", outline: "none", resize: "vertical", fontSize: "1rem", background: "transparent", color: "var(--primary)", fontFamily: "inherit", margin: "var(--padding)", color: "var(--secondary)" }} />
+                  <textarea
+                    placeholder="Enter text"
+                    value={translateInput}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setTranslateInput(value);
+                      setTranslateOutput(computeTranslation(value, leftLang, rightLang));
+                    }}
+                    style={{ width: "100%", height: "100%", border: "none", outline: "none", resize: "vertical", fontSize: "1rem", background: "transparent", color: "var(--primary)", fontFamily: "inherit", margin: "var(--padding)", color: "var(--secondary)" }}
+                  />
                 </div>
 
                 {/* Right Language Selector and Output */}
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "var(--primary-bg, #fff)", borderRadius: "var(--border)", boxShadow: "var(--shadow, 0 2px 8px 0 rgba(0,0,0,0.04))" }}>
-                  <textarea placeholder="Enter text" style={{ width: "100%", height: "100%", border: "none", outline: "none", resize: "vertical", fontSize: "1rem", background: "transparent", color: "var(--primary)", fontFamily: "inherit", margin: "var(--padding)", color: "var(--secondary)" }} />
+                  <textarea
+                    placeholder="Translation"
+                    value={translateOutput}
+                    readOnly
+                    style={{ width: "100%", height: "100%", border: "none", outline: "none", resize: "vertical", fontSize: "1rem", background: "transparent", color: "var(--primary)", fontFamily: "inherit", margin: "var(--padding)", color: "var(--secondary)" }}
+                  />
                 </div>
 
               </div>
@@ -1711,7 +1958,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
                             title={selectedHymn?.englishTitle}
                             artist={selectedHymn?.artist}
                             thumbnail={selectedHymn?.imgLink}
-                            audioSrc={selectedHymn?.audioFileLink}
+                            audioSrc={proxyAudioUrl(selectedHymn?.audioFileLink)}
                           />
                         }
                       </span>
@@ -1726,7 +1973,8 @@ export function Home({ height, showSearch, loading, setLoading }) {
                       }}>
                         {currentArtistHymnsLength.map((hymn, index) => {
                           function hymnClick() {
-                            setSelectedHymn(hymn);
+                            const backendId = hymnIdMap[hymn.audioFileLink];
+                            setSelectedHymn({ ...hymn, id: backendId || null });
                             setDisplayHymnAudio(true);
                           }
 
@@ -1786,12 +2034,13 @@ export function Home({ height, showSearch, loading, setLoading }) {
                                   padding: '0.5rem',
                                   display: 'flex',
                                   alignItems: 'center',
-                                  transition: 'transform 0.2s'
+                                  transition: 'transform 0.2s',
+                                  color: isHymnLiked(hymnIdMap[hymn.audioFileLink]) ? '#e53935' : 'inherit'
                                 }}
                                 onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.2)'}
                                 onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                               >
-                                <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                                <svg width={20} height={20} viewBox="0 0 24 24" fill={isHymnLiked(hymnIdMap[hymn.audioFileLink]) ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2}>
                                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                                 </svg>
                               </button>
@@ -1841,49 +2090,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
   return (
     <>
       {mainContainer()}
-      {showCreatePlaylist && (
-        <div className="popupOverlay" onClick={() => setShowCreatePlaylist(false)}>
-          <div className="popupContent" onClick={(e) => e.stopPropagation()}>
-            <h2>Create Playlist</h2>
-            <form onSubmit={handleCreatePlaylist} style={{ display: "flex", flexDirection: "column", gap: "var(--padding)" }}>
-              <input
-                type="text"
-                placeholder="Playlist title"
-                value={newPlaylistTitle}
-                onChange={(e) => setNewPlaylistTitle(e.target.value)}
-                required
-                style={{
-                  padding: 'var(--padding)',
-                  borderRadius: '4px',
-                  border: '1px solid var(--primary)',
-                  fontSize: 'var(--border)',
-                  fontFamily: "BoucherieSans",
-                  background: 'var(--sixthly)',
-                  color: 'var(--fourthy)',
-                  outline: 'none',
-                  paddingLeft: "var(--padding)",
-                }}
-              />
-              <label style={{ color: "var(--thirdly)", display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                <input
-                  type="checkbox"
-                  checked={newPlaylistPublic}
-                  onChange={(e) => setNewPlaylistPublic(e.target.checked)}
-                />
-                Public playlist
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setNewPlaylistThumbnail(e.target.files?.[0] || null)}
-              />
-              <button className="primaryButton" type="submit">Create</button>
-              <button className="secondaryButton" type="button" onClick={() => setShowCreatePlaylist(false)}>Cancel</button>
-            </form>
-          </div>
-        </div>
-      )}
-
       {showAddToPlaylist && (
         <div className="popupOverlay" onClick={() => setShowAddToPlaylist(false)}>
           <div className="popupContent" onClick={(e) => e.stopPropagation()}>

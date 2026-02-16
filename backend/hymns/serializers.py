@@ -27,6 +27,13 @@ class RegisterSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         display_name = validated_data.pop('display_name', '')
+        base_username = validated_data.get('username')
+        username = base_username
+        suffix = 1
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}{suffix}"
+            suffix += 1
+        validated_data['username'] = username
         user = User.objects.create_user(**validated_data)
         Profile.objects.create(user=user, display_name=display_name)
         return user
@@ -61,7 +68,14 @@ class HymnSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hymn
-        fields = ['id', 'title', 'audio_file', 'uploaded_by', 'created_at']
+        fields = ['id', 'title', 'audio_file', 'audio_url', 'uploaded_by', 'created_at']
+
+    def validate(self, data):
+        audio_file = data.get('audio_file')
+        audio_url = data.get('audio_url')
+        if not audio_file and not audio_url:
+            raise serializers.ValidationError('Provide either audio_file or audio_url.')
+        return data
 
 
 class PlaylistItemSerializer(serializers.ModelSerializer):

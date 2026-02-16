@@ -20,6 +20,11 @@ export function resolveMediaUrl(path) {
   return `${MEDIA_BASE}${path}`;
 }
 
+export function proxyAudioUrl(url) {
+  if (!url) return '';
+  return `${API_BASE}/proxy/?url=${encodeURIComponent(url)}`;
+}
+
 async function apiFetch(path, options = {}) {
   const url = `${API_BASE}${path}`;
   const headers = options.headers || {};
@@ -84,6 +89,15 @@ export async function getPlaylists() {
   return apiFetch('/playlists/');
 }
 
+export async function updatePlaylist(playlistId, { title, is_public, thumbnail }) {
+  await ensureCsrf();
+  const form = new FormData();
+  if (title !== undefined) form.append('title', title);
+  if (is_public !== undefined) form.append('is_public', is_public ? 'true' : 'false');
+  if (thumbnail) form.append('thumbnail', thumbnail);
+  return apiFetch(`/playlists/${playlistId}/`, { method: 'PATCH', body: form });
+}
+
 export async function createPlaylist({ title, is_public, thumbnail }) {
   await ensureCsrf();
   const form = new FormData();
@@ -129,6 +143,10 @@ export async function uploadHymn({ title, audio_file }) {
   form.append('title', title);
   form.append('audio_file', audio_file);
   return apiFetch('/hymns/', { method: 'POST', body: form });
+}
+
+export async function getHymns() {
+  return apiFetch('/hymns/');
 }
 
 export async function updateProfile({ display_name, avatar }) {

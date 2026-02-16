@@ -13,6 +13,7 @@ urlpatterns = [
     path('auth/login/', views.login_view),
     path('auth/logout/', views.logout_view),
     path('auth/me/', views.me),
+    path('proxy/', views.proxy_audio),
     path('profile/', views.ProfileViewSet.as_view({'get': 'retrieve', 'put': 'update'})),
     path('', include(router.urls)),
 ]

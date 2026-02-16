@@ -4,6 +4,9 @@ from django.middleware.csrf import get_token
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
+from django.http import StreamingHttpResponse
+from urllib.request import urlopen, Request
+from urllib.error import URLError, HTTPError
 
 from .models import Profile, Hymn, Playlist, PlaylistItem, Like
 from .serializers import (
@@ -57,6 +60,24 @@ def me(request):
     if not request.user.is_authenticated:
         return Response({'authenticated': False})
     return Response({'authenticated': True, 'user': UserSerializer(request.user).data})
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def proxy_audio(request):
+    url = request.query_params.get('url')
+    if not url:
+        return Response({'detail': 'url is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        remote = urlopen(req, timeout=15)
+        content_type = remote.headers.get('Content-Type', 'audio/mpeg')
+        response = StreamingHttpResponse(remote, content_type=content_type)
+        response['Access-Control-Allow-Origin'] = '*'
+        return response
+    except (HTTPError, URLError) as err:
+        return Response({'detail': f'Failed to fetch audio: {err}'}, status=status.HTTP_502_BAD_GATEWAY)
 
 
 class ProfileViewSet(viewsets.ViewSet):

@@ -264,6 +264,26 @@ p2 {
   flex-grow: 1;
 }
 
+.primaryButton,
+.secondaryButton,
+.thirdlyButton,
+.fourthlyButton,
+.primaryButton img,
+.secondaryButton img,
+.thirdlyButton img,
+.fourthlyButton img,
+button {
+  transition: filter 0.2s ease-in-out;
+}
+
+.primaryButton:hover,
+.secondaryButton:hover,
+.thirdlyButton:hover,
+.fourthlyButton:hover,
+button:hover {
+  filter: brightness(1.25);
+}
+
 .secondaryButton {
   border-radius: var(--spacing);
   text-align: center;

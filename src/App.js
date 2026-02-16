@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { Upload } from "./Upload.js";
 import { Home } from "./Home.js";

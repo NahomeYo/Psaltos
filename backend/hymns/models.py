@@ -13,7 +13,8 @@ class Profile(models.Model):
 
 class Hymn(models.Model):
     title = models.CharField(max_length=200)
-    audio_file = models.FileField(upload_to='hymns/')
+    audio_file = models.FileField(upload_to='hymns/', blank=True, null=True)
+    audio_url = models.URLField(blank=True)
     uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
