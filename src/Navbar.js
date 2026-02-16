@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import logo from "./img/logoV2.svg";
-import outlineLogo from "./img/outlinelogoV2.svg";
 import followingIcon from "./img/followingIcon.svg";
 import heart from "./img/lightHeart.svg";
 import profileIcon from "./img/profileIcon.svg";
@@ -180,29 +179,29 @@ export const Navbar = () => {
                                 }}
                             />
 
-                            <img src={downCaret} className="downCaret" style={{ filter: "brightness(1.5)"}} />
+                            <img src={downCaret} alt="" className="downCaret" style={{ filter: "brightness(1.5)"}} />
                         </div>
 
                         {profileDropdown && authenticated && (
                             <div
                                 className="profileDropdown">
                                 <li onClick = {() =>  navigate("/Profile")}>
-                                    <img src={profileIcon} />
+                                    <img src={profileIcon} alt="" />
                                     <p>Profile</p>
                                 </li>
 
                                 <li>
-                                    <img src={heart} />
+                                    <img src={heart} alt="" />
                                     <p>Likes</p>
                                 </li>
 
                                 <li>
-                                    <img src={followingIcon} />
+                                    <img src={followingIcon} alt="" />
                                     <p>Following</p>
                                 </li>
 
                                 <li onClick={handleLogout}>
-                                    <img src={profileIcon} />
+                                    <img src={profileIcon} alt="" />
                                     <p>Logout</p>
                                 </li>
                             </div>
