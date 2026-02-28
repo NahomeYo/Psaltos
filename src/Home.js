@@ -1,6 +1,5 @@
-// ============================================
-// IMPORTS
-// ============================================
+
+
 import './App.css';
 import "./animation.css";
 import "./media.css";
@@ -8,12 +7,11 @@ import "./interfaceMain.css";
 import { profileData } from './profiles.js';
 import { useState, useEffect, useCallback, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { hymnsData } from "./hymns.js";
 import WavesurferPlayer from '@wavesurfer/react';
 import { AuthContext } from './AuthContext.js';
 import { getPlaylists, getLikes, resolveMediaUrl, addPlaylistItem, getHymns, likeHymn, unlikeHymn, proxyAudioUrl } from './api.js';
+import { LoadingOverlay } from './LoadingOverlay.js';
 
-// Images
 import DeaconsBackImg from "./img/deaconsBack.jpg";
 import DeaconLibraryImg from "./img/deaconLibrary.jpg";
 import DeaconProcessionImg from "./img/deaconProcession.png";
@@ -31,7 +29,6 @@ import addToQueue from "./img/addToQueue.svg";
 import Robe from "./img/robe.svg";
 import searchIcon from "./img/searchIcon.svg";
 
-// Icons
 import {
   Logo,
   ArtistIcon,
@@ -44,9 +41,6 @@ import {
   CrossButton
 } from './icons.js';
 
-// ============================================
-// CAROUSEL COMPONENT
-// ============================================
 export function CarouselComponent() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -93,7 +87,7 @@ export function CarouselComponent() {
           }}
         >
 
-          {/* Content */}
+          
           <div
             className="carouselContent"
             style={{
@@ -140,7 +134,7 @@ export function CarouselComponent() {
               </span>)}
           </div>
 
-          {/* background gradient */}
+          
           <div style={{
             position: "absolute",
             zIndex: 3,
@@ -165,7 +159,7 @@ export function CarouselComponent() {
         </div>
       ))}
 
-      {/* Carousel Indicators */}
+      
       <div style={{
         position: "absolute",
         bottom: "0",
@@ -197,16 +191,37 @@ export function CarouselComponent() {
   );
 }
 
-// ============================================
-// SEARCH BAR COMPONENT
-// ============================================
 export function SearchBarComp(props) {
-  const hymns = hymnsData();
   const profiles = profileData();
+  const [hymns, setHymns] = useState([]);
   const [typing, setTyping] = useState("");
   const [dropdown, setDropdown] = useState(false);
 
-  // Search handler
+  useEffect(() => {
+    let active = true;
+    const loadHymns = async () => {
+      try {
+        const data = await getHymns();
+        if (!active) return;
+        const mapped = (Array.isArray(data) ? data : []).map((hymn) => ({
+          englishTitle: hymn.englishTitle || hymn.title || '',
+          copticTitle: hymn.copticTitle || hymn.coptic_title || '',
+          audioFileLink: hymn.audioFileLink || hymn.audio_url || '',
+          season: hymn.season || '',
+          artist: hymn.artist || hymn.cantor || '',
+        }));
+        setHymns(mapped);
+      } catch (err) {
+        if (!active) return;
+        setHymns([]);
+      }
+    };
+    loadHymns();
+    return () => {
+      active = false;
+    };
+  }, []);
+
   function searchHymn(e) {
     const value = e.target.value;
     if (value.trim() === "") {
@@ -215,14 +230,13 @@ export function SearchBarComp(props) {
     } else {
       setTyping(value);
       if (!dropdown) {
-        setDropdown(true); // Ensure dropdown is only set to true when necessary
+        setDropdown(true);
       }
     }
   }
 
-  // Add artist and imgLink keys to hymn objects
   const hymnsWithArtists = hymns.map((hymn) => {
-    let artist = "";
+    let artist = hymn.artist ? hymn.artist.replaceAll("_", " ") : "";
     let imgLink = "";
     let audioData = hymn.audioFileLink;
 
@@ -233,15 +247,13 @@ export function SearchBarComp(props) {
       }
     });
 
-    return { ...hymn, artist, imgLink };
+    return { ...hymn, artist: artist || "Unknown Cantor", imgLink };
   });
 
-  // Filter hymns based on search input
   const filteredHymns = hymnsWithArtists
     .filter(hymn => hymn.englishTitle.includes(typing))
     .slice(0, 10);
 
-  // Dropdown container
   function dropdownContainer() {
     return (
       <div className="dropdownContainer" style={{
@@ -348,23 +360,12 @@ export function SearchBarComp(props) {
   );
 }
 
-// ============================================
-// HOME COMPONENT
-// ============================================
 export function Home({ height, showSearch, loading, setLoading }) {
-  // ============================================
-  // STATE - Data
-  // ============================================
+
   const { authenticated } = useContext(AuthContext);
   const navigate = useNavigate();
-  const hymns = hymnsData();
   const profiles = profileData();
 
-  // (Handlers moved below artistOnlyArray definition)
-
-  // ============================================
-  // STATE - UI State
-  // ============================================
   const [searchBarHeight, setSearchBarHeight] = useState();
   const [seasonLoad, setSeasonLoad] = useState(false);
   const [feastLoad, setFeastLoad] = useState(false);
@@ -379,22 +380,20 @@ export function Home({ height, showSearch, loading, setLoading }) {
   const [libraryStatus, setLibraryStatus] = useState('');
   const [backendHymns, setBackendHymns] = useState([]);
   const [hymnIdMap, setHymnIdMap] = useState({});
+  const [catalogHymns, setCatalogHymns] = useState([]);
+  const [libraryLoading, setLibraryLoading] = useState(false);
+  const [hymnsLoading, setHymnsLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(false);
   const [translateInput, setTranslateInput] = useState('');
   const [translateOutput, setTranslateOutput] = useState('');
   const [leftLang, setLeftLang] = useState('english');
   const [rightLang, setRightLang] = useState('coptic-english');
 
-  // ============================================
-  // STATE - Selection State
-  // ============================================
   const [selectedArtist, setSelectedArtist] = useState(null);
   const [seasonIndex, setSeasonIndex] = useState(null);
   const [selectedFeast, setSelectedFeast] = useState(null);
   const [selectedHymn, setSelectedHymn] = useState(null);
 
-  // ============================================
-  // STATE - Display State
-  // ============================================
   const [displayArtistSeasons, setDisplayArtistSeasons] = useState(false);
   const [displayArtistFeasts, setDisplayArtistFeasts] = useState(false);
   const [displayArtistHymns, setDisplayArtistHymns] = useState(false);
@@ -402,9 +401,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
   const [feastSelections, setFeastSelections] = useState([]);
   const [audioPlayerExpanded, setAudioPlayerExpanded] = useState(false);
 
-  // ============================================
-  // STATE - Responsive Design
-  // ============================================
   const [resize, setResize] = useState(() => {
     if (typeof window !== 'undefined') {
       if (window.innerWidth <= 1440 && window.innerWidth >= 1000) return 1;
@@ -413,9 +409,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
     return 1;
   });
 
-  // ============================================
-  // HANDLERS
-  // ============================================
   const handleResize = useCallback(() => {
     const width = window.innerWidth;
     if (width <= 1440 && width >= 1000) {
@@ -425,9 +418,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
     }
   }, []);
 
-  // ============================================
-  // EFFECTS - Window Management
-  // ============================================
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [showSearch]);
@@ -437,9 +427,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
     return () => window.removeEventListener("resize", handleResize);
   }, [handleResize]);
 
-  // ============================================
-  // HANDLERS - Hymn Actions
-  // ============================================
   const handleLikeToggle = async (hymnId) => {
     const backendId = hymnIdMap[hymnId] || hymnId;
     if (typeof backendId !== 'number') {
@@ -453,11 +440,8 @@ export function Home({ height, showSearch, loading, setLoading }) {
     console.log('Download clicked - auth removed');
   };
 
-  // ============================================
-  // DATA PROCESSING - Hymns with Artists
-  // ============================================
-  const hymnsWithArtists = hymns.map((hymn) => {
-    let artist = "";
+  const hymnsWithArtists = catalogHymns.map((hymn) => {
+    let artist = hymn.artist ? hymn.artist.replaceAll("_", " ") : "";
     let imgLink = "";
     let audioData = hymn.audioFileLink;
 
@@ -468,12 +452,9 @@ export function Home({ height, showSearch, loading, setLoading }) {
       }
     });
 
-    return { ...hymn, artist, imgLink };
+    return { ...hymn, artist: artist || "Unknown Cantor", imgLink };
   });
 
-  // ============================================
-  // DATA PROCESSING - Artists
-  // ============================================
   const filterArtists = hymnsWithArtists.map((hymn) => {
     let hymnCopy = { ...hymn };
     delete hymnCopy.englishTitle;
@@ -496,9 +477,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
     new Set(removeSeasons.map(hymn => JSON.stringify(hymn)))
   ).map(hymn => JSON.parse(hymn));
 
-  // ============================================
-  // ARTIST PAGINATION HANDLERS (MOVED HERE)
-  // ============================================
   const artistsPerPage = 4;
   const totalPages = Math.ceil(artistOnlyArray.length / artistsPerPage);
   const handleNextArtists = () => {
@@ -508,11 +486,8 @@ export function Home({ height, showSearch, loading, setLoading }) {
     setArtistPage((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
-  // ============================================
-  // NAVIGATION HANDLER FOR hymnSearchNav MARKERS (MOVED HERE)
-  // ============================================
   const handleNavMarkerClick = (index) => {
-    // Helper to animate out boxes for a given class
+
     function animateOutBoxes(className) {
       const boxes = document.querySelectorAll(`.${className}`);
       boxes.forEach((box) => {
@@ -525,7 +500,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
     }
 
     if (index === 0 && selectedArtist !== null) {
-      // Reset to initial artist selection
+
       animateOutBoxes('seasonBox');
       animateOutBoxes('feastBox');
       animateOutBoxes('hymnRecording');
@@ -540,7 +515,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
       setSeasonLoad(false);
       setFeastLoad(false);
     } else if (index === 1 && seasonIndex !== null) {
-      // Reset to season selection
+
       animateOutBoxes('feastBox');
       animateOutBoxes('hymnRecording');
       setSeasonIndex(null);
@@ -551,7 +526,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
       setDisplayHymnAudio(false);
       setFeastLoad(false);
     } else if (index === 2 && selectedFeast !== null) {
-      // Reset to feast selection
+
       animateOutBoxes('hymnRecording');
       setSelectedFeast(null);
       setSelectedHymn(null);
@@ -559,7 +534,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
       setDisplayHymnAudio(false);
       setFeastLoad(false);
     } else if (index === 3 && selectedHymn !== null) {
-      // Reset to hymn selection
+
       setSelectedHymn(null);
       setDisplayHymnAudio(false);
     }
@@ -571,9 +546,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
   });
   const seasonsOnlyArray = Array.from(new Set(seasonArray));
 
-  // ============================================
-  // DATA PROCESSING - Feasts
-  // ============================================
   let feastArray = [];
   hymnsWithArtists.map((hymn) => {
     let feastFix = hymn.season.substring(hymn.season.indexOf("-") + 1);
@@ -582,9 +554,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
   });
   const feastOnlyArray = Array.from(new Set(feastArray));
 
-  // ============================================
-  // EFFECTS - UI Updates
-  // ============================================
   useEffect(() => {
     const robes = document.querySelectorAll('.robeImg');
     const tabContent = document.querySelectorAll('.artistTab span');
@@ -613,9 +582,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
     }
   }, [selectedHymn]);
 
-  // ============================================
-  // EFFECTS - Selection Flow
-  // ============================================
   useEffect(() => {
     if (selectedArtist !== null) setDisplayArtistSeasons(true);
   }, [selectedArtist]);
@@ -673,9 +639,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
     }
   }, [selectedFeast]);
 
-  // ============================================
-  // EFFECTS - Animation Loading
-  // ============================================
   useEffect(() => {
     const seasonBoxes = document.querySelectorAll(".seasonBox");
     let delay = 0;
@@ -702,44 +665,10 @@ export function Home({ height, showSearch, loading, setLoading }) {
     }
   }, [feastLoad]);
 
-  // ============================================
-  // HELPER COMPONENTS
-  // ============================================
-
-  // Loading circle animation
   const circleComp = () => {
-    return (
-      <div
-        className={`circleLoadingContainer ${(seasonLoad || feastLoad) ? 'fadeout' : ''}`}
-        style={{
-          zIndex: 3,
-          opacity: (seasonLoad || feastLoad) ? "0%" : "100%",
-          pointerEvents: (seasonLoad || feastLoad) ? "none" : "auto",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          left: 0,
-          top: 0,
-          width: "100%",
-          height: "100%"
-        }}
-      >
-        <svg className="loadCircle" width="100" height="100">
-          <circle
-            cx="50"
-            cy="50"
-            r="40"
-            stroke="var(--fifthly)"
-            strokeWidth="6"
-            fill="none"
-          />
-        </svg>
-      </div>
-    );
+    return <LoadingOverlay show={true} />;
   };
 
-  // Get seasons for selected artist
   const seasonsOfArtist = () => {
     function hymnThumbnail(season) {
       let seasonFix = season.toLowerCase()
@@ -767,12 +696,13 @@ export function Home({ height, showSearch, loading, setLoading }) {
     return (
       <div style={{ display: 'flex', width: '100%', height: 'min-content', gap: "var(--padding)", position: "relative", alignItems: "start", flexGrow: 1 }}>
 
-        {(selectedArtist !== null && loading) && circleComp()}
+        {(selectedArtist !== null && !seasonLoad) && circleComp()}
 
         {seasonsOnlyArray.map((season, index) => {
 
           function ohYes() {
             setSeasonIndex(index)
+            setFeastLoad(false)
 
             setTimeout(() => {
               setFeastLoad(true)
@@ -940,11 +870,10 @@ export function Home({ height, showSearch, loading, setLoading }) {
 
   }, [feastSelections])
 
-  // Get feasts for selected season
   const feastsOfSeasons = () => {
     return (
       <div className="feastContainer" style={{ width: "100%", display: "flex", flexWrap: "wrap", gap: "var(--padding)", position: "relative", justifyContent: "space-between", height: "100%", margin: 0, flexGrow: 1 }}>
-        {((seasonIndex !== null) && feastLoad) && circleComp()}
+        {((seasonIndex !== null) && !feastLoad) && circleComp()}
         {feastSelections}
       </div>
     )
@@ -971,10 +900,12 @@ export function Home({ height, showSearch, loading, setLoading }) {
   useEffect(() => {
     let active = true;
     if (!authenticated) {
+      setLibraryLoading(false);
       setPlaylists([]);
       setLikes([]);
       return;
     }
+    setLibraryLoading(true);
 
     const loadLibrary = async () => {
       try {
@@ -986,6 +917,9 @@ export function Home({ height, showSearch, loading, setLoading }) {
         if (!active) return;
         setPlaylists([]);
         setLikes([]);
+      } finally {
+        if (!active) return;
+        setLibraryLoading(false);
       }
     };
 
@@ -998,23 +932,40 @@ export function Home({ height, showSearch, loading, setLoading }) {
 
   useEffect(() => {
     let active = true;
+    setHymnsLoading(true);
     const loadHymns = async () => {
       try {
         const data = await getHymns();
         if (!active) return;
         const items = Array.isArray(data) ? data : [];
         setBackendHymns(items);
+        const mapped = items.map((hymn) => ({
+          englishTitle: hymn.englishTitle || hymn.title || '',
+          copticTitle: hymn.copticTitle || hymn.coptic_title || '',
+          audioFileLink: hymn.audioFileLink || hymn.audio_url || '',
+          season: hymn.season || 'Annual - Uncategorized',
+          artist: hymn.artist || hymn.cantor || '',
+        }));
+        setCatalogHymns(mapped);
         const map = {};
         items.forEach((hymn) => {
-          if (hymn.audio_url) {
-            map[hymn.audio_url] = hymn.id;
+          const audio = hymn.audioFileLink || hymn.audio_url;
+          if (audio) {
+            map[audio] = hymn.id;
+            if (audio.startsWith('https://media.tasbeha.org')) {
+              map[audio.replace('https://media.tasbeha.org', 'http://media.tasbeha.org')] = hymn.id;
+            }
           }
         });
         setHymnIdMap(map);
       } catch (err) {
         if (!active) return;
         setBackendHymns([]);
+        setCatalogHymns([]);
         setHymnIdMap({});
+      } finally {
+        if (!active) return;
+        setHymnsLoading(false);
       }
     };
     loadHymns();
@@ -1029,11 +980,14 @@ export function Home({ height, showSearch, loading, setLoading }) {
       setShowAddToPlaylist(false);
       return;
     }
+    setActionLoading(true);
     try {
       await addPlaylistItem(playlistId, selectedHymn.id);
       setLibraryStatus('Added to playlist.');
     } catch (err) {
       setLibraryStatus(err.message || 'Failed to add to playlist.');
+    } finally {
+      setActionLoading(false);
     }
     setShowAddToPlaylist(false);
   };
@@ -1283,6 +1237,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
       setLibraryStatus('This hymn is not in the upload library yet.');
       return;
     }
+    setActionLoading(true);
     try {
       if (isHymnLiked(hymnId)) {
         await unlikeHymn(hymnId);
@@ -1293,17 +1248,15 @@ export function Home({ height, showSearch, loading, setLoading }) {
       setLikes(Array.isArray(likeData) ? likeData : []);
     } catch (err) {
       setLibraryStatus(err.message || 'Failed to update like.');
+    } finally {
+      setActionLoading(false);
     }
   };
 
   const mainContainer = () => {
 
-    // ============================================
-    // UI INTERACTION HANDLERS
-    // ============================================
-
-    // Cover flip animation handler
     const coverFlip = () => {
+      setActionLoading(true);
       const bookCover = document.querySelector(".bookCover");
 
       if (bookCover) {
@@ -1326,10 +1279,11 @@ export function Home({ height, showSearch, loading, setLoading }) {
       }
 
       setArtistPage(0);
+      setTimeout(() => setActionLoading(false), 800);
     }
 
-    // Page flip animation handler
     const pageFlip = () => {
+      setActionLoading(true);
       const artistPage = document.querySelector(".lengthyTab");
 
       if (artistPage) {
@@ -1352,24 +1306,15 @@ export function Home({ height, showSearch, loading, setLoading }) {
       }
 
       setArtistPage(prev => (prev === 0 ? 1 : 0));
+      setTimeout(() => setActionLoading(false), 800);
     }
 
-    // ============================================
-    // UTILITY FUNCTIONS
-    // ============================================
-
-    // Format text helper
     function formatText(text) {
       if (text.includes("Cantor")) {
         return text.replace("Cantor", "");
       }
     }
 
-    // ============================================
-    // AUDIO PLAYER COMPONENTS
-    // ============================================
-
-    // Basic audio player (currently unused, replaced by AudioVisualizer)
     const AudioPlayer = ({ title, artist, thumbnail, audioSrc }) => {
       const [isPlaying, setIsPlaying] = useState(false);
       const [wavesurfer, setWavesurfer] = useState(null);
@@ -1465,10 +1410,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
       );
     };
 
-    // ============================================
-    // PAGINATION & DISPLAY LOGIC
-    // ============================================
-
     const artistsPerPage = 4;
     const currentStartIndex = artistPage * artistsPerPage;
     const currentEndIndex = currentStartIndex + artistsPerPage;
@@ -1476,7 +1417,6 @@ export function Home({ height, showSearch, loading, setLoading }) {
       hymn.season.includes(feastOnlyArray[selectedFeast])
     );
 
-    // Display track count and song options
     function displayCount() {
       return (
         <div style={{
@@ -1529,13 +1469,9 @@ export function Home({ height, showSearch, loading, setLoading }) {
       )
     }
 
-    // ============================================
-    // MAIN RENDER
-    // ============================================
-
     return (
       <div style={{ overflow: "hidden", paddingTop: height }}>
-        {/* ===== Main Container ===== */}
+        
         <div style={{
           position: "relative",
           display: "flex",
@@ -1548,6 +1484,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
           transition: "all 0.5s ease-in-out",
         }}>
           <div className="patternBackground"></div>
+          <LoadingOverlay show={actionLoading} />
 
           <CarouselComponent />
 
@@ -1620,7 +1557,10 @@ export function Home({ height, showSearch, loading, setLoading }) {
                 {libraryStatus && (
                   <p style={{ color: "var(--thirdly)", margin: 0 }}>{libraryStatus}</p>
                 )}
-                {LibraryItems()}
+                <div style={{ position: "relative" }}>
+                  {LibraryItems()}
+                  <LoadingOverlay show={libraryLoading} />
+                </div>
               </span>
 
             </div>
@@ -1635,13 +1575,13 @@ export function Home({ height, showSearch, loading, setLoading }) {
               padding: "var(--padding)",
               boxShadow: "var(--shadow, 0 2px 16px 0 rgba(0,0,0,0.08))"
             }}>
-              {/* Google Translate-like UI */}
+              
               <t2 style={{ textTransform: "uppercase" }}>Coptic Translate</t2>
 
               <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
 
                 <div style={{ display: "flex", alignItems: "center", gap: "var(--padding)"}}>
-                  {/* Language row selector (left) */}
+                  
                   <div style={{ display: "flex" }}>
                     <button
                       className={`fourthlyButton ${leftLang === 'english' ? 'clicked' : ''}`}
@@ -1664,13 +1604,13 @@ export function Home({ height, showSearch, loading, setLoading }) {
                   </div>
                 </div>
 
-                {/* Arrow Icon */}
+                
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center"}}>
                   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", gap: "var(--padding)" }}>
-                  {/* Language row selector (right) */}
+                  
                   <div style={{ display: "flex" }}>
                     <button
                       className={`fourthlyButton ${rightLang === 'english' ? 'clicked' : ''}`}
@@ -1706,7 +1646,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
 
               <div style={{ display: "flex", flexDirection: "row", width: "100%", gap: "var(--padding)", height: "100%", position: "relative" }}>
 
-                {/* Left Language Selector and Input */}
+                
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "var(--primary-bg, #fff)", borderRadius: "var(--border)", boxShadow: "var(--shadow, 0 2px 8px 0 rgba(0,0,0,0.04))" }}>
                   <textarea
                     placeholder="Enter text"
@@ -1720,7 +1660,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
                   />
                 </div>
 
-                {/* Right Language Selector and Output */}
+                
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "var(--primary-bg, #fff)", borderRadius: "var(--border)", boxShadow: "var(--shadow, 0 2px 8px 0 rgba(0,0,0,0.04))" }}>
                   <textarea
                     placeholder="Translation"
@@ -1734,7 +1674,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
             </div>
           </div>
 
-          {/* ===== Cantor Book Container ===== */}
+          
           <div
             className="cantorBookContainer"
             style={{
@@ -1745,7 +1685,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
               height: "100vh",
             }}
           >
-            {/* ===== Left Section: Deacon Stand with Book ===== */}
+            
             <span
               style={{
                 position: "relative",
@@ -1819,8 +1759,19 @@ export function Home({ height, showSearch, loading, setLoading }) {
                               </span>
                             }
 
-                            <span className="artistContainer" style={{ display: "flex", flexDirection: (resize === 2) ? "column" : "row", justifyContent: "space-between", alignItems: "start", width: "100%" }}>
-                              {/* Previous button for artist pagination */}
+                            <span
+                              className="artistContainer"
+                              style={{
+                                display: "flex",
+                                flexDirection: (resize === 2) ? "column" : "row",
+                                justifyContent: "flex-start",
+                                alignItems: "stretch",
+                                gap: "var(--padding)",
+                                width: "100%",
+                                flexGrow: 1
+                              }}
+                            >
+                              
                               {artistPage > 0 && (
                                 <button
                                   style={{ marginRight: "1rem", cursor: "pointer", background: "var(--primary)", border: "none", borderRadius: "50%", width: "2rem", height: "2rem", display: "flex", alignItems: "center", justifyContent: "center" }}
@@ -1839,6 +1790,8 @@ export function Home({ height, showSearch, loading, setLoading }) {
 
                                 const artistToSeason = () => {
                                   setSelectedArtist(globalIndex);
+                                  setSeasonLoad(false);
+                                  setFeastLoad(false);
                                   setLoading(true);
                                   setTimeout(() => {
                                     setSeasonLoad(true);
@@ -1846,11 +1799,22 @@ export function Home({ height, showSearch, loading, setLoading }) {
                                 };
 
                                 return (
-                                  <div className="artistTab" key={globalIndex} onClick={() => artistToSeason()} style={{ transition: "width 1s ease-in-out", margin: "0 var(--spacing)", width: (selectedArtist !== null || resize === 2) ? "100%" : "auto"}} >
-                                    <span style={{ position: 'relative', gap: "0", flexDirection: (selectedArtist === globalIndex) ? "row" : "column", width: "100%", borderRadius: "var(--border) 0 0 var(--border)", alignItems: (selectedArtist === globalIndex) ? "center" : "start" }}>
+                                  <div
+                                    className="artistTab"
+                                    key={globalIndex}
+                                    onClick={() => artistToSeason()}
+                                    style={{
+                                      transition: "all 0.5s ease-in-out",
+                                      margin: 0,
+                                      width: (selectedArtist !== null || resize === 2) ? "100%" : "auto",
+                                      flex: (selectedArtist !== null || resize === 2) ? "1 1 100%" : "1 1 0",
+                                      minWidth: 0
+                                    }}
+                                  >
+                                    <span style={{ position: 'relative', gap: "var(--padding)", flexDirection: (selectedArtist === globalIndex) ? "row" : "column", width: "100%", borderRadius: "var(--border) 0 0 var(--border)", alignItems: (selectedArtist === globalIndex) ? "center" : "center", justifyContent: "center", minHeight: "100%" }}>
                                       <img className="profilePic" src={hymn.imgLink} style={{ border: 'solid var(--fourthly)', borderWidth: '0 10px 5px 0', height: "var(--profile)", width: "var(--profile)", marginBottom: "var(--padding)" }} alt="hymnImgLink" />
 
-                                      <li style={{ listStyle: "none", marginLeft: 'var(--padding)', marginRight: (selectedArtist === globalIndex) ? 0 : "var(--border)", marginBottom: (selectedArtist === globalIndex) ? 0 : "var(--border)" }}>
+                                      <li style={{ listStyle: "none", marginLeft: 'var(--padding)', marginRight: 'var(--padding)', marginBottom: (selectedArtist === globalIndex) ? 0 : "var(--border)", textAlign: "center" }}>
                                         <ArtistIcon fill="var(--fourthy)" caption="cantor" textColor="var(--fourthy)" />
                                         <h1 style={{ whiteSpace: (selectedArtist === globalIndex) ? "nowrap" : 'wrap' }}>{name}</h1>
                                       </li>
@@ -1861,7 +1825,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
                                 );
                               })}
 
-                              {/* Next button for artist pagination */}
+                              
                               {artistPage < totalPages - 1 && (
                                 <button
                                   style={{ marginLeft: "1rem", cursor: "pointer", background: "var(--primary)", border: "none", borderRadius: "50%", width: "2rem", height: "2rem", display: "flex", alignItems: "center", justifyContent: "center" }}
@@ -1911,7 +1875,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
                   borderRadius: "0 0 var(--border) var(--border)",
                 }}
               >
-                {/* ===== Right Section: Hymn Player & Track List ===== */}
+                
                 <>
                   {displayArtistHymns && selectedFeast !== null && (
                     <>
@@ -1971,6 +1935,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
                         height: "100%",
                         background: "var(--fifthly)",
                       }}>
+                        <LoadingOverlay show={hymnsLoading} />
                         {currentArtistHymnsLength.map((hymn, index) => {
                           function hymnClick() {
                             const backendId = hymnIdMap[hymn.audioFileLink];
@@ -2014,14 +1979,14 @@ export function Home({ height, showSearch, loading, setLoading }) {
                               }}
                             >
                               <img src={hymn.imgLink} style={{ width: "1rem", marginRight: "0.5rem" }} />
-                              {/* 1-based index here */}
+                              
                               <p style={{ color: "var(--fourthy)" }}>{index + 1}</p>
                               <p>•</p>
                               <p style={{ color: "var(--thirdly)" }} onClick={hymnClick}>{hymn.artist}</p>
                               <p>•</p>
                               <h1 style={{ color: "var(--primary)", flex: 1 }} onClick={hymnClick}>{hymn.englishTitle}</h1>
 
-                              {/* Like button */}
+                              
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -2045,7 +2010,7 @@ export function Home({ height, showSearch, loading, setLoading }) {
                                 </svg>
                               </button>
 
-                              {/* Download button */}
+                              
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();

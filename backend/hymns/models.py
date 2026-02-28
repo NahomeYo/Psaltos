@@ -13,6 +13,9 @@ class Profile(models.Model):
 
 class Hymn(models.Model):
     title = models.CharField(max_length=200)
+    coptic_title = models.CharField(max_length=255, blank=True)
+    season = models.CharField(max_length=255, blank=True)
+    cantor = models.CharField(max_length=255, blank=True)
     audio_file = models.FileField(upload_to='hymns/', blank=True, null=True)
     audio_url = models.URLField(blank=True)
     uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)

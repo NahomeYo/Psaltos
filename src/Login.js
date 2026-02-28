@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import { login, register } from './api.js';
+import { LoadingOverlay } from './LoadingOverlay.js';
 
 export function Login({ onClose, displaySignUp, onAuthSuccess }) {
   const [email, setEmail] = useState('');
@@ -205,6 +206,7 @@ export function Login({ onClose, displaySignUp, onAuthSuccess }) {
             <h2 style={{ color: "var(--primaryColor)" }}>Don't have an account? Sign up!</h2>
           </button>
         </form>
+        <LoadingOverlay show={loading} />
       </div>
     </>
   );
@@ -389,6 +391,7 @@ export function Signup({ onClose, onAuthSuccess }) {
             {loading ? 'Creating Account...' : 'Sign Up'}
           </button>
         </form>
+        <LoadingOverlay show={loading} />
       </div>
     </>
   );

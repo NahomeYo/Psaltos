@@ -11,6 +11,7 @@ import { SearchBarComp } from "./Home.js";
 import { Login, Signup } from "./Login.js";
 import { AuthContext } from "./AuthContext.js";
 import { logout, resolveMediaUrl } from "./api.js";
+import { LoadingOverlay } from "./LoadingOverlay.js";
 
 export const Navbar = () => {
     const [resize, setResize] = useState(() => {
@@ -25,6 +26,7 @@ export const Navbar = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [showSignUp, setShowSignUp] = useState(false);
     const [profileDropdown, setProfileDropdown] = useState(false);
+    const [navLoading, setNavLoading] = useState(false);
     const { authenticated, user, refresh } = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -47,6 +49,12 @@ export const Navbar = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    useEffect(() => {
+        if (!authenticated) {
+            setProfileDropdown(false);
+        }
+    }, [authenticated]);
+
     const activateLoad = (pageNum) => {
         setTimeout(() => {
             const routes = [
@@ -55,6 +63,7 @@ export const Navbar = () => {
                 "/Upload",
             ];
             navigate(routes[pageNum] || "/");
+            setNavLoading(false);
         }, 2000);
     };
 
@@ -107,17 +116,21 @@ export const Navbar = () => {
 
     const handleUploadClick = () => {
         if (authenticated) {
+            setNavLoading(true);
             activateLoad(2);
         } else {
-            setShowSignUp(true);
+            setShowPopup(true);
         }
     };
 
     const handleLogout = async () => {
+        setNavLoading(true);
         try {
             await logout();
         } catch (err) {
-            // ignore for now
+
+        } finally {
+            setNavLoading(false);
         }
         refresh();
         setProfileDropdown(false);
@@ -160,59 +173,67 @@ export const Navbar = () => {
 
                     </span>
 
-                    <span className="userDropdown"
-                        style={{
-                            position: "relative",
-                            gap: "var(--sectionSpacing)",
-                            display: "flex",
-                            alignItems: "center",
-                        }}>
-
-                        <div onClick={() => setProfileDropdown((prev) => !prev)} style={{ padding: 0, margin: 0, display: "flex", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: "var(--padding)" }}>
-                            <img src={resolveMediaUrl(user?.profile?.avatar) || profileIcon} alt="profile" className="profileIcon"
-                                style={{
-                                    borderRadius: "50%",
-                                    cursor: "pointer",
-                                    width: "calc(var(--profile) / 2)",
-                                    height: "calc(var(--profile) / 2)",
-                                    background: "var(--primary)",
-                                }}
-                            />
-
-                            <img src={downCaret} alt="" className="downCaret" style={{ filter: "brightness(1.5)"}} />
-                        </div>
-
-                        {profileDropdown && authenticated && (
+                    {authenticated && (
+                        <span
+                            className="userDropdown"
+                            style={{
+                                position: "relative",
+                                gap: "var(--sectionSpacing)",
+                                display: "flex",
+                                alignItems: "center",
+                            }}
+                        >
                             <div
-                                className="profileDropdown">
-                                <li onClick = {() =>  navigate("/Profile")}>
-                                    <img src={profileIcon} alt="" />
-                                    <p>Profile</p>
-                                </li>
+                                onClick={() => setProfileDropdown((prev) => !prev)}
+                                style={{ padding: 0, margin: 0, display: "flex", alignItems: "center", justifyContent: "flex-start", width: "100%", gap: "var(--padding)" }}
+                            >
+                                <img
+                                    src={resolveMediaUrl(user?.profile?.avatar) || profileIcon}
+                                    alt="profile"
+                                    className="profileIcon"
+                                    style={{
+                                        borderRadius: "50%",
+                                        cursor: "pointer",
+                                        width: "calc(var(--profile) / 2)",
+                                        height: "calc(var(--profile) / 2)",
+                                        background: "var(--primary)",
+                                    }}
+                                />
 
-                                <li>
-                                    <img src={heart} alt="" />
-                                    <p>Likes</p>
-                                </li>
-
-                                <li>
-                                    <img src={followingIcon} alt="" />
-                                    <p>Following</p>
-                                </li>
-
-                                <li onClick={handleLogout}>
-                                    <img src={profileIcon} alt="" />
-                                    <p>Logout</p>
-                                </li>
+                                <img src={downCaret} alt="" className="downCaret" style={{ filter: "brightness(1.5)" }} />
                             </div>
-                        )}
-                    </span>
+
+                            {profileDropdown && (
+                                <div className="profileDropdown">
+                                    <li onClick={() => navigate("/Profile")}>
+                                        <img src={profileIcon} alt="" />
+                                        <p>Profile</p>
+                                    </li>
+
+                                    <li>
+                                        <img src={heart} alt="" />
+                                        <p>Likes</p>
+                                    </li>
+
+                                    <li>
+                                        <img src={followingIcon} alt="" />
+                                        <p>Following</p>
+                                    </li>
+
+                                    <li onClick={handleLogout}>
+                                        <img src={profileIcon} alt="" />
+                                        <p>Logout</p>
+                                    </li>
+                                </div>
+                            )}
+                        </span>
+                    )}
 
                     <div
                         className="secondaryButton"
-                        onClick={() => setShowPopup(true)}
+                        onClick={authenticated ? handleLogout : () => setShowPopup(true)}
                     >
-                        {authenticated ? (user?.username || 'Account') : 'Sign In'}
+                        {authenticated ? "Sign Out" : "Sign In"}
                     </div>
 
                     <div
@@ -222,6 +243,7 @@ export const Navbar = () => {
                     </div>
                 </nav>
             </div>
+            <LoadingOverlay show={navLoading} />
 
             {showSignUp && (
                 <Signup onClose={handlePopupClose} onAuthSuccess={refresh} />

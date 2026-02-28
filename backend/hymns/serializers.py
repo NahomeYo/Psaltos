@@ -68,7 +68,17 @@ class HymnSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hymn
-        fields = ['id', 'title', 'audio_file', 'audio_url', 'uploaded_by', 'created_at']
+        fields = [
+            'id',
+            'title',
+            'coptic_title',
+            'season',
+            'cantor',
+            'audio_file',
+            'audio_url',
+            'uploaded_by',
+            'created_at',
+        ]
 
     def validate(self, data):
         audio_file = data.get('audio_file')

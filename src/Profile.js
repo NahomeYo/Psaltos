@@ -9,6 +9,7 @@ import shareButton from "./img/share.svg";
 import editButton from "./img/editIcon.svg";
 import { AuthContext } from './AuthContext.js';
 import { updateProfile, resolveMediaUrl, getPlaylists, getLikes, createPlaylist, updatePlaylist } from './api.js';
+import { LoadingOverlay } from './LoadingOverlay.js';
 
 export function Profile({ height }) {
     const { authenticated, user, refresh } = useContext(AuthContext);
@@ -27,6 +28,7 @@ export function Profile({ height }) {
     const [newPlaylistPublic, setNewPlaylistPublic] = useState(false);
     const [newPlaylistThumbnail, setNewPlaylistThumbnail] = useState(null);
     const [displayName, setDisplayName] = useState(user?.profile?.display_name || '');
+    const [busy, setBusy] = useState(false);
 
     useEffect(() => {
         setDisplayName(user?.profile?.display_name || '');
@@ -83,12 +85,15 @@ export function Profile({ height }) {
     const handleFileChange = async (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
+        setBusy(true);
         try {
             await updateProfile({ avatar: file });
             await refresh();
             setStatus('Profile photo updated.');
         } catch (err) {
             setStatus(err.message || 'Update failed.');
+        } finally {
+            setBusy(false);
         }
         setShowUpdatePopup(false);
     };
@@ -98,12 +103,15 @@ export function Profile({ height }) {
             setStatus('Display name cannot be empty.');
             return;
         }
+        setBusy(true);
         try {
             await updateProfile({ display_name: displayName.trim() });
             await refresh();
             setStatus('Display name updated.');
         } catch (err) {
             setStatus(err.message || 'Update failed.');
+        } finally {
+            setBusy(false);
         }
     };
 
@@ -113,6 +121,7 @@ export function Profile({ height }) {
             setStatus('Please enter a playlist title.');
             return;
         }
+        setBusy(true);
         try {
             await createPlaylist({
                 title: newPlaylistTitle.trim(),
@@ -128,10 +137,13 @@ export function Profile({ height }) {
             setStatus('Playlist created.');
         } catch (err) {
             setStatus(err.message || 'Failed to create playlist.');
+        } finally {
+            setBusy(false);
         }
     };
 
     const handlePlaylistVisibility = async (playlist, isPublic) => {
+        setBusy(true);
         try {
             const updated = await updatePlaylist(playlist.id, { is_public: isPublic });
             setPlaylists((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
@@ -141,11 +153,14 @@ export function Profile({ height }) {
             setStatus('Playlist visibility updated.');
         } catch (err) {
             setStatus(err.message || 'Failed to update playlist.');
+        } finally {
+            setBusy(false);
         }
     };
 
     return (
-        <div style={{ paddingTop: height, width: "var(--pageWidth)", margin: "var(--paddingSides)", minHeight: "100vh" }}>
+        <div style={{ paddingTop: height, width: "var(--pageWidth)", margin: "var(--paddingSides)", minHeight: "100vh", position: "relative" }}>
+            <LoadingOverlay show={busy} />
             <div className="artistTab" style={{ width: "100%" }} >
                 <span style={{ position: 'relative', gap: "var(--sectionSpacing)", flexDirection: "row", width: "100%", borderRadius: "var(--border) 0 0 var(--border)", alignItems: "center", padding: "var(--padding)" }}>
                     <img

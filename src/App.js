@@ -15,6 +15,7 @@ import { me } from './api.js';
 function App() {
   const [navHeight, setNavHeight] = useState('0px');
   const [loading, setLoading] = useState(false);
+  const [showRouteLoader, setShowRouteLoader] = useState(true);
   const [authState, setAuthState] = useState({ authenticated: false, user: null });
 
   const refreshAuth = useCallback(async () => {
@@ -42,9 +43,30 @@ function App() {
     refreshAuth();
   }, [refreshAuth]);
 
+  useEffect(() => {
+    const finishRouteLoad = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            setShowRouteLoader(false);
+          }, 500);
+        });
+      });
+    };
+
+    const handleRouteStart = () => {
+      setShowRouteLoader(true);
+      finishRouteLoad();
+    };
+
+    handleRouteStart();
+    window.addEventListener('hashchange', handleRouteStart);
+    return () => window.removeEventListener('hashchange', handleRouteStart);
+  }, []);
+
   return (
     <>
-      <LoadingScreen loading={loading} setLoading={setLoading} />
+      <LoadingScreen show={showRouteLoader} />
       <AuthContext.Provider value={{ ...authState, refresh: refreshAuth, setAuthState }}>
         <Router>
           <Navbar />

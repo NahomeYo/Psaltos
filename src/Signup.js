@@ -21,13 +21,12 @@ export function Signup({ onClose }) {
       return setError('Password must be at least 6 characters');
     }
 
-    // Auth logic removed - form only
     setError('');
     console.log('Signup submitted:', { email, password, displayName });
   }
 
   function handleGoogleSignup() {
-    // Auth logic removed - form only
+
     console.log('Google signup clicked');
   }
 

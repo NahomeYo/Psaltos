@@ -79,6 +79,43 @@
     animation: boxFadeUp 1s ease-in-out forwards;
 }
 
+.domLoadingOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    background: transparent;
+}
+
+.loadingAnimInner {
+    width: min(220px, 40%);
+    opacity: 0.75;
+}
+
+.loadingAnimInner svg {
+    width: 100%;
+    height: auto;
+}
+
+.domLoadingOverlay .st0 {
+    stroke: var(--fourthy);
+}
+
+.domLoadingOverlay .st1,
+.domLoadingOverlay .st2,
+.domLoadingOverlay .st3,
+.domLoadingOverlay .st4 {
+    fill: var(--fourthy) !important;
+}
+
+.domLoadingOverlay .RIGHTSTRING path,
+.domLoadingOverlay .LEFTSTRING path {
+    stroke: var(--fourthy) !important;
+}
+
 @keyframes boxFadeUp {
     from {
         to {

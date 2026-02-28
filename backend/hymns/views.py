@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from django.http import StreamingHttpResponse
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
+from urllib.parse import urlparse
 
 from .models import Profile, Hymn, Playlist, PlaylistItem, Like
 from .serializers import (
@@ -69,12 +70,27 @@ def proxy_audio(request):
     if not url:
         return Response({'detail': 'url is required'}, status=status.HTTP_400_BAD_REQUEST)
 
+    parsed = urlparse(url)
+    if parsed.scheme not in ('http', 'https') or not parsed.netloc:
+        return Response({'detail': 'Invalid URL'}, status=status.HTTP_400_BAD_REQUEST)
+
     try:
-        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        range_header = request.headers.get('Range')
+        if range_header:
+            headers['Range'] = range_header
+
+        req = Request(url, headers=headers)
         remote = urlopen(req, timeout=15)
         content_type = remote.headers.get('Content-Type', 'audio/mpeg')
-        response = StreamingHttpResponse(remote, content_type=content_type)
+        response = StreamingHttpResponse(remote, content_type=content_type, status=getattr(remote, 'status', 200))
+        for header in ('Content-Length', 'Content-Range', 'Accept-Ranges'):
+            value = remote.headers.get(header)
+            if value:
+                response[header] = value
         response['Access-Control-Allow-Origin'] = '*'
+        response['Access-Control-Allow-Headers'] = 'Range, Content-Type'
+        response['Access-Control-Expose-Headers'] = 'Content-Length, Content-Range, Accept-Ranges'
         return response
     except (HTTPError, URLError) as err:
         return Response({'detail': f'Failed to fetch audio: {err}'}, status=status.HTTP_502_BAD_GATEWAY)
